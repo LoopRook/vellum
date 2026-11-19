@@ -1,0 +1,428 @@
+<!-- @dsExample name="Example Pitch Deck (Reference)" minWidth="1280" description="A worked 16:9 deck showing how slides are composed from Vellum tokens, type, and sheets." -->
+<!-- REFERENCE IMPLEMENTATION · CANONICAL SPECIFICATION: /systems/spec/DESIGN.md & styles.css -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Design System Presentation Deck (Interactive Example)</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+/* 16:9 Interactive Deck Viewer Architecture */
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.deck-viewer {
+  width: 100%;
+  max-width: 1120px;
+  height: 630px; /* Exact 16:9 ratio */
+  position: relative;
+  z-index: 1;
+  background: var(--color-bg-canvas);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-stage);
+  box-shadow: var(--elevation-viewport);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Slide Container & Animations */
+.slide-stage {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide-pane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 56px 72px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.98);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-pane.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+  z-index: 2;
+}
+
+/* Slide Navigation Bar */
+.deck-controls-bar {
+  height: 54px;
+  padding: 0 32px;
+  background: var(--color-surface-raised);
+  border-top: 1px solid var(--color-border);
+  backdrop-filter: blur(var(--blur-nav));
+  -webkit-backdrop-filter: blur(var(--blur-nav));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.deck-stepper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.deck-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deck-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-divider);
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: all var(--duration-fast) ease;
+}
+
+.deck-dot.active {
+  width: 24px;
+  background: var(--color-text-primary);
+}
+/* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .deck-controls-bar { background: var(--color-surface-solid); }
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient luminous lamps -->
+<div class="light-table"></div>
+
+<div class="deck-viewer">
+  <div class="slide-stage">
+    
+    <!-- Slide 1: Cover / System Reveal -->
+    <div class="slide-pane active" id="slide-1">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="tag-pill">DESIGN SYSTEM SPECIFICATION</span>
+        <span style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; color: var(--color-text-muted);">V1.0.0-RC12</span>
+      </div>
+
+      <div style="margin: auto 0; max-width: 840px;">
+        <div style="font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--color-text-muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px;">
+          [ SWISS TYPOGRAPHY &amp; TRANSLUCENT VELLUM ]
+        </div>
+        <h1 style="font-family: var(--font-display); font-size: 64px; font-weight: 900; letter-spacing: var(--tracking-display); line-height: 0.92; margin: 0 0 20px; text-transform: uppercase;">
+          VELLUM<br/>DESIGN LANGUAGE
+        </h1>
+        <p style="font-size: 20px; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">
+          A precision visual language for high-performance software, creative portfolios, and industrial hardware.
+        </p>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); text-transform: uppercase; font-size: 10.5px; color: var(--color-text-muted);">
+        <div>CONFIDENTIAL &amp; PROPRIETARY</div>
+        <div>JONATHAN HOCKADAY</div>
+      </div>
+    </div>
+
+    <!-- Slide 2: The Problem Statement -->
+    <div class="slide-pane" id="slide-2">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="label">01 / THE CHALLENGE</div>
+        <div style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; color: var(--color-text-muted);">[ 02 / 05 ]</div>
+      </div>
+
+      <div>
+        <h2 style="font-family: var(--font-display); font-size: 38px; font-weight: 900; letter-spacing: var(--tracking-statement); margin: 0 0 28px; text-transform: uppercase;">
+          Modern Interfaces Lack Character &amp; Density
+        </h2>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div class="card" style="padding: 24px;">
+            <div class="label" style="margin-bottom: 8px;">GENERIC CORPORATE SAAS</div>
+            <h3 style="font-size: 18px; margin: 0 0 8px; text-transform: uppercase;">Overused Blue &amp; Heavy Gradients</h3>
+            <p style="font-size: 14px; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">Most web products rely on interchangeable component templates that lack tactile feedback and visual authority.</p>
+          </div>
+
+          <div class="card" style="padding: 24px;">
+            <div class="label" style="margin-bottom: 8px;">DESIGN DRIFT IN AI AGENTS</div>
+            <h3 style="font-size: 18px; margin: 0 0 8px; text-transform: uppercase;">Unconstrained Generations</h3>
+            <p style="font-size: 14px; color: var(--color-text-secondary); line-height: 1.5; margin: 0;">Autonomous coding agents struggle without machine-readable design constraints, producing inconsistent mockups.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-family: var(--font-mono); text-transform: uppercase; font-size: 10.5px; color: var(--color-text-muted);">
+        ECOSYSTEM ANALYSIS · DESIGN RESEARCH
+      </div>
+    </div>
+
+    <!-- Slide 3: The System Architecture -->
+    <div class="slide-pane" id="slide-3">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="label">02 / CORE ARCHITECTURE</div>
+        <div style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; color: var(--color-text-muted);">[ 03 / 05 ]</div>
+      </div>
+
+      <div style="margin: auto 0;">
+        <div style="display: flex; align-items: baseline; gap: 10px;">
+          <div style="font-family: var(--font-display); font-size: 110px; font-weight: 900; letter-spacing: var(--tracking-display); line-height: 0.9; color: var(--color-text-primary);">
+            1
+          </div>
+          <div style="font-family: var(--font-mono); text-transform: uppercase; font-size: 34px; font-weight: 700; color: var(--color-text-muted);">
+            FILE
+          </div>
+        </div>
+
+        <h3 style="font-family: var(--font-display); font-size: 28px; font-weight: 900; text-transform: uppercase; margin: 12px 0 16px; letter-spacing: var(--tracking-title);">
+          Zero-Dependency Master Stylesheet
+        </h3>
+
+        <p style="font-size: 20px; color: var(--color-text-secondary); line-height: 1.5; max-width: 780px; margin: 0;">
+          All sheet physics, derived colour ramps, typography scales, and tactile console controls are bundled in pure, ultra-fast CSS.
+        </p>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); text-transform: uppercase; font-size: 10.5px; color: var(--color-text-muted);">
+        <div>ZERO RUNTIME OVERHEAD</div>
+        <div>100% LIGHTHOUSE PERFORMANCE</div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Multi-Platform Adaptability -->
+    <div class="slide-pane" id="slide-4">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="label">03 / MULTI-PLATFORM ADAPTABILITY</div>
+        <div style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; color: var(--color-text-muted);">[ 04 / 05 ]</div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; align-items: center;">
+        <div>
+          <h2 style="font-family: var(--font-display); font-size: 32px; font-weight: 900; text-transform: uppercase; margin: 0 0 16px; letter-spacing: var(--tracking-title);">
+            Universal Token Harmony
+          </h2>
+          <p style="font-size: 15px; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 20px;">
+            The exact same token hierarchy drives web landing pages, SaaS dashboards, widescreen slide decks, and physical print specifications.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="tag-pill" style="font-size: var(--type-micro); padding: 2px 6px;">DUAL-GROUND</span>
+              <span style="font-size: 13.5px; font-weight: 700;">Light and dark modes</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="tag-pill" style="font-size: var(--type-micro); padding: 2px 6px;">GEIST 900</span>
+              <span style="font-size: 13.5px; font-weight: 700;">Architectural Swiss Type Scale</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Token Preview Card -->
+        <div class="card" style="padding: 14px;">
+          <div class="stage-cavity" style="height: 170px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+            <div style="text-align: center;">
+              <div style="font-family: var(--font-display); font-size: 28px; font-weight: 900; color: var(--color-text-on-sunken); letter-spacing: var(--tracking-title);">
+                VELLUM
+              </div>
+              <div style="font-family: var(--font-mono); text-transform: uppercase; font-size: var(--type-micro); color: var(--color-text-on-sunken-secondary); margin-top: 6px; letter-spacing: 0.1em;">
+                40PX STAGE SHEET · 1PX EDGE
+              </div>
+            </div>
+          </div>
+          <div class="console-card" style="margin: 0; padding: 10px 12px;">
+            <div class="console-row">
+              <div class="console-group">
+                <span class="label" style="font-size: var(--type-micro);">MODE:</span>
+                <button class="btn-control active" style="padding: 4px 8px; font-size: var(--type-micro);">WEB</button>
+                <button class="btn-control" style="padding: 4px 8px; font-size: var(--type-micro);">DECK</button>
+                <button class="btn-control" style="padding: 4px 8px; font-size: var(--type-micro);">PRINT</button>
+              </div>
+              <span class="tag-pill tag-emerald" style="padding: 1px 6px; font-size: var(--type-micro);">CALIBRATED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); text-transform: uppercase; font-size: 10.5px; color: var(--color-text-muted);">
+        <div>CROSS-PLATFORM DESIGN TOKENS</div>
+        <div>TESTED ACROSS BROWSERS &amp; SCREEN SIZES</div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Closing Summary & CTA -->
+    <div class="slide-pane" id="slide-5">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="label">04 / ECOSYSTEM READY</div>
+        <div style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; color: var(--color-text-muted);">[ 05 / 05 ]</div>
+      </div>
+
+      <div style="margin: auto 0; max-width: 860px;">
+        <div style="margin-bottom: 20px;">
+          <span class="tag-pill">SPECIFICATION V1.0.0-RC12</span>
+        </div>
+
+        <h2 style="font-family: var(--font-display); font-size: 46px; font-weight: 900; letter-spacing: var(--tracking-statement); line-height: 1.05; margin: 0 0 20px; text-transform: uppercase;">
+          Deploy Vellum with AI &amp; Code.
+        </h2>
+
+        <p style="font-size: 20px; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 32px;">
+          Feed DESIGN.md into Claude Code, Google Stitch, or Cursor to generate on-brand hardware interfaces with zero design drift.
+        </p>
+
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <button type="button" class="btn btn-pill btn-primary" style="padding: 12px 28px; font-size: 13px;" onclick="goToSlide(0)">
+            BACK TO START →
+          </button>
+          <span style="font-family: var(--font-mono); text-transform: uppercase; font-size: 12px; color: var(--color-text-muted);">
+            PROPRIETARY · ALL RIGHTS RESERVED
+          </span>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); text-transform: uppercase; font-size: 10.5px; color: var(--color-text-muted);">
+        <div>© 2026 JONATHAN HOCKADAY</div>
+        <div>VELLUM SPECIFICATION</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Control Bar -->
+  <div class="deck-controls-bar">
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <span style="font-family: var(--font-display); font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: var(--tracking-title);">VELLUM DECK</span>
+      <span id="slideCounter" style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; color: var(--color-text-muted);">SLIDE 1 OF 5</span>
+    </div>
+
+    <!-- Indicator Dots -->
+    <div class="deck-dots" id="deckDots">
+      <button type="button" class="deck-dot active" onclick="goToSlide(0)" aria-label="Slide 1" aria-current="true"></button>
+      <button type="button" class="deck-dot" onclick="goToSlide(1)" aria-label="Slide 2"></button>
+      <button type="button" class="deck-dot" onclick="goToSlide(2)" aria-label="Slide 3"></button>
+      <button type="button" class="deck-dot" onclick="goToSlide(3)" aria-label="Slide 4"></button>
+      <button type="button" class="deck-dot" onclick="goToSlide(4)" aria-label="Slide 5"></button>
+    </div>
+
+    <!-- Stepper Buttons & Theme Toggle -->
+    <div class="deck-stepper">
+      <button class="btn btn-control" id="prevBtn" onclick="prevSlide()" style="font-size: 10.5px; padding: 5px 10px;">← PREV</button>
+      <button class="btn btn-control" id="nextBtn" onclick="nextSlide()" style="font-size: 10.5px; padding: 5px 10px;">NEXT →</button>
+      <button data-mode-toggle class="btn btn-icon" id="themeToggleBtn" aria-label="Switch to dark mode" aria-pressed="false" style="width: 32px; height: 32px;">
+        <svg id="themeIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentSlideIndex = 0;
+const totalSlides = 5;
+const slidePanes = [
+  document.getElementById('slide-1'),
+  document.getElementById('slide-2'),
+  document.getElementById('slide-3'),
+  document.getElementById('slide-4'),
+  document.getElementById('slide-5')
+];
+const dots = document.getElementById('deckDots').children;
+const counter = document.getElementById('slideCounter');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+
+function updateSlide(index) {
+  currentSlideIndex = Math.max(0, Math.min(index, totalSlides - 1));
+  
+  slidePanes.forEach((pane, idx) => {
+    pane.classList.toggle('active', idx === currentSlideIndex);
+  });
+  
+  for (let i = 0; i < dots.length; i++) {
+    dots[i].classList.toggle('active', i === currentSlideIndex);
+    if (i === currentSlideIndex) dots[i].setAttribute('aria-current', 'true');
+    else dots[i].removeAttribute('aria-current');
+  }
+  
+  counter.textContent = `SLIDE ${currentSlideIndex + 1} OF ${totalSlides}`;
+  prevBtn.disabled = currentSlideIndex === 0;
+  nextBtn.disabled = currentSlideIndex === totalSlides - 1;
+}
+
+function nextSlide() {
+  if (currentSlideIndex < totalSlides - 1) {
+    updateSlide(currentSlideIndex + 1);
+  }
+}
+
+function prevSlide() {
+  if (currentSlideIndex > 0) {
+    updateSlide(currentSlideIndex - 1);
+  }
+}
+
+function goToSlide(index) {
+  updateSlide(index);
+}
+
+// Keyboard arrow navigation
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || (e.key === ' ' && !e.target.closest('button, a, input'))) {
+    nextSlide();
+  } else if (e.key === 'ArrowLeft') {
+    prevSlide();
+  }
+});
+
+// Theme toggle
+const themeBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+const MOON = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />';
+const SUN = '<circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />';
+
+function applyTheme(mode) {
+  const dark = mode === 'dark';
+  if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+  else document.documentElement.removeAttribute('data-theme');
+  themeIcon.innerHTML = dark ? SUN : MOON;
+  themeBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+  themeBtn.setAttribute('aria-pressed', String(dark));
+}
+
+themeBtn.addEventListener('click', () => {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  try { localStorage.setItem('site_theme', next); } catch (e) {}
+});
+
+let savedTheme = null;
+try { savedTheme = localStorage.getItem('site_theme'); } catch (e) {}
+applyTheme(savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+</script>
+</body>
+</html>

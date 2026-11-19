@@ -1,0 +1,168 @@
+<!-- @dsCard group="Foundations" name="Typography Scale" subtitle="The ten-step scale, three families, and the tracking pairs each step takes" viewport="640x760" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Typography Scale</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1000px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); font-size: var(--type-label); font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-mono-wide); text-transform: uppercase; color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+}
+.demo-note { font-size: var(--type-small); color: var(--color-text-secondary); margin: 0 0 var(--space-3); max-width: 68ch; }
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: var(--space-4); }
+
+.type-card {
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-tray);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--space-3);
+}
+.type-meta {
+  font-family: var(--font-mono); font-size: var(--type-micro);
+  color: var(--color-text-muted); text-transform: uppercase;
+  letter-spacing: var(--tracking-mono); margin-bottom: 6px;
+}
+.type-meta b { color: var(--color-text-primary); font-weight: var(--weight-bold); }
+
+.family-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+.family-card {
+  padding: var(--space-4);
+  border-radius: var(--radius-tray);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+}
+.family-name {
+  font-family: var(--font-display); font-size: var(--type-subhead);
+  font-weight: var(--weight-title); letter-spacing: var(--tracking-title);
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.family-owns { font-size: var(--type-small); color: var(--color-text-secondary); line-height: var(--leading-body); }
+.family-never {
+  font-family: var(--font-mono); font-size: var(--type-micro); text-transform: uppercase;
+  letter-spacing: var(--tracking-mono); color: var(--color-text-muted);
+  margin-top: var(--space-3); padding-top: var(--space-2); border-top: 1px solid var(--color-divider);
+}
+
+@media (max-width: 640px) {
+  .family-grid { grid-template-columns: 1fr; }
+  .type-card { padding: var(--space-3) var(--space-4); }
+}
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <div class="demo-head">Three families, one job each</div>
+  <div class="family-grid">
+    <div class="family-card">
+      <div class="family-name" style="font-family: var(--font-display); letter-spacing: var(--tracking-title);">Geist</div>
+      <div class="family-owns">Headlines, card titles, stat numerals. <span data-weights="--weight-title --weight-headline"></span> — a 600-weight headline is a different system, not a lighter one.</div>
+      <div class="family-never">Never · running prose</div>
+    </div>
+    <div class="family-card">
+      <div class="family-name" style="font-family: var(--font-body); text-transform: none;">Inter</div>
+      <div class="family-owns">Running prose, descriptions, answers. Left-aligned whenever it runs past two lines. <span data-weights="--weight-body --weight-medium"></span>.</div>
+      <div class="family-never">Never · labels, badges, buttons</div>
+    </div>
+    <div class="family-card">
+      <div class="family-name" style="font-family: var(--font-mono); font-size: var(--type-body);">JetBrains Mono</div>
+      <div class="family-owns">Every mechanical label, badge, counter, unit, CTA, and table header. Uppercase, always. <span data-weights="--weight-bold"></span>.</div>
+      <div class="family-never">Never · prose of any length</div>
+    </div>
+  </div>
+
+  <div class="demo-head">The scale</div>
+  <p class="demo-note">Ten steps, rendered at the exact values <code>tokens.json</code> ships. Fluid steps show their <code>clamp()</code> range and resize with the viewport. A medium may scale this set; it may not invent a step.</p>
+  <div id="scale"></div>
+
+  <div class="demo-head">Tracking pairs</div>
+  <p class="demo-note">Tracking is bound to the step, not chosen per use. Display type tightens as it grows; monospace opens up, and opens further when it stands alone with no border to give it structure.</p>
+  <div id="tracking"></div>
+
+  <div class="demo-head">Heading elements, h1 to h6</div>
+  <p class="demo-note">Bare elements, no classes. <code>h1</code> is the headline weight. <code>h2</code> to <code>h6</code> are the title weight. <code>h5</code> takes the body size and <code>h6</code> the small size, so neither falls below the floor.</p>
+  <div class="type-card">
+    <h1>Heading 1</h1>
+    <h2>Heading 2</h2>
+    <h3>Heading 3</h3>
+    <h4>Heading 4</h4>
+    <h5>Heading 5</h5>
+    <h6>Heading 6</h6>
+    <p>Body text follows, for comparison.</p>
+  </div>
+</main>
+
+<script src="../tokens.generated.js"></script>
+<script>
+const {LIGHT, META} = VellumTokens;
+
+/* Every specimen below renders from the token file. Nothing here restates a value. */
+
+const SCALE = [
+  ['--type-hero',    'Hero',    '--font-display', '--weight-headline', '--tracking-display',   'Vellum'],
+  ['--type-display', 'Display', '--font-display', '--weight-headline', '--tracking-display',   'Precision & clarity'],
+  ['--type-title',   'Title',   '--font-display', '--weight-title',    '--tracking-title',     'Section title'],
+  ['--type-heading', 'Heading', '--font-display', '--weight-title',    '--tracking-title',     'Card heading'],
+  ['--type-subhead', 'Subhead', '--font-display', '--weight-title',    '--tracking-title',     'Supporting subhead'],
+  ['--type-lead',    'Lead',    '--font-body',    '--weight-body',     '--tracking-body',      'A standfirst paragraph introducing the section that follows.'],
+  ['--type-body',    'Body',    '--font-body',    '--weight-body',     '--tracking-body',      'Running prose sets at the base size with generous leading, left-aligned so the eye returns to a predictable margin on every line.'],
+  ['--type-small',   'Small',   '--font-body',    '--weight-body',     '--tracking-body',      'Captions, dense table cells, and button labels.'],
+  ['--type-label',   'Label',   '--font-mono',    '--weight-bold',     '--tracking-mono',      'MONOSPACE LABEL'],
+  ['--type-micro',   'Micro',   '--font-mono',    '--weight-bold',     '--tracking-mono',      'CHIP · TABLE HEADER'],
+];
+
+/* Each family's weights are the roles it takes, read from the token file. */
+document.querySelectorAll('[data-weights]').forEach((el) => {
+  const w = el.dataset.weights.split(' ').map((role) => Number(LIGHT[role])).sort((a, b) => a - b);
+  el.textContent = `Weight ${w.length > 1 ? `${w[0]}–${w[w.length - 1]}` : w[0]} only`;
+});
+
+const UPPER = new Set(['--type-hero', '--type-display', '--type-title', '--type-heading', '--type-label', '--type-micro']);
+
+document.getElementById('scale').innerHTML = SCALE.map(([token, label, family, weight, tracking, sample]) => {
+  const value = LIGHT[token];
+  const fluid = value.includes('clamp');
+  return `<div class="type-card">
+    <div class="type-meta">
+      <b>${label}</b> · <code>${token}</code> · <span class="literal">${value}</span>${fluid ? ' · fluid' : ''} · ${LIGHT[weight]} · <span class="literal">${LIGHT[tracking]}</span>
+    </div>
+    <div style="
+      font-family: var(${family});
+      font-size: var(${token});
+      font-weight: var(${weight});
+      letter-spacing: var(${tracking});
+      line-height: ${token === '--type-hero' || token === '--type-display' ? 'var(--leading-display)' : 'var(--leading-body)'};
+      ${UPPER.has(token) ? 'text-transform: uppercase;' : ''}
+      color: var(--color-text-primary);
+      overflow-wrap: anywhere;
+    ">${sample}</div>
+  </div>`;
+}).join('');
+
+const TRACKING = ['--tracking-display', '--tracking-statement', '--tracking-title', '--tracking-body', '--tracking-mono', '--tracking-mono-wide', '--tracking-numeral'];
+
+document.getElementById('tracking').innerHTML = `
+  <div style="background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-tray); overflow: hidden;">
+    <table class="data-table" style="margin: 0;">
+      <thead><tr><th>Token</th><th>Value</th><th>Applies to</th></tr></thead>
+      <tbody>${TRACKING.map((n) => `<tr>
+        <td><code style="color: var(--color-text-primary); font-weight: var(--weight-bold);">${n}</code></td>
+        <td><code>${LIGHT[n]}</code></td>
+        <td>${(META[n] && META[n].description) || ''}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+  </div>`;
+</script>
+</body>
+</html>

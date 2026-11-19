@@ -1,0 +1,378 @@
+<!-- @dsCard group="Foundations" name="Component State Anatomy" subtitle="Default, hover, active, focus, and disabled across every primitive" viewport="1000x820" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Component State Anatomy</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1000px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+}
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+
+/* States Table Grid */
+.states-table-wrap {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-stage);
+  overflow: hidden;
+  backdrop-filter: blur(var(--blur-stage));
+  -webkit-backdrop-filter: blur(var(--blur-stage));
+  box-shadow: var(--elevation-stage);
+}
+
+.states-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.states-table th {
+  padding: 16px 20px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--color-surface-raised);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.states-table td {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--color-divider);
+  vertical-align: middle;
+}
+
+.states-table tr:last-child td {
+  border-bottom: none;
+}
+
+.component-name-cell {
+  font-family: var(--font-mono); text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.component-code-sub {
+  font-size: var(--type-micro);
+  color: var(--color-text-muted);
+  font-weight: 400;
+  display: block;
+  margin-top: 2px;
+}
+
+/* The matrix depicts states, so it must not RESPOND to them: a live cell under
+   the cursor shows hover in the column labelled "default". Every specimen is
+   inert, and each cell wears the .is-* class that styles.css pairs with the real
+   pseudo-class — so a state shown here is literally the state that ships. These
+   used to be hand-copied declarations and had already drifted. */
+.states-table td .btn,
+.states-table td .input,
+.states-table td .range-slider {
+  pointer-events: none;
+}
+
+.sim-hover-primary   { }  /* superseded by .is-hover — kept as a no-op so any */
+.sim-hover-secondary { }  /* stale markup degrades to the default state       */
+.sim-hover-icon      { }
+.sim-hover-control   { }
+.sim-hover-input     { }
+
+.sim-active-click { transform: translateY(1px) scale(0.98) !important; }
+
+.sim-focus-ring {
+  outline: 2px solid var(--color-text-primary) !important;
+  outline-offset: 2px !important;
+}
+
+.sim-slider-focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px var(--color-text-primary), var(--elevation-thumb) !important;
+}
+.sim-slider-focus::-moz-range-thumb {
+  box-shadow: 0 0 0 3px var(--color-text-primary), var(--elevation-thumb) !important;
+}
+
+.sim-disabled {
+  opacity: 0.38 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+.state-physics-card {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-tray);
+  padding: 20px 24px;
+  margin-top: 24px;
+}
+
+@media (max-width: 860px) {
+  .states-table-wrap { overflow-x: auto; }
+}
+/* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .states-table-wrap { background: var(--color-surface-solid); }
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient background lamps -->
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <div class="demo-head">Universal 5-State Component Anatomy Matrix</div>
+
+  <div class="states-table-wrap">
+    <table class="states-table">
+      <thead>
+        <tr>
+          <th>PRIMITIVE</th>
+          <th>1. DEFAULT (IDLE)</th>
+          <th>2. HOVER (ELEVATED)</th>
+          <th>3. ACTIVE (PRESSED)</th>
+          <th>4. FOCUSED (TAB KEY)</th>
+          <th>5. DISABLED</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Row 1: Primary Pill Button -->
+        <tr>
+          <td class="component-name-cell">
+            Primary Action Pill
+            <span class="component-code-sub literal">.btn-pill.btn-primary</span>
+          </td>
+          <td>
+            <button class="btn btn-pill btn-primary" style="font-size: 10.5px; padding: 6px 14px;">ACTION →</button>
+          </td>
+          <td>
+            <button class="btn btn-pill btn-primary is-hover sim-hover-primary" style="font-size: 10.5px; padding: 6px 14px;">ACTION →</button>
+          </td>
+          <td>
+            <button class="btn btn-pill btn-primary is-active sim-active-click" style="font-size: 10.5px; padding: 6px 14px;">ACTION →</button>
+          </td>
+          <td>
+            <button class="btn btn-pill btn-primary sim-focus-ring" style="font-size: 10.5px; padding: 6px 14px;">ACTION →</button>
+          </td>
+          <td>
+            <button class="btn btn-pill btn-primary sim-disabled" disabled style="font-size: 10.5px; padding: 6px 14px;">ACTION →</button>
+          </td>
+        </tr>
+
+        <!-- Row 2: secondary sheet pill -->
+        <tr>
+          <td class="component-name-cell">
+            Secondary sheet pill
+            <span class="component-code-sub literal">.btn-pill.btn-secondary</span>
+          </td>
+          <td>
+            <button class="btn btn-pill btn-secondary" style="font-size: 10.5px; padding: 6px 14px;">OPTION</button>
+          </td>
+          <td>
+            <button class="btn btn-pill btn-secondary is-hover sim-hover-secondary" style="font-size: 10.5px; padding: 6px 14px;">OPTION</button>
+          </td>
+          <td>
+            <button class="btn btn-pill btn-secondary is-active sim-active-click" style="font-size: 10.5px; padding: 6px 14px;">OPTION</button>
+          </td>
+          <td>
+            <button class="btn btn-pill btn-secondary sim-focus-ring" style="font-size: 10.5px; padding: 6px 14px;">OPTION</button>
+          </td>
+          <td>
+            <button class="btn btn-pill btn-secondary sim-disabled" disabled style="font-size: 10.5px; padding: 6px 14px;">OPTION</button>
+          </td>
+        </tr>
+
+        <!-- Row 3: Circular Icon Trigger -->
+        <tr>
+          <td class="component-name-cell">
+            Icon Trigger Button
+            <span class="component-code-sub literal">.btn-icon (36x36)</span>
+          </td>
+          <td>
+            <button class="btn btn-icon" aria-label="Search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-icon is-hover sim-hover-icon" aria-label="Search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-icon is-active sim-active-click" aria-label="Search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-icon sim-focus-ring" aria-label="Search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </button>
+          </td>
+          <td>
+            <button class="btn btn-icon sim-disabled" disabled aria-label="Search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </button>
+          </td>
+        </tr>
+
+        <!-- Row 4: Hardware Segmented Switch -->
+        <tr>
+          <td class="component-name-cell">
+            Segmented Switch
+            <span class="component-code-sub literal">.btn-control</span>
+          </td>
+          <td>
+            <button class="btn btn-control" style="font-size: 10.5px; padding: 6px 14px; min-width: 80px;">CONTROL</button>
+          </td>
+          <td>
+            <button class="btn btn-control is-hover sim-hover-control" style="font-size: 10.5px; padding: 6px 14px; min-width: 80px;">CONTROL</button>
+          </td>
+          <td>
+            <button class="btn btn-control active" style="font-size: 10.5px; padding: 6px 14px; min-width: 80px;">CONTROL</button>
+          </td>
+          <td>
+            <button class="btn btn-control sim-focus-ring" style="font-size: 10.5px; padding: 6px 14px; min-width: 80px;">CONTROL</button>
+          </td>
+          <td>
+            <button class="btn btn-control sim-disabled" disabled style="font-size: 10.5px; padding: 6px 14px; min-width: 80px;">CONTROL</button>
+          </td>
+        </tr>
+
+        <!-- Row 5: Precision Text Input -->
+        <tr>
+          <td class="component-name-cell">
+            Monochrome Text Field
+            <span class="component-code-sub literal">.input</span>
+          </td>
+          <td>
+            <input type="text" class="input" value="Input text" style="width: 110px; font-size: 11px; padding: 6px 10px;" />
+          </td>
+          <td>
+            <input type="text" class="input is-hover sim-hover-input" value="Input text" style="width: 110px; font-size: 11px; padding: 6px 10px;" />
+          </td>
+          <td>
+            <input type="text" class="input" value="Input text" style="width: 110px; font-size: 11px; padding: 6px 10px; border-color: var(--color-text-primary);" />
+          </td>
+          <td>
+            <input type="text" class="input is-focus" value="Input text" style="width: 110px; font-size: 11px; padding: 6px 10px;" />
+          </td>
+          <td>
+            <input type="text" class="input sim-disabled" value="Input text" disabled style="width: 110px; font-size: 11px; padding: 6px 10px;" />
+          </td>
+        </tr>
+
+        <!-- Row 6: Secondary Outline Chip -->
+        <tr>
+          <td class="component-name-cell">
+            Secondary Chip
+            <span class="component-code-sub literal">.btn-chip</span>
+          </td>
+          <td>
+            <button class="btn-chip" style="font-size: var(--type-micro); padding: 4px 10px; min-width: 68px;">CHIP</button>
+          </td>
+          <td>
+            <button class="btn-chip is-hover" style="font-size: var(--type-micro); padding: 4px 10px; min-width: 68px;">CHIP</button>
+          </td>
+          <td>
+            <button class="btn-chip active" style="font-size: var(--type-micro); padding: 4px 10px; min-width: 68px;">CHIP</button>
+          </td>
+          <td>
+            <button class="btn-chip sim-focus-ring" style="font-size: var(--type-micro); padding: 4px 10px; min-width: 68px;">CHIP</button>
+          </td>
+          <td>
+            <button class="btn-chip sim-disabled" disabled style="font-size: var(--type-micro); padding: 4px 10px; min-width: 68px;">CHIP</button>
+          </td>
+        </tr>
+
+        <!-- Row 6b: Stepper -->
+        <tr>
+          <td class="component-name-cell">
+            Stepper
+            <span class="component-code-sub literal">.btn-stepper</span>
+          </td>
+          <td>
+            <button class="btn-stepper" style="min-width: 68px;">NEXT →</button>
+          </td>
+          <td>
+            <button class="btn-stepper is-hover" style="min-width: 68px;">NEXT →</button>
+          </td>
+          <td>
+            <button class="btn-stepper sim-active-click" style="min-width: 68px;">NEXT →</button>
+          </td>
+          <td>
+            <button class="btn-stepper sim-focus-ring" style="min-width: 68px;">NEXT →</button>
+          </td>
+          <td>
+            <button class="btn-stepper sim-disabled" disabled style="min-width: 68px;">NEXT →</button>
+          </td>
+        </tr>
+
+        <!-- Row 7: Tactile Range Slider -->
+        <tr>
+          <td class="component-name-cell">
+            Range Slider
+            <span class="component-code-sub literal">.range-slider</span>
+          </td>
+          <td>
+            <input type="range" class="range-slider" min="0" max="100" value="30" style="width: 90px; --range-progress: 30%;" />
+          </td>
+          <td>
+            <input type="range" class="range-slider" min="0" max="100" value="30" style="width: 90px; --range-progress: 30%;" />
+          </td>
+          <td>
+            <input type="range" class="range-slider" min="0" max="100" value="75" style="width: 90px; --range-progress: 75%;" />
+          </td>
+          <td>
+            <input type="range" class="range-slider sim-slider-focus" min="0" max="100" value="30" style="width: 90px; --range-progress: 30%;" />
+          </td>
+          <td>
+            <input type="range" class="range-slider sim-disabled" disabled min="0" max="100" value="30" style="width: 90px; --range-progress: 30%;" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="state-physics-card">
+    <div style="font-family: var(--font-display); font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: var(--tracking-title); margin-bottom: 8px;">
+      Interaction Physics &amp; State Definitions
+    </div>
+    <ul style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; margin: 0; padding-left: 18px;">
+      <li><strong>1. Default (Idle):</strong> The component resting state with translucent sheet edges and standard ink contrast.</li>
+      <li><strong>2. Hover (Elevated):</strong> Mouse cursor enters the component. Elements lift quietly by <code>translateY(-1px)</code>, borders darken/crisp to <code>var(--color-text-primary)</code>, and a subtle lift is added.</li>
+      <li><strong>3. Active (Pressed):</strong> MouseDown or finger tap actuation. The component physically depresses by <code>translateY(1px) scale(0.98)</code>, simulating an analog mechanical switch throw.</li>
+      <li><strong>4. Focused (Keyboard Navigation):</strong> Triggered when a user navigates via the <kbd>Tab</kbd> key. Standard WCAG AAA accessibility ring strictly using a <code>2px solid var(--color-text-primary)</code> outline with <code>2px</code> offset (never browser default blue/yellow rings).</li>
+      <li><strong>5. Disabled:</strong> Inactive or non-interactive state. Drops to <code>opacity: 0.38</code> with <code>cursor: not-allowed</code>, preserving grid geometry without disappearing.</li>
+    </ul>
+  </div>
+</main>
+
+<script>
+// Dynamic Range Slider Progress Track Sync
+document.querySelectorAll('.range-slider').forEach(slider => {
+  const update = () => {
+    const min = parseFloat(slider.min) || 0;
+    const max = parseFloat(slider.max) || 100;
+    const val = parseFloat(slider.value) || 0;
+    const pct = ((val - min) / (max - min) * 100).toFixed(1);
+    slider.style.setProperty('--range-progress', pct + '%');
+  };
+  slider.addEventListener('input', update);
+  update();
+});
+</script>
+</body>
+</html>

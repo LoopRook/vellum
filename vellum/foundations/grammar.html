@@ -1,0 +1,257 @@
+<!-- @dsCard group="Foundations" name="Grammar: Constants &amp; Variables" subtitle="What every Vellum artifact must obey, against what each project may choose" viewport="1000x900" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Grammar</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1100px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); font-size: var(--type-label); font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-mono-wide); text-transform: uppercase; color: var(--color-text-muted);
+  margin: var(--space-8) 0 var(--space-3);
+}
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: var(--space-4); }
+
+.lede {
+  font-size: var(--type-lead); line-height: var(--leading-body);
+  color: var(--color-text-secondary); max-width: 62ch; margin: 0 0 var(--space-6);
+}
+.lede strong { color: var(--color-text-primary); font-weight: var(--weight-bold); }
+
+/* The split: constants on the left, variables on the right */
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); align-items: start; }
+
+.column {
+  padding: var(--space-6);
+  border-radius: var(--radius-tray);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(var(--blur-raised));
+  -webkit-backdrop-filter: blur(var(--blur-raised));
+}
+.column-title {
+  font-family: var(--font-display); font-size: var(--type-heading);
+  font-weight: var(--weight-title); letter-spacing: var(--tracking-title);
+  text-transform: uppercase; margin: 0 0 var(--space-1);
+}
+.column-sub {
+  font-family: var(--font-mono); font-size: var(--type-micro); font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-mono-wide); text-transform: uppercase;
+  color: var(--color-text-muted); margin-bottom: var(--space-4);
+}
+
+.rule { padding: var(--space-3) 0; border-top: 1px solid var(--color-divider); }
+.rule-name {
+  font-family: var(--font-mono); font-size: var(--type-label); font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-mono); text-transform: uppercase;
+  color: var(--color-text-primary); margin-bottom: 4px;
+}
+.rule-body { font-size: var(--type-small); line-height: var(--leading-body); color: var(--color-text-secondary); margin: 0; }
+.rule-body code {
+  font-family: var(--font-mono); font-size: 0.94em;
+  color: var(--color-text-primary); background: var(--color-wash-active);
+  padding: 1px 4px; border-radius: var(--radius-chip);
+}
+
+/* Ladder diagram */
+.ladder { margin-top: var(--space-3); }
+.rung {
+  display: flex; align-items: center; gap: var(--space-3);
+  font-family: var(--font-mono); text-transform: uppercase; font-size: var(--type-micro);
+  color: var(--color-text-secondary); padding: 3px 0;
+}
+.rung-bar { height: 10px; border-radius: var(--radius-chip); background: var(--color-text-primary); opacity: 0.16; flex: none; }
+.rung-name { flex: none; width: 120px; color: var(--color-text-primary); }
+.rung-val { color: var(--color-text-muted); }
+
+/* Audit list */
+.audit { counter-reset: audit; display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-6); }
+.audit-item {
+  counter-increment: audit; position: relative;
+  padding: var(--space-3) 0 var(--space-3) 34px;
+  border-top: 1px solid var(--color-divider);
+  font-size: var(--type-small); line-height: var(--leading-body); color: var(--color-text-secondary);
+}
+.audit-item::before {
+  content: counter(audit, decimal-leading-zero);
+  position: absolute; left: 0; top: var(--space-3);
+  font-family: var(--font-mono); text-transform: uppercase; font-size: var(--type-micro); font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-numeral); color: var(--color-text-muted);
+}
+.audit-item strong { color: var(--color-text-primary); font-weight: var(--weight-bold); display: block; }
+
+.note {
+  margin-top: var(--space-6); padding: var(--space-4) var(--space-6);
+  border-left: 2px solid var(--color-text-primary);
+  font-size: var(--type-small); line-height: var(--leading-body); color: var(--color-text-secondary);
+}
+.note strong { color: var(--color-text-primary); }
+
+@media (max-width: 860px) {
+  .split, .audit { grid-template-columns: 1fr; }
+  .audit-item { border-top: 1px solid var(--color-divider); }
+}
+/* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .column { background: var(--color-surface-solid); }
+}
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <p class="lede">
+    Vellum is a <strong>toolkit, not a template.</strong> Two sites built from it should look
+    nothing alike and still read as the same system. The left column is what makes that
+    recognition possible — break one and the artifact stops being Vellum. The right column
+    is yours. Fix any of it across every project and you have built a template instead.
+  </p>
+
+  <div class="demo-head">The line</div>
+  <div class="split">
+
+    <section class="column">
+      <h2 class="column-title">Constants</h2>
+      <div class="column-sub">[ Invariant · every artifact ]</div>
+
+      <div class="rule">
+        <div class="rule-name">01 · Type carries hierarchy</div>
+        <p class="rule-body">Geist 800–900 for display, Inter for prose, JetBrains Mono for every mechanical label — uppercase, always. Never colour as hierarchy.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">02 · Monochrome headlines</div>
+        <p class="rule-body">Display type is <code>--color-text-primary</code> or its inverse. No tint, no gradient, no accent word.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">03 · The elevation ladder</div>
+        <p class="rule-body">Blur expresses depth, and the order never changes. Rungs may be skipped, never reordered.</p>
+        <div class="ladder" id="ladder"></div>
+      </div>
+      <div class="rule">
+        <div class="rule-name">04 · The material has physics</div>
+        <p class="rule-body">Blur belongs to the sheet, never to text. Every sheet edge is exactly 1px and uncoloured. The lamps, two or three per mode, are what a sheet diffuses — without them every surface flattens.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">05 · Hover is quiet</div>
+        <p class="rule-body">Lift <code>2px</code>, deepen the shadow, brighten the edge. No glow, no colour shift, no scaling.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">06 · Accents are status, not brand</div>
+        <p class="rule-body">Action colour is monochrome ink that inverts across modes. Amber, emerald, and cyan report live state only — never a button fill, never a headline.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">07 · Pill grammar is binary</div>
+        <p class="rule-body">Untinted means category. Tinted means live state. If the label would read the same tomorrow, it is a category.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">08 · Radius encodes identity</div>
+        <p class="rule-body">Radius says what a thing is, not how big. Same radius means same kind of object. Choosing by eye breaks the grammar.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">09 · Focus is monochrome</div>
+        <p class="rule-body">Ink border plus <code>--color-focus-ring</code> halo. Browser-default blue is prohibited; so is removing focus entirely.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">10 · Paper is not a screen</div>
+        <p class="rule-body">Print drops every digital artifact. Structure survives as 0.5pt hairlines and 100% K type — the hierarchy is what makes it a sibling.</p>
+      </div>
+    </section>
+
+    <section class="column">
+      <h2 class="column-title">Variables</h2>
+      <div class="column-sub">[ Free · per project ]</div>
+
+      <div class="rule">
+        <div class="rule-name">Layout &amp; composition</div>
+        <p class="rule-body">Section count and order, grid structure, page length, whether there is a hero, a stage, or a console at all. <strong>The system has no required page shape.</strong> A single-column editorial page with none of the demo furniture is fully on-brand.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">Content &amp; voice</div>
+        <p class="rule-body">All yours. Telemetry readouts and frame rates belong to the product the examples demonstrated — not to the system. Labels stay uppercase mono; what they say is the project's.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">The project accent</div>
+        <p class="rule-body"><code>--color-accent</code> is designed to be repointed. Set it to anything. It stays bound by constant 06 — which is exactly why a magenta-accented site still reads as Vellum. The accent was never carrying the brand.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">Lamp hue</div>
+        <p class="rule-body">The lamps' hues are yours, under the opacity ceiling in <code>semantic.lamp</code>. Each is an opaque colour at an opacity, per mode. Fixed: that there are two or three per mode, that they sit behind everything with nothing beneath the table, and that they stay ambient rather than decorative.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">Density &amp; imagery</div>
+        <p class="rule-body">Which spacing steps you favour, how much air the layout carries, photography or illustration or nothing, and which glyphs you draw on.</p>
+      </div>
+      <div class="rule">
+        <div class="rule-name">Medium</div>
+        <p class="rule-body">Web, application, deck, print, stationery, email. The grammar survives all of them; constant 10 governs the crossing to paper.</p>
+      </div>
+
+      <div class="rule">
+        <div class="rule-name">Where the demo's layout went</div>
+        <p class="rule-body">The landing example's ten sections, 560px stage, 2×2 feature grid and four-column stat bar are <em>that example's</em> anatomy — documented in <code>examples/landing/ANATOMY.md</code>. Reproduce it if it suits the work; ignore it freely if it does not. An example is a reference to check output against, not a starting point.</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="demo-head">The audit — any single failure means off-brand</div>
+  <div class="audit">
+    <div class="audit-item"><strong>Type</strong>Geist 800–900 headlines on a display tracking role; every mechanical label uppercase mono?</div>
+    <div class="audit-item"><strong>Monochrome headlines</strong>No tint, gradient, or accent word anywhere in display type?</div>
+    <div class="audit-item"><strong>Action colour</strong>Every primary action monochrome ink, inverting between modes?</div>
+    <div class="audit-item"><strong>Accent discipline</strong>Point at any accent and name the state it reports. No answer means it fails.</div>
+    <div class="audit-item"><strong>Pill grammar</strong>Categories untinted, tint reserved for live state?</div>
+    <div class="audit-item"><strong>Elevation</strong>Ladder in order, consoles nested inside cards, cavities opaque and unblurred?</div>
+    <div class="audit-item"><strong>Sheet integrity</strong>Text sharp on the sheet, borders exactly 1px and uncoloured, two or three lamps present per mode?</div>
+    <div class="audit-item"><strong>Quiet hover</strong>Lift and shadow only — no glow, no border colour change, no scaling?</div>
+    <div class="audit-item"><strong>Focus</strong>Monochrome ring on keyboard navigation, no browser default?</div>
+    <div class="audit-item"><strong>Not a template</strong>Layout driven by this project's content, not copied from an example?</div>
+  </div>
+
+  <div class="note">
+    <strong>On the last question.</strong> A page can pass every style check and still fail the
+    system. If the layout reproduces an example's section order without the content needing that
+    order, the artifact is a copy of an example wearing the grammar — not a new Vellum
+    artifact. That distinction is the whole point of this page.
+  </div>
+</main>
+
+<script src="../tokens.generated.js"></script>
+<script>
+const {LIGHT, META} = VellumTokens;
+
+/* The ladder renders from the token file, so the depth ordering shown here is the
+   depth ordering the CSS actually ships. It cannot drift out of sync. */
+const RUNGS = [
+  ['Page ground', null,          'no blur'],
+  ['Sheet',       '--blur-stage',   null],
+  ['Spec drawer', '--blur-drawer',  null],
+  ['Fixed nav',   '--blur-nav',     null],
+  ['Console tray','--blur-raised', null],
+  ['Input field', '--blur-field',   null],
+  ['Cavity',      null,          'opaque — never a sheet'],
+];
+
+const px = (v) => parseFloat(v) || 0;
+const max = Math.max(...RUNGS.filter(r => r[1]).map(r => px(LIGHT[r[1]])));
+
+document.getElementById('ladder').innerHTML = RUNGS.map(([name, token, literal]) => {
+  const value = token ? LIGHT[token] : literal;
+  const width = token ? Math.round((px(LIGHT[token]) / max) * 90) + 4 : 4;
+  return `<div class="rung">
+    <span class="rung-name">${name}</span>
+    <span class="rung-bar" style="width:${width}px"></span>
+    <span class="rung-val">${token ? `<span class="literal">${token} · ${value}</span>` : value}</span>
+  </div>`;
+}).join('');
+
+</script>
+</body>
+</html>

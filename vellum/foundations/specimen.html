@@ -1,0 +1,286 @@
+<!-- @dsCard group="Foundations" name="System Specimen" subtitle="One-sheet poster: type, ramps, controls, and the sheet substrate together" viewport="1000x720" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — System Specimen</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1000px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+
+/* Specimen Poster Board */
+.specimen-board {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-stage);
+  backdrop-filter: blur(var(--blur-stage));
+  -webkit-backdrop-filter: blur(var(--blur-stage));
+  box-shadow: var(--elevation-stage);
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 20px;
+}
+
+.specimen-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.specimen-box {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-tray);
+  padding: 18px 20px;
+}
+
+.specimen-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Swatches */
+.swatch-bar {
+  display: flex;
+  height: 28px;
+  border-radius: var(--radius-control);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  margin-top: 8px;
+}
+.swatch-step { flex: 1; height: 100%; }
+
+/* Type Scale Specimens */
+.type-sample-huge {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: var(--tracking-display);
+  color: var(--color-text-primary);
+}
+.type-sample-body {
+  font-family: var(--font-body);
+  font-size: 38px;
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  color: var(--color-text-primary);
+}
+.type-sample-mono {
+  font-family: var(--font-mono); text-transform: uppercase;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 860px) {
+  .specimen-board {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+}
+/* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .specimen-board { background: var(--color-surface-solid); }
+}
+</style>
+</head>
+<body>
+
+<!-- Luminous ambient background lamps -->
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <div class="specimen-board">
+    
+    <!-- Column 1: Color Ramps & Swatches -->
+    <div class="specimen-col">
+      <div class="specimen-box">
+        <div class="specimen-head">
+          <span>Primary Monochrome</span>
+          <span data-token="--color-text-primary" data-pair="--color-action-fg"></span>
+        </div>
+        <div style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--color-text-primary);">MONOCHROME SWISS GROUND</div>
+        <div class="swatch-bar">
+          <div class="swatch-step" style="background: var(--color-neutral-100);"></div>
+          <div class="swatch-step" style="background: var(--color-neutral-200);"></div>
+          <div class="swatch-step" style="background: var(--color-neutral-300);"></div>
+          <div class="swatch-step" style="background: var(--color-neutral-400);"></div>
+          <div class="swatch-step" style="background: var(--color-neutral-500);"></div>
+          <div class="swatch-step" style="background: var(--color-neutral-600);"></div>
+          <div class="swatch-step" style="background: var(--color-neutral-700);"></div>
+          <div class="swatch-step" style="background: var(--color-neutral-800);"></div>
+          <div class="swatch-step" style="background: var(--color-neutral-900);"></div>
+        </div>
+      </div>
+
+      <div class="specimen-box">
+        <div class="specimen-head">
+          <span>Accent · Amber</span>
+          <span data-token="--color-status-amber"></span>
+        </div>
+        <div class="swatch-bar">
+          <div class="swatch-step" style="background: var(--color-amber-100);"></div>
+          <div class="swatch-step" style="background: var(--color-amber-300);"></div>
+          <div class="swatch-step" style="background: var(--color-amber-500);"></div>
+          <div class="swatch-step" style="background: var(--color-amber-700);"></div>
+          <div class="swatch-step" style="background: var(--color-amber-900);"></div>
+        </div>
+      </div>
+
+      <div class="specimen-box">
+        <div class="specimen-head">
+          <span>Accent · Emerald</span>
+          <span data-token="--color-status-emerald"></span>
+        </div>
+        <div class="swatch-bar">
+          <div class="swatch-step" style="background: var(--color-emerald-100);"></div>
+          <div class="swatch-step" style="background: var(--color-emerald-300);"></div>
+          <div class="swatch-step" style="background: var(--color-emerald-500);"></div>
+          <div class="swatch-step" style="background: var(--color-emerald-700);"></div>
+          <div class="swatch-step" style="background: var(--color-emerald-900);"></div>
+        </div>
+      </div>
+
+      <div class="specimen-box">
+        <div class="specimen-head">
+          <span>Accent · Cyan</span>
+          <span data-token="--color-status-cyan"></span>
+        </div>
+        <div class="swatch-bar">
+          <div class="swatch-step" style="background: var(--color-cyan-100);"></div>
+          <div class="swatch-step" style="background: var(--color-cyan-300);"></div>
+          <div class="swatch-step" style="background: var(--color-cyan-500);"></div>
+          <div class="swatch-step" style="background: var(--color-cyan-700);"></div>
+          <div class="swatch-step" style="background: var(--color-cyan-900);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 2: Typography Scale Specimen -->
+    <div class="specimen-col">
+      <div class="specimen-box" style="flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div class="specimen-head">
+            <span>Headline Display</span>
+            <span>Geist 900</span>
+          </div>
+          <div class="type-sample-huge">Aa</div>
+          <p style="font-size: 13px; color: var(--color-text-secondary); margin-top: 8px;">
+            Ultra-bold headline, at the tightest display tracking, <code>--tracking-display</code>.
+          </p>
+        </div>
+
+        <div style="margin: 20px 0;">
+          <div class="specimen-head">
+            <span>Body &amp; Subtitle</span>
+            <span>Inter 400/600</span>
+          </div>
+          <div class="type-sample-body">Aa</div>
+          <div style="margin-top: 8px; font-size: 13px; color: var(--color-text-secondary); line-height: 1.5;">
+            Balanced structural clarity designed for maximum readability across screen densities.
+          </div>
+        </div>
+
+        <div>
+          <div class="specimen-head">
+            <span>Monospace Rails</span>
+            <span>JetBrains Mono 700</span>
+          </div>
+          <div class="type-sample-mono literal">Aa</div>
+          <div style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; color: var(--color-text-muted); margin-top: 6px; letter-spacing: 0.08em;">
+            [ 01 · SYSTEM_SPEC_2026 ]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 3: Controls, Inputs & Pill Hierarchy -->
+    <div class="specimen-col">
+      <div class="specimen-box">
+        <div class="specimen-head">
+          <span>Action Controls</span>
+          <span>Pill System</span>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
+          <button class="btn btn-pill btn-primary" style="font-size: 11px; padding: 6px 14px;">PRIMARY</button>
+          <button class="btn btn-pill btn-secondary" style="font-size: 11px; padding: 6px 14px;">SECONDARY</button>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button class="btn btn-control active">ACTIVE</button>
+          <button class="btn btn-control">INACTIVE</button>
+        </div>
+      </div>
+
+      <div class="specimen-box">
+        <div class="specimen-head">
+          <span>Search &amp; Text Field</span>
+          <span>Monochrome Focus</span>
+        </div>
+        <input type="text" class="input" placeholder="Search components..." value="SEARCH_PARAM" style="font-size: 12.5px; padding: 8px 12px;" />
+      </div>
+
+      <div class="specimen-box">
+        <div class="specimen-head">
+          <span>Status Tags</span>
+          <span>Category vs State</span>
+        </div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;">
+          <span class="tag-pill">TAXONOMY</span>
+          <span class="tag-pill">SPECS</span>
+        </div>
+        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+          <span class="tag-pill tag-emerald">LIVE</span>
+          <span class="tag-pill tag-cyan">ACTIVE STATE</span>
+          <span class="tag-pill tag-amber">ATTENTION</span>
+        </div>
+      </div>
+
+      <div class="specimen-box">
+        <div class="specimen-head">
+          <span>Range Slider</span>
+          <span>Tactile Control</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <input type="range" class="range-slider" min="0" max="100" value="65" style="width: 100%; --range-progress: 65%;" oninput="this.style.setProperty('--range-progress', this.value + '%'); this.nextElementSibling.textContent = this.value + '%';" />
+          <span style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--color-text-primary); min-width: 32px; text-align: right;">65%</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+<script src="../tokens.generated.js"></script>
+<script>
+const {LIGHT, DARK} = VellumTokens;
+
+/* Captions read from the token file, and follow the mode toggle, so a swatch
+   and the value printed beside it can never drift apart. */
+const sync = () => {
+  const src = document.documentElement.getAttribute('data-theme') === 'dark' ? DARK : LIGHT;
+  document.querySelectorAll('[data-token]').forEach((n) => {
+    const pair = n.dataset.pair;
+    n.textContent = pair ? `${src[n.dataset.token]} / ${src[pair]}` : src[n.dataset.token];
+  });
+};
+new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+sync();
+</script>
+</body>
+</html>

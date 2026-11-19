@@ -1,0 +1,796 @@
+{
+  "namespace": "Vellum",
+  "components": [],
+  "startingPoints": [],
+  "cards": [
+    {
+      "path": "foundations/grammar.html",
+      "group": "Foundations",
+      "viewport": "1000x900",
+      "subtitle": "What every Vellum artifact must obey, against what each project may choose",
+      "name": "Grammar: Constants & Variables"
+    },
+    {
+      "path": "foundations/color.html",
+      "group": "Foundations",
+      "viewport": "640x600",
+      "subtitle": "light / dark grounds, sheet overlays, tonal ramps, and the status-only accent rule",
+      "name": "Color & Ramps"
+    },
+    {
+      "path": "foundations/type.html",
+      "group": "Foundations",
+      "viewport": "640x760",
+      "subtitle": "The ten-step scale, three families, and the tracking pairs each step takes",
+      "name": "Typography Scale"
+    },
+    {
+      "path": "foundations/sheets.html",
+      "group": "Foundations",
+      "viewport": "640x560",
+      "subtitle": "The blur ladder, sheet edges, and why a sheet needs the light table behind it",
+      "name": "Sheets & Depth"
+    },
+    {
+      "path": "foundations/layout.html",
+      "group": "Foundations",
+      "viewport": "640x640",
+      "subtitle": "The eight-step spacing scale and radius-as-identity mapping",
+      "name": "Spacing & Radii"
+    },
+    {
+      "path": "foundations/icons.html",
+      "group": "Foundations",
+      "viewport": "640x540",
+      "subtitle": "Lucide stroke glyphs, currentColor inheritance, and sheet trigger frames",
+      "name": "Interface Icons"
+    },
+    {
+      "path": "foundations/wayfinding.html",
+      "group": "Foundations",
+      "viewport": "1000x800",
+      "subtitle": "How sections, slides, and printed clauses are indexed in each medium",
+      "name": "Numbering & Wayfinding"
+    },
+    {
+      "path": "foundations/antipatterns.html",
+      "group": "Foundations",
+      "viewport": "1000x800",
+      "subtitle": "Brand invariants set against the prohibited pattern each one rules out",
+      "name": "Do's & Don'ts (Anti-Patterns)"
+    },
+    {
+      "path": "foundations/states.html",
+      "group": "Foundations",
+      "viewport": "1000x820",
+      "subtitle": "Default, hover, active, focus, and disabled across every primitive",
+      "name": "Component State Anatomy"
+    },
+    {
+      "path": "foundations/specimen.html",
+      "group": "Foundations",
+      "viewport": "1000x720",
+      "subtitle": "One-sheet poster: type, ramps, controls, and the sheet substrate together",
+      "name": "System Specimen"
+    },
+    {
+      "path": "foundations/cmf.html",
+      "group": "Foundations",
+      "viewport": "1000x820",
+      "subtitle": "Colour, material, and finish mapping from screen tokens to physical hardware",
+      "name": "CMF & Material"
+    },
+    {
+      "path": "foundations/print.html",
+      "group": "Foundations",
+      "viewport": "1000x820",
+      "subtitle": "Paper substrates, 0.5pt hairline grid, process inks, and document metadata rails",
+      "name": "Print & Physical Stationery"
+    },
+    {
+      "path": "components/buttons.html",
+      "group": "Components",
+      "viewport": "640x520",
+      "subtitle": "Pill CTAs, secondary actions, machined controls, chips, and icon triggers",
+      "name": "Buttons & Controls"
+    },
+    {
+      "path": "components/console.html",
+      "group": "Components",
+      "viewport": "640x480",
+      "subtitle": "Multi-row control trays, segmented mode pills, steppers, and calibrated sliders",
+      "name": "Toolbars & Segmented Controls"
+    },
+    {
+      "path": "components/cards.html",
+      "group": "Components",
+      "viewport": "640x600",
+      "subtitle": "Feature sheets with a quiet lift, and stacked FAQ disclosure",
+      "name": "Feature Cards & FAQ"
+    },
+    {
+      "path": "components/navigation.html",
+      "group": "Components",
+      "viewport": "640x420",
+      "subtitle": "Fixed nav sheet that hides on scroll down and returns on scroll up or hover",
+      "name": "Navigation"
+    },
+    {
+      "path": "components/forms.html",
+      "group": "Components",
+      "viewport": "640x500",
+      "subtitle": "Text fields, range sliders, and monochrome focus treatment",
+      "name": "Forms & Inputs"
+    },
+    {
+      "path": "components/table.html",
+      "group": "Components",
+      "viewport": "640x680",
+      "subtitle": "Hairline data grids, stat strips, and the mobile card-stack collapse",
+      "name": "Tables & Data Display"
+    },
+    {
+      "path": "components/dialog.html",
+      "group": "Components",
+      "viewport": "640x460",
+      "subtitle": "Floating sheet dialog over a blurred backdrop, with action alignment rules",
+      "name": "Dialogs & Modals"
+    }
+  ],
+  "examples": [
+    {
+      "name": "Dashboard",
+      "description": "A workspace application: collapsible navigation, a live telemetry strip, inspector controls, and a data grid.",
+      "folder": "examples/dashboard",
+      "entryPath": "examples/dashboard/index.html"
+    },
+    {
+      "name": "Deck",
+      "description": "A worked 16:9 widescreen presentation, for reference: cover, architecture, quadrants, hardware telemetries, and sheet feature slides.",
+      "folder": "examples/deck",
+      "entryPath": "examples/deck/Deck.dc.html",
+      "minWidth": 1280
+    },
+    {
+      "name": "Example Pitch Deck (Reference)",
+      "description": "A worked 16:9 deck showing how slides are composed from Vellum tokens, type, and sheets.",
+      "folder": "examples/deck",
+      "entryPath": "examples/deck/example-deck.html",
+      "minWidth": 1280
+    },
+    {
+      "name": "Landing",
+      "description": "A worked product landing page, for reference: fixed nav, split hero, a blurred stage card over a dark cavity, a live control console, a collapsible spec drawer, and a feature matrix.",
+      "folder": "examples/landing",
+      "entryPath": "examples/landing/index.html"
+    },
+    {
+      "name": "Printable Spec Sheet",
+      "description": "A print-ready Swiss A4/Letter executive memo and technical specification sheet with 0.5pt hairline grid and monospace telemetry.",
+      "folder": "examples/document",
+      "entryPath": "examples/document/spec.html"
+    }
+  ],
+  "hasThumbnailHtml": true,
+  "globalCssPaths": [
+    "styles.css"
+  ],
+  "tokens": [
+    {
+      "name": "--color-bg-canvas",
+      "value": "#F4F6F9",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-surface-solid",
+      "value": "#FFFFFF",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-surface-sunken",
+      "value": "#0F172A",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-surface-document",
+      "value": "#FFFFFF",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-text-primary",
+      "value": "#0F172A",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-text-secondary",
+      "value": "#475569",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-text-muted",
+      "value": "#5F7086",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-text-ghost",
+      "value": "rgba(15, 23, 42, 0.15)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-text-document",
+      "value": "#0F172A",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-text-on-sunken",
+      "value": "#FFFFFF",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-text-on-sunken-secondary",
+      "value": "#94A3B8",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-surface",
+      "value": "rgba(255, 255, 255, 0.65)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-border",
+      "value": "rgba(255, 255, 255, 0.85)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-border-hover",
+      "value": "rgba(255, 255, 255, 0.95)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-surface-raised",
+      "value": "rgba(255, 255, 255, 0.70)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-surface-nav",
+      "value": "rgba(244, 246, 249, 0.85)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-border-subtle",
+      "value": "rgba(0, 0, 0, 0.06)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-border-document",
+      "value": "rgba(255, 255, 255, 0.85)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-action-bg",
+      "value": "#0F172A",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-action-bg-hover",
+      "value": "#1E293B",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-action-bg-active",
+      "value": "#0F172A",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-action-fg",
+      "value": "#FFFFFF",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-action-border",
+      "value": "rgba(0, 0, 0, 0.42)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-divider",
+      "value": "rgba(0, 0, 0, 0.06)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-rule-strong",
+      "value": "rgba(0, 0, 0, 0.4)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-rule-document",
+      "value": "#0F172A",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-wash-hover",
+      "value": "rgba(0, 0, 0, 0.02)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-wash-active",
+      "value": "rgba(0, 0, 0, 0.06)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-wash-subtle",
+      "value": "rgba(0, 0, 0, 0.03)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-focus-ring",
+      "value": "rgba(15, 23, 42, 0.12)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-control-thumb",
+      "value": "#595F6E",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-control-thumb-ring",
+      "value": "#FFFFFF",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-status-red",
+      "value": "#F07B74",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-status-amber",
+      "value": "#D98E1E",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-status-emerald",
+      "value": "#13B37D",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-status-cyan",
+      "value": "#00ADCA",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-status-purple",
+      "value": "#B68AEB",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-status-red-fg",
+      "value": "#A94F4A",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-status-amber-fg",
+      "value": "#965E00",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-status-emerald-fg",
+      "value": "#007A53",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-status-cyan-fg",
+      "value": "#007589",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-status-purple-fg",
+      "value": "#7D5AA6",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-doc-affirm",
+      "value": "#13B37D",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-doc-negate",
+      "value": "#EF4444",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--color-accent",
+      "value": "#38BDF8",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--elevation-stage",
+      "value": "0 20px 50px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.95)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--elevation-hover",
+      "value": "0 25px 60px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--elevation-sm",
+      "value": "0 1px 2px rgba(0, 0, 0, 0.05)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--elevation-md",
+      "value": "0 4px 12px rgba(0, 0, 0, 0.08)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--elevation-lg",
+      "value": "0 20px 50px rgba(0, 0, 0, 0.12)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--elevation-action-hover",
+      "value": "0 4px 12px rgba(15, 23, 42, 0.20)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--elevation-nav-scrolled",
+      "value": "0 20px 40px rgba(0, 0, 0, 0.05)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--elevation-viewport",
+      "value": "0 40px 100px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.05)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--elevation-document-sheet",
+      "value": "0 30px 80px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.05)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--elevation-thumb",
+      "value": "0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.20)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--elevation-thumb-active",
+      "value": "0 3px 8px rgba(0, 0, 0, 0.45)",
+      "kind": "shadow",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-a-color",
+      "value": "var(--brand-1)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-a-opacity",
+      "value": "0.45",
+      "kind": "number",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-b-color",
+      "value": "var(--brand-2)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-b-opacity",
+      "value": "0.25",
+      "kind": "number",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-c-color",
+      "value": "var(--brand-3)",
+      "kind": "color",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-c-opacity",
+      "value": "0.2",
+      "kind": "number",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-a-top",
+      "value": "-10%",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-a-left",
+      "value": "-15%",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-b-top",
+      "value": "5%",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-b-right",
+      "value": "-10%",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-c-top",
+      "value": "45%",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-c-left",
+      "value": "25%",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--lamp-scale",
+      "value": "1",
+      "kind": "number",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--font-display",
+      "value": "'Geist', 'Inter Display', system-ui, -apple-system, sans-serif",
+      "kind": "fontfamily",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--font-body",
+      "value": "'Inter', 'Geist', system-ui, -apple-system, sans-serif",
+      "kind": "fontfamily",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--font-mono",
+      "value": "'JetBrains Mono', 'Space Mono', ui-monospace, monospace",
+      "kind": "fontfamily",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--type-hero",
+      "value": "clamp(40px, 11vw, 150px)",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--type-display",
+      "value": "clamp(40px, 6vw, 72px)",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--type-statement",
+      "value": "clamp(28px, 7vw, 90px)",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--type-title",
+      "value": "clamp(30px, 3.5vw, 36px)",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--type-heading",
+      "value": "24px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--type-subhead",
+      "value": "18px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--type-lead",
+      "value": "20px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--type-body",
+      "value": "14px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--type-small",
+      "value": "12px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--type-label",
+      "value": "11px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--type-micro",
+      "value": "10.5px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius-stage",
+      "value": "20px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius-drawer",
+      "value": "18px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius-tray",
+      "value": "14px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius-cavity",
+      "value": "12px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius-faq",
+      "value": "10px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius-control",
+      "value": "6px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius-chip",
+      "value": "4px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--radius-pill",
+      "value": "100px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--blur-stage",
+      "value": "40px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--blur-drawer",
+      "value": "30px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--blur-nav",
+      "value": "24px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--blur-raised",
+      "value": "20px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    },
+    {
+      "name": "--blur-field",
+      "value": "10px",
+      "kind": "dimension",
+      "definedIn": "styles.css"
+    }
+  ],
+  "themes": [
+    {
+      "name": "Light",
+      "selector": ":root",
+      "description": "Light mode. Light ground, sheets lit from behind."
+    },
+    {
+      "name": "Dark",
+      "selector": "[data-theme=\"dark\"]",
+      "description": "Dark mode. Dark ground, dark sheets over dim lamps."
+    }
+  ],
+  "fonts": [],
+  "brandFonts": [
+    {
+      "family": "Geist",
+      "status": "ok",
+      "tokens": [
+        "--font-display"
+      ],
+      "path": "styles.css"
+    },
+    {
+      "family": "Inter",
+      "status": "ok",
+      "tokens": [
+        "--font-body"
+      ],
+      "path": "styles.css"
+    },
+    {
+      "family": "JetBrains Mono",
+      "status": "ok",
+      "tokens": [
+        "--font-mono"
+      ],
+      "path": "styles.css"
+    }
+  ],
+  "source": "spa"
+}

@@ -1,0 +1,76 @@
+<!-- @dsCard group="Components" name="Buttons &amp; Controls" subtitle="Pill CTAs, secondary actions, machined controls, chips, and icon triggers" viewport="640x520" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Buttons &amp; controls</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1000px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+}
+.row { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; margin-bottom: 14px; }
+.dot-line { display: inline-flex; align-items: center; gap: var(--space-2); margin-right: var(--space-3); }
+.rule-box {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-tray);
+  padding: 16px 20px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <div class="demo-head">Primary, Secondary &amp; Icon Actions</div>
+  <div class="row">
+    <button class="btn btn-pill btn-primary">PRIMARY ACTION →</button>
+    <button class="btn btn-pill btn-secondary">SECONDARY PILL</button>
+    <button class="btn btn-icon" aria-label="Theme toggle">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+
+  <div class="demo-head">Pill Badges &amp; Tags</div>
+  <div class="row">
+    <span class="tag-pill">TAXONOMY</span>
+    <span class="tag-pill">ARCHITECTURE</span>
+    <span class="tag-pill">TYPOGRAPHY</span>
+  </div>
+  <div class="row">
+    <span class="tag-pill tag-red">FAILED</span>
+    <span class="tag-pill tag-amber">ATTENTION</span>
+    <span class="tag-pill tag-emerald">LIVE</span>
+    <span class="tag-pill tag-cyan">SYNCING</span>
+    <span class="tag-pill tag-purple">SCHEDULED</span>
+  </div>
+
+  <div class="demo-head">Status Dots</div>
+  <div class="row">
+    <span class="dot-line"><span class="status-dot status-dot-red"></span><span class="label">OFFLINE</span></span>
+    <span class="dot-line"><span class="status-dot status-dot-amber"></span><span class="label">DEGRADED</span></span>
+    <span class="dot-line"><span class="status-dot status-dot-emerald status-dot-live"></span><span class="label">LIVE</span></span>
+    <span class="dot-line"><span class="status-dot status-dot-cyan"></span><span class="label">UPDATED</span></span>
+    <span class="dot-line"><span class="status-dot status-dot-purple"></span><span class="label">SCHEDULED</span></span>
+  </div>
+
+  <div class="rule-box">
+    <strong style="color: var(--color-text-primary);">Pill Badge Rule:</strong> Use <strong>Neutral Untinted Pills</strong> for categories, taxonomy, and structural labels. Use <strong>Semantic Tinted Pills</strong> strictly for state, alerts, and live status indicators. A <strong>Status Dot</strong> always sits beside the word that names its state; the word carries the meaning.
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!-- @dsExample name="Printable Spec Sheet" description="A print-ready Swiss A4/Letter executive memo and technical specification sheet with 0.5pt hairline grid and monospace telemetry." -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Technical Specification Sheet</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+/* Printable Document Architecture */
+.doc-canvas-wrapper {
+  padding: 40px 16px 80px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.doc-sheet {
+  width: 100%;
+  max-width: 840px;
+  min-height: 1100px;
+  background: var(--color-surface-document);
+  color: var(--color-text-document);
+  border-radius: var(--radius-tray);
+  border: 1px solid var(--color-border-document);
+  box-shadow: var(--elevation-document-sheet);
+  padding: 64px 72px;
+  box-sizing: border-box;
+  font-family: var(--font-body);
+}
+
+/* Hairline Grid & Typography */
+.doc-header-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 24px;
+  border-bottom: 1.5px solid var(--color-rule-document);
+  margin-bottom: 32px;
+}
+
+.doc-brand-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: var(--tracking-title);
+  line-height: 1;
+}
+
+.doc-brand-sub {
+  font-family: var(--font-mono); text-transform: uppercase;
+  font-size: var(--type-micro);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+}
+
+.doc-telemetry-box {
+  font-family: var(--font-mono); text-transform: uppercase;
+  font-size: var(--type-micro);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  text-align: right;
+}
+
+.doc-title-block {
+  margin-bottom: 36px;
+}
+
+.doc-kicker {
+  font-family: var(--font-mono); text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.doc-main-title {
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: var(--tracking-title);
+  line-height: 1.05;
+  margin: 0 0 16px;
+}
+
+.doc-lead {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.doc-section-head {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-divider);
+  margin: 32px 0 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin-bottom: 24px;
+}
+
+.doc-table th {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-divider);
+  text-align: left;
+  background: var(--color-wash-subtle);
+}
+
+.doc-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.doc-footer-grid {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-divider);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono); text-transform: uppercase;
+  font-size: var(--type-micro);
+  color: var(--color-text-muted);
+}
+
+/* Print Optimization */
+@media print {
+  body {
+    background: var(--print-paper) !important;
+  }
+  .light-table,
+  .print-action-bar {
+    display: none !important;
+  }
+  .doc-canvas-wrapper {
+    padding: 0 !important;
+  }
+  .doc-sheet {
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    background: var(--print-paper) !important;
+    color: var(--print-ink) !important;
+  }
+  .doc-header-grid {
+    border-bottom-color: var(--print-rule) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .doc-sheet {
+    padding: 32px 20px;
+  }
+  .doc-header-grid {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .doc-telemetry-box {
+    text-align: left;
+  }
+}
+
+/* A print-destined document keeps its table structure on screen so the view
+   matches the sheet. The table therefore gets its own horizontal scroll rather
+   than collapsing — and the PAGE still never scrolls sideways. No effect in
+   print: the container has no width constraint on paper. */
+.doc-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+/* This page has always lit two lamps, A and B: its light table was built
+   with two lamp divs. Lamp C is switched off here so it keeps that look
+   now that the table paints every lamp itself (DECISIONS 064). */
+.light-table { --lamp-c-opacity: 0; }
+@media print { .doc-table-scroll { overflow-x: visible; } }
+</style>
+</head>
+<body>
+
+<!-- Ambient background lamps -->
+<div class="light-table"></div>
+
+<div class="doc-canvas-wrapper">
+  <div class="doc-sheet">
+    <!-- Top Action Bar (Print & Theme Toggles) -->
+    <div class="print-action-bar" style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 24px;">
+      <button class="btn btn-control" onclick="window.print()">PRINT / EXPORT PDF</button>
+      <button data-mode-toggle class="btn btn-control" id="docThemeBtn" aria-pressed="false" onclick="toggleDocTheme()">TOGGLE DARK</button>
+    </div>
+
+    <!-- Letterhead Header -->
+    <header class="doc-header-grid">
+      <div>
+        <div class="doc-brand-title">VELLUM</div>
+        <div class="doc-brand-sub">DESIGN SYSTEM SPECIFICATION</div>
+      </div>
+      <div class="doc-telemetry-box">
+        <div><strong>DOCUMENT ID:</strong> VELLUM-SPEC-2026-A</div>
+        <div><strong>SPEC VERSION:</strong> 1.0.0-RC12</div>
+        <div><strong>LICENCE:</strong> MPL-2.0</div>
+        <div><strong>PAGE:</strong> 01 OF 01</div>
+      </div>
+    </header>
+
+    <!-- Title Block -->
+    <div class="doc-title-block">
+      <div class="doc-kicker">TECHNICAL MEMORANDUM &amp; STANDARD DIRECTIVE</div>
+      <h1 class="doc-main-title">Vellum Design System Specification</h1>
+      <p class="doc-lead">
+        This document codifies the design tokens, typographic hierarchy, sheet blurs, and tactile controls of the Vellum design system for human engineers and autonomous AI agents.
+      </p>
+    </div>
+
+    <!-- Section 01: Core Architecture Tokens -->
+    <div class="doc-section-head">
+      <span>01 / System Token Hierarchy</span>
+      <span>ISO/IEC COMPLIANT</span>
+    </div>
+
+    <div class="doc-table-scroll"><table class="doc-table">
+      <thead>
+        <tr>
+          <th>Token Category</th>
+          <th>Light mode</th>
+          <th>Dark mode</th>
+          <th>Semantic Application</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>--color-bg-canvas</code></td>
+          <td><code>#F4F6F9</code></td>
+          <td><code>#18181B</code></td>
+          <td>Primary canvas ground</td>
+        </tr>
+        <tr>
+          <td><code>--color-surface</code></td>
+          <td><code>rgba(255,255,255,0.65)</code></td>
+          <td><code>rgba(12,13,14,0.1929)</code></td>
+          <td>40px backdrop blur cards</td>
+        </tr>
+        <tr>
+          <td><code>--color-surface-sunken</code></td>
+          <td><code>#0F172A</code></td>
+          <td><code>#0B0C0D</code></td>
+          <td>Recessed display viewports</td>
+        </tr>
+        <tr>
+          <td><code>--color-status-emerald</code></td>
+          <td><code>#13B37D</code></td>
+          <td><code>#13B37D</code></td>
+          <td>Active status &amp; live readouts</td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <!-- Section 02: Invariants & Grammar Rules -->
+    <div class="doc-section-head">
+      <span>02 / Core Behavioral Invariants</span>
+      <span>STRICT COMPLIANCE</span>
+    </div>
+
+    <ul class="spec-list" style="padding-left: 18px; font-size: 13.5px; line-height: 1.7; margin: 0 0 24px;">
+      <li><strong>Pill Grammar</strong>: Neutral untinted pills (<code>.tag-pill</code>) are strictly reserved for structural categories (e.g. <code>TYPOGRAPHY</code>, <code>CONTROLS</code>). Tinted pills (red, amber, emerald, cyan, purple) are reserved for real-time states and telemetry.</li>
+      <li><strong>Quiet Elevation Hovers</strong>: Interactive cards rise by <code>translateY(-2px)</code>; in light mode the edge brightens, in dark the rise is the whole gesture. Harsh colored border glows on card hover are strictly prohibited.</li>
+      <li><strong>Monochrome Focus Rings</strong>: Form fields and sliders take a clean ink border (<code>border-color: var(--color-text-primary)</code>) plus a monochrome halo (<code>--color-focus-ring</code>), never the browser's blue ring.</li>
+      <li><strong>Responsive Stacking</strong>: Structured data tables automatically collapse into self-contained card stacks on viewports &le; 540px.</li>
+    </ul>
+
+    <!-- Section 03: Sign-Off & Verification -->
+    <div class="doc-section-head">
+      <span>03 / System Verification &amp; Authorization</span>
+      <span>HASH: 4F92-A81C-99E0</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 12px; font-family: var(--font-mono); text-transform: uppercase; margin-top: 16px;">
+      <div>
+        <div style="color: var(--color-text-muted); margin-bottom: 4px;">ARCHITECTURAL SIGN-OFF:</div>
+        <div style="font-weight: 700; border-bottom: 1px solid var(--color-divider); padding-bottom: 4px;">CORE DESIGN SYSTEMS TEAM</div>
+      </div>
+      <div>
+        <div style="color: var(--color-text-muted); margin-bottom: 4px;">VERIFICATION ENGINE:</div>
+        <div style="font-weight: 700; border-bottom: 1px solid var(--color-divider); padding-bottom: 4px;">0 ERRORS · 0 WARNINGS PASS</div>
+      </div>
+    </div>
+
+    <!-- Letterhead Footer -->
+    <footer class="doc-footer-grid">
+      <div>VELLUM · JONATHAN HOCKADAY · MPL-2.0</div>
+      <div>END OF MEMORANDUM · SHEET 01/01</div>
+    </footer>
+  </div>
+</div>
+
+<script>
+function applyDocTheme(mode) {
+  const dark = mode === 'dark';
+  if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+  else document.documentElement.removeAttribute('data-theme');
+  document.getElementById('docThemeBtn').setAttribute('aria-pressed', String(dark));
+}
+
+function toggleDocTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  applyDocTheme(next);
+  try { localStorage.setItem('site_theme', next); } catch (e) {}
+}
+
+let savedDocTheme = null;
+try { savedDocTheme = localStorage.getItem('site_theme'); } catch (e) {}
+applyDocTheme(savedDocTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!-- @dsCard group="Components" name="Dialogs &amp; Modals" subtitle="Floating sheet dialog over a blurred backdrop, with action alignment rules" viewport="640x460" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Dialog &amp; modals</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1000px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+}
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <div class="demo-head">Elevated Modal Surface</div>
+  <div class="card" style="padding: 28px; border-radius: var(--radius-stage); box-shadow: var(--elevation-lg);">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+      <div>
+        <span class="tag-pill">CONFIGURATION</span>
+        <h3 style="margin-top: 10px; font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: var(--tracking-title);">System Pipeline Settings</h3>
+      </div>
+      <button class="btn btn-icon" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    
+    <p style="font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
+      Changes apply immediately and affect every member of this workspace.
+    </p>
+
+    <div class="modal-actions">
+      <button class="btn btn-pill btn-secondary">CANCEL</button>
+      <button class="btn btn-pill btn-primary">SAVE SETTINGS →</button>
+    </div>
+  </div>
+</main>
+</body>
+</html>

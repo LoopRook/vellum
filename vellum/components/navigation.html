@@ -1,0 +1,154 @@
+<!-- @dsCard group="Components" name="Navigation" subtitle="Fixed nav sheet that hides on scroll down and returns on scroll up or hover" viewport="640x420" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Navigation</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1000px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+}
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+
+/* Exact Header Structure matching Landing Example & Live Reference */
+.nav-header-box {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-tray);
+  backdrop-filter: blur(var(--blur-nav));
+  -webkit-backdrop-filter: blur(var(--blur-nav));
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--elevation-sm);
+}
+
+.nav-bar-demo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+}
+
+.demo-note { font-size: var(--type-small); color: var(--color-text-secondary); margin: 0 0 var(--space-3); max-width: 68ch; }
+
+.brand-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: var(--tracking-title);
+  color: var(--color-text-primary);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono); text-transform: uppercase;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+}
+
+.nav-links a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--duration-fast) ease;
+}
+
+.nav-links a:hover {
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 640px) {
+  .nav-links {
+    display: none;
+  }
+  .nav-header-box {
+    padding: 10px 16px;
+  }
+}
+/* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .nav-header-box { background: var(--color-surface-solid); }
+}
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="toggleNavTheme()">TOGGLE DARK</button>
+  </div>
+
+  <div class="demo-head">Smart nav sheet (2-part right-clustered layout)</div>
+  <header class="nav-header-box">
+    <!-- Left: Brand Mark -->
+    <div class="brand-title">
+      VELLUM
+    </div>
+
+    <!-- Right: Nav Links + Theme Toggle + Primary CTA -->
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <nav class="nav-links">
+        <a href="#">FEATURES</a>
+        <a href="#">SPECS</a>
+        <a href="#">BENCHMARKS</a>
+        <a href="#">FAQ</a>
+      </nav>
+
+      <button data-mode-toggle class="btn btn-icon" id="navThemeToggleBtn" onclick="toggleNavTheme()" aria-label="Toggle Theme">
+        <svg id="navThemeIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+
+      <button class="btn btn-pill btn-primary" style="padding: 7px 18px; font-size: 11px;">GET STARTED</button>
+    </div>
+  </header>
+
+  <div class="demo-head">Pinned nav bar (<span class="literal">.nav</span>)</div>
+  <p class="demo-note">The flat bar that sits at the top edge of a page and stays there: the nav material, a hairline below, no radius. The floating sheet above is the other form. A page picks one.</p>
+  <header class="nav nav-bar-demo">
+    <div class="brand-title">VELLUM</div>
+    <nav class="nav-links">
+      <a href="#">FEATURES</a>
+      <a href="#">SPECS</a>
+      <a href="#">BENCHMARKS</a>
+      <a href="#">FAQ</a>
+    </nav>
+  </header>
+</main>
+
+<script>
+function toggleNavTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'dark';
+  if (isDark) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  updateNavThemeIcon(isDark);
+}
+
+function updateNavThemeIcon(isDark) {
+  const icon = document.getElementById('navThemeIcon');
+  if (!icon) return;
+  if (isDark) {
+    // Sun Icon
+    icon.innerHTML = `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`;
+  } else {
+    // Moon Icon
+    icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+  }
+}
+</script>
+</body>
+</html>

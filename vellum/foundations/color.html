@@ -1,0 +1,224 @@
+<!-- @dsCard group="Foundations" name="Color &amp; Ramps" subtitle="light / dark grounds, sheet overlays, tonal ramps, and the status-only accent rule" viewport="640x600" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Color &amp; Ramps</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1000px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); font-size: var(--type-label); font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-mono-wide); text-transform: uppercase; color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+}
+.demo-note { font-size: var(--type-small); color: var(--color-text-secondary); margin: 0 0 var(--space-3); max-width: 68ch; }
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: var(--space-4); }
+
+.swatches { display: flex; gap: var(--space-2); }
+.swc { flex: 1; min-width: 0; }
+.sw { height: 38px; border-radius: var(--radius-control); border: 1px solid var(--color-border); }
+.swl {
+  font-family: var(--font-mono); font-size: var(--type-micro); color: var(--color-text-muted);
+  margin-top: 4px; text-transform: uppercase; letter-spacing: var(--tracking-mono);
+  overflow: hidden; text-overflow: ellipsis;
+}
+.swl b { color: var(--color-text-primary); font-weight: var(--weight-bold); display: block; }
+.swl-rule { display: block; }
+
+.rrow { display: flex; align-items: center; gap: var(--space-3); margin: var(--space-2) 0; }
+.rlabel {
+  flex: none; width: 72px; font-family: var(--font-mono); font-size: var(--type-micro);
+  letter-spacing: var(--tracking-mono-wide); color: var(--color-text-muted); text-transform: uppercase;
+}
+.ramp { display: flex; gap: 4px; flex: 1; }
+.ramp .sw { flex: 1; height: 24px; }
+
+.accent-callout {
+  margin-top: var(--space-3); padding: var(--space-4) var(--space-6);
+  border-left: 2px solid var(--color-accent);
+  font-size: var(--type-small); line-height: var(--leading-body); color: var(--color-text-secondary);
+}
+.accent-callout strong { color: var(--color-text-primary); }
+
+@media (max-width: 540px) {
+  .swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+  .rlabel { width: 54px; font-size: var(--type-micro); }
+  .ramp { gap: 2px; }
+}
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <div class="demo-head">Core surface &amp; canvas roles</div>
+  <p class="demo-note">Every label below is read from <code>tokens.json</code> at render time, so a swatch and its caption cannot disagree.</p>
+  <div class="swatches" id="coreSwatches"></div>
+
+  <div class="demo-head">Brand palette</div>
+  <p class="demo-note">The project's colours, each exactly as given, and the lamps they light. A brand brings as many colours as it has; which one lights each lamp is chosen per mode, because light to dark does not always carry over (GRAMMAR §3.3, §3.5). These are Vellum's own; a project replaces them.</p>
+  <div class="swatches" id="brandSwatches"></div>
+  <div style="background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-tray); overflow: hidden; margin-top: var(--space-3);">
+    <table class="data-table" style="margin: 0;">
+      <thead><tr><th>Lamp</th><th>light mode</th><th>dark mode</th></tr></thead>
+      <tbody id="lampRows"></tbody>
+    </table>
+  </div>
+
+  <div class="demo-head">Status colours</div>
+  <p class="demo-note">The core five, read from <code>tokens.json</code>. A fixed status keeps its job and may be recoloured only inside its family's hue range; a free one is named by the project and may take any hue a free status may sit at, a brand colour included. A project may also add its own (GRAMMAR §3.9).</p>
+  <div class="swatches" id="statusSwatches"></div>
+
+  <div class="demo-head">Tonal ramps</div>
+  <p class="demo-note">The full palette. A project may reach for any step; unused steps are expected — shipping the whole ramp is the point.</p>
+  <div id="ramps"></div>
+
+  <div class="demo-head">Color roles &amp; usage</div>
+  <p class="demo-note">Every colour role in <code>semantic.color</code>, derived from the token file at render time. Rows marked <strong>MANUAL ONLY</strong> are workbench chrome and must never appear in a product interface.</p>
+  <div style="background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-tray); overflow: hidden; margin-top: var(--space-3);">
+    <table class="data-table" style="margin: 0;">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>light mode</th>
+          <th>dark mode</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+      <tbody id="roleRows"></tbody>
+    </table>
+  </div>
+
+  <div class="demo-head">The accent</div>
+  <div class="accent-callout" id="accentNote"></div>
+</main>
+
+<script src="../tokens.generated.js"></script>
+<script>
+const {LIGHT, DARK, META} = VellumTokens;
+
+const el = (id) => document.getElementById(id);
+
+/* --- Core surfaces ------------------------------------------------------- */
+const CORE = [
+  ['--color-bg-canvas',   'Canvas'],
+  ['--color-surface',    'Sheet'],
+  ['--color-surface-sunken',   'Cavity'],
+];
+
+el('coreSwatches').innerHTML = CORE.map(([token, label]) => `
+  <div class="swc">
+    <div class="sw" style="background: var(${token}); ${token === '--color-surface' ? 'backdrop-filter: blur(var(--blur-field));' : ''}"></div>
+    <div class="swl"><b>${label}</b><span data-live="${token}">${LIGHT[token]}</span></div>
+  </div>`).join('');
+
+/* --- Brand palette and the lamps it lights, read from the token file ------
+   semantic.brand.<n> are the colours; each lamp's colour names one of them per mode
+   (DECISIONS 046), so the table says what the CSS actually does. */
+const BRAND = Object.entries(META)
+  .filter(([, m]) => /^semantic\.brand\.\d+$/.test(m.path || ''))
+  .sort((a, b) => +a[1].path.split('.').pop() - +b[1].path.split('.').pop())
+  .map(([name]) => name);
+el('brandSwatches').innerHTML = BRAND.map((n) => `
+  <div class="swc">
+    <div class="sw" style="background: var(${n})"></div>
+    <div class="swl"><b>${n.replace('--', '')}</b>${LIGHT[n]}</div>
+  </div>`).join('');
+/* --- Status colours, read from the token file ------------------------------
+   Each core status role carries its kind (fixed, with the range it may move in, or free) in
+   META.status (DECISIONS 058), so this list and its rules cannot fall behind the tokens. */
+const STATUS = Object.entries(META).filter(([, m]) => m.status && /^semantic\.color\.status-[a-z]+$/.test(m.path || ''));
+el('statusSwatches').innerHTML = STATUS.map(([n, m]) => {
+  const rule = m.status.kind === 'fixed'
+    ? `fixed · ${m.status.range.map(([a, b]) => `${a}–${b}°`).join(' or ')}`
+    : 'free · named per project';
+  return `
+  <div class="swc">
+    <div class="sw" style="background: var(${n})"></div>
+    <div class="swl"><b>${n.replace('--color-status-', '')}</b><span data-live="${n}">${LIGHT[n]}</span><span class="swl-rule">${rule}</span></div>
+  </div>`;
+}).join('');
+
+// Each lamp is two tokens per mode, its colour and its peak opacity (DECISIONS 064).
+const lit = (colour, opacity) => {
+  const m = /^var\((--(?:brand|color-brand|color-neutral)-[a-z0-9-]+)\)$/.exec(String(colour || '').trim());
+  const a = Number(opacity);
+  if (!Number.isFinite(a)) return '<code>no opacity</code>';
+  if (a === 0) return 'off';
+  if (!m) return '<code>not from the palette</code>';
+  const sw = `<span class="sw" style="display:inline-block;vertical-align:middle;width:14px;height:14px;margin-right:6px;background:var(${m[1]})"></span>`;
+  return `${sw}<code>${m[1].replace('--', '')}</code> at ${+(a * 100).toFixed(2)}%`;
+};
+el('lampRows').innerHTML = ['a', 'b', 'c'].map((k) =>
+  `<tr><td>Lamp ${k.toUpperCase()}</td><td>${lit(LIGHT['--lamp-' + k + '-color'], LIGHT['--lamp-' + k + '-opacity'])}</td><td>${lit(DARK['--lamp-' + k + '-color'], DARK['--lamp-' + k + '-opacity'])}</td></tr>`).join('');
+
+/* --- Ramps, discovered from the token file rather than listed by hand -----
+   Grouped by the token PATH (primitive.color.<family>.<step>) rather than by
+   splitting the CSS name: the leading `--` puts two empty slots at the front of
+   a name split, which is exactly the kind of off-by-one that silently produces
+   one empty ramp instead of four. The path has no such trap. */
+const rampSteps = {};
+for (const [name, m] of Object.entries(META)) {
+  const parts = (m.path || '').split('.');
+  if (parts[0] !== 'primitive' || parts[1] !== 'color' || parts.length !== 4) continue;
+  (rampSteps[parts[2]] ||= []).push({ name, step: parseInt(parts[3], 10) });
+}
+
+el('ramps').innerHTML = Object.entries(rampSteps)
+  .filter(([, steps]) => steps.length > 1)
+  .map(([ramp, steps]) => {
+    steps.sort((a, b) => a.step - b.step);
+    return `<div class="rrow">
+      <span class="rlabel">${ramp}</span>
+      <div class="ramp">${steps.map(({ name }) => `<div class="sw" title="${name} · ${LIGHT[name]}" style="background: var(${name})"></div>`).join('')}</div>
+    </div>`;
+  }).join('');
+
+/* --- Role table, discovered from the token file rather than listed by hand ---
+   This table used to be a hardcoded array, and it was the only part of this card
+   that could disagree with tokens.json — which it did, falling six roles behind
+   between RC3 and RC5 (surface-nav, action-bg-hover, border-hover, border-subtle,
+   and the two doc roles). Deriving it from the token PATH means a role added to
+   semantic.color appears here the next time the system is built. */
+const ROLES = Object.entries(META)
+  .filter(([, m]) => {
+    const parts = (m.path || '').split('.');
+    return parts[0] === 'semantic' && parts[1] === 'color' && parts.length === 3;
+  })
+  .map(([name]) => name);
+
+el('roleRows').innerHTML = ROLES.map((n) => {
+  const m = META[n] || {};
+  const docOnly = /DOCUMENTATION CHROME ONLY/i.test(m.description || '');
+  return `<tr>
+    <td><code style="color: var(--color-text-primary); font-weight: var(--weight-bold);">${n}</code>${
+      docOnly ? ' <span class="tag-pill" style="font-size: var(--type-micro);">MANUAL ONLY</span>' : ''
+    }</td>
+    <td><code>${LIGHT[n]}</code></td>
+    <td><code>${DARK[n]}</code></td>
+    <td>${m.description || ''}</td>
+  </tr>`;
+}).join('');
+
+/* --- The accent note is the token's own description, so the card cannot
+       claim a rule the token file does not state. --------------------------- */
+el('accentNote').innerHTML =
+  `<strong>--color-accent</strong> — ${(META['--color-accent'].description || '')}`;
+
+/* Keep the core captions honest when the mode is toggled. */
+const sync = () => {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const src = dark ? DARK : LIGHT;
+  document.querySelectorAll('[data-live]').forEach((n) => { n.textContent = src[n.dataset.live]; });
+};
+new MutationObserver(sync).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+sync();
+</script>
+</body>
+</html>

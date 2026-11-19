@@ -1,0 +1,69 @@
+{
+  "name": "Vellum",
+  "palette": {
+    "band": "dual",
+    "scheme": "vellum",
+    "light": {
+      "bg": "#F4F6F9",
+      "surface": "rgba(255, 255, 255, 0.65)",
+      "text": "#0F172A",
+      "border": "rgba(255, 255, 255, 0.85)"
+    },
+    "dark": {
+      "bg": "#18181B",
+      "surface": "rgba(12, 13, 14, 0.1929)",
+      "text": "#FFFFFF",
+      "border": "rgba(255, 255, 255, 0)"
+    },
+    "brand": ["#38BDF8", "#A855F7", "#34D399", "#06B6D4", "#9333EA"],
+    "lamps": {
+      "light": ["brand-1", "brand-2", "brand-3"],
+      "dark": ["brand-4", "brand-5", "off"]
+    },
+    "accent": "#38BDF8",
+    "success": "#13B37D"
+  },
+  "fonts": {
+    "heading": {
+      "family": "Geist",
+      "class": "sans",
+      "weights": [
+        800,
+        900
+      ]
+    },
+    "body": {
+      "family": "Inter",
+      "class": "sans",
+      "weights": [
+        400,
+        500
+      ]
+    },
+    "mono": {
+      "family": "JetBrains Mono",
+      "class": "monospace",
+      "weights": [
+        700
+      ]
+    }
+  },
+  "density": 1,
+  "radius": {
+    "card": "20px",
+    "tray": "14px",
+    "pill": "100px",
+    "control": "6px"
+  },
+  "blur": {
+    "stage": "40px",
+    "raised": "20px",
+    "nav": "24px"
+  },
+  "dividers": "hairline",
+  "buttonAlign": "pill-and-hardware",
+  "modes": {
+    "light": "light mode",
+    "dark": "dark mode"
+  }
+}

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Cover Thumbnail</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--color-bg-canvas);
+  overflow: hidden;
+}
+.cover-card {
+  width: 580px;
+  padding: 40px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(var(--blur-stage));
+  border-radius: var(--radius-stage);
+  box-shadow: var(--elevation-stage);
+  position: relative;
+  z-index: 1;
+}
+/* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .cover-card { background: var(--color-surface-solid); }
+}
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<div class="cover-card">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <span class="tag-pill">DESIGN SYSTEM SPEC</span>
+    <span style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--color-text-muted);" id="sfVersion" class="literal">…</span>
+  </div>
+  <h1 style="font-size: 38px; line-height: 1.0; margin-bottom: 12px;">VELLUM</h1>
+  <p style="font-size: 14px; margin-bottom: 24px;">Swiss precision typography, luminous translucent vellum, and tactile hardware controls.</p>
+  
+  <div style="display: flex; gap: 8px;">
+    <div style="height: 12px; flex: 1; border-radius: var(--radius-pill); background: var(--color-accent);"></div>
+    <div style="height: 12px; flex: 1; border-radius: var(--radius-pill); background: var(--color-status-emerald);"></div>
+    <div style="height: 12px; flex: 1; border-radius: var(--radius-pill); background: var(--color-status-cyan);"></div>
+    <div style="height: 12px; flex: 1; border-radius: var(--radius-pill); background: var(--color-text-primary);"></div>
+  </div>
+</div>
+<script src="tokens.generated.js"></script>
+<script>
+/* The version badge reads the token file rather than restating it — a stamped
+   version is the first thing to go stale after a release is cut. */
+document.getElementById('sfVersion').textContent = 'v' + VellumTokens.VERSION;
+</script>
+</body>
+</html>

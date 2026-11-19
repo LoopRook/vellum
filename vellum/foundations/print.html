@@ -1,0 +1,262 @@
+<!-- @dsCard group="Foundations" name="Print &amp; Physical Stationery" subtitle="Paper substrates, 0.5pt hairline grid, process inks, and document metadata rails" viewport="1000x820" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Print &amp; Physical Stationery</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1000px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+}
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+
+/* Print Card Architecture */
+.print-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.print-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-stage);
+  padding: 24px;
+  backdrop-filter: blur(var(--blur-stage));
+  -webkit-backdrop-filter: blur(var(--blur-stage));
+  box-shadow: var(--elevation-sm);
+}
+
+/* Physical Hardware Label Specimen */
+.hardware-tag {
+  background: var(--print-paper);
+  color: var(--print-ink);
+  border: 1.5px solid var(--print-rule);
+  border-radius: var(--radius-chip);
+  padding: 20px;
+  font-family: var(--font-mono); text-transform: uppercase;
+}
+
+.hardware-tag-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid var(--print-rule);
+  margin-bottom: 14px;
+}
+
+.hardware-tag-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: var(--tracking-title);
+  line-height: 1;
+}
+
+.hardware-tag-sub {
+  font-size: var(--type-micro);
+  font-weight: 700;
+  color: var(--print-ink-secondary);
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+.tag-spec-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  padding: 4px 0;
+  border-bottom: 0.5px solid var(--print-rule-light);
+}
+
+.tag-spec-key {
+  color: var(--print-ink-secondary);
+  font-weight: 700;
+}
+
+.tag-spec-val {
+  font-weight: 700;
+  color: var(--print-ink);
+}
+
+/* CMYK Palette Swatches */
+.cmyk-swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.cmyk-item {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cmyk-color-box {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-chip);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.cmyk-info {
+  font-family: var(--font-mono); text-transform: uppercase;
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+
+.cmyk-name {
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.cmyk-vals {
+  color: var(--color-text-muted);
+  font-size: var(--type-micro);
+}
+
+@media (max-width: 860px) {
+  .print-grid { grid-template-columns: 1fr; }
+}
+/* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .print-card { background: var(--color-surface-solid); }
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient background lamps -->
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <div class="demo-head">Physical Hardware CMF Specification Tag (1:1 Ratio)</div>
+
+  <div class="print-grid">
+    <!-- Card 1: Physical Hardware Tag Specimen -->
+    <div class="print-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span class="tag-pill">PHYSICAL SPECIMEN</span>
+        <span style="font-family: var(--font-mono); text-transform: uppercase; font-size: 10.5px; color: var(--color-text-muted);">85 × 55 MM</span>
+      </div>
+
+      <div class="hardware-tag" data-medium="paper">
+        <div class="hardware-tag-header">
+          <div>
+            <div class="hardware-tag-title">VELLUM</div>
+            <div class="hardware-tag-sub">CMF SPECIFICATION TAG</div>
+          </div>
+          <div style="font-size: var(--type-micro); text-align: right; color: var(--print-ink-secondary);">
+            <div><strong>TAG ID:</strong> CMF-2026-01</div>
+            <div><strong>LOT:</strong> BATCH-A</div>
+          </div>
+        </div>
+
+        <div class="tag-spec-row">
+          <span class="tag-spec-key">ENCLOSURE:</span>
+          <span class="tag-spec-val">ANODIZED 6061-T6 AL</span>
+        </div>
+        <div class="tag-spec-row">
+          <span class="tag-spec-key">SURFACE FINISH:</span>
+          <span class="tag-spec-val">BEAD-BLAST MATTE SATIN</span>
+        </div>
+        <div class="tag-spec-row">
+          <span class="tag-spec-key">DIFFUSION LENS:</span>
+          <span class="tag-spec-val">4MM TEMPERED LOW-IRON</span>
+        </div>
+        <div class="tag-spec-row">
+          <span class="tag-spec-key">INK FILL:</span>
+          <span class="tag-spec-val">LASER ENAMEL <span class="literal">var(--print-ink)</span></span>
+        </div>
+        <div class="tag-spec-row">
+          <span class="tag-spec-key">CALIBRATION:</span>
+          <span class="tag-spec-val">ISO/IEC 17025 VERIFIED</span>
+        </div>
+
+        <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed var(--print-rule-light); display: flex; justify-content: space-between; align-items: center; font-size: var(--type-micro); color: var(--print-ink-secondary);">
+          <span>© 2026 JONATHAN HOCKADAY</span>
+          <span>PROPRIETARY SPEC</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: CMYK & Paper Stock Specifications -->
+    <div class="print-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span class="tag-pill">PRINT PROFILES</span>
+        <span style="font-family: var(--font-mono); text-transform: uppercase; font-size: 10.5px; color: var(--color-text-muted);">ISO/DIS 12647-2</span>
+      </div>
+
+      <div style="font-family: var(--font-display); font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: var(--tracking-title); margin-bottom: 6px;">
+        CMYK &amp; Paper Substrate Rules
+      </div>
+      <p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; margin: 0 0 12px;">
+        For physical letterheads, specification sheets, and hardware packaging, digital RGB values map to pure process inks:
+      </p>
+
+      <div class="cmyk-swatch-grid">
+        <div class="cmyk-item">
+          <div class="cmyk-color-box" style="background: var(--print-ink);"></div>
+          <div class="cmyk-info">
+            <div class="cmyk-name">Primary Ink</div>
+            <div class="cmyk-vals">C:0 M:0 Y:0 K:100</div>
+          </div>
+        </div>
+
+        <div class="cmyk-item">
+          <div class="cmyk-color-box" style="background: var(--print-ink-secondary);"></div>
+          <div class="cmyk-info">
+            <div class="cmyk-name">Secondary Ink</div>
+            <div class="cmyk-vals">C:0 M:0 Y:0 K:60</div>
+          </div>
+        </div>
+
+        <div class="cmyk-item">
+          <div class="cmyk-color-box" style="background: var(--color-emerald-500);"></div>
+          <div class="cmyk-info">
+            <div class="cmyk-name">Emerald Spot</div>
+            <div class="cmyk-vals">Pantone 7724 C</div>
+          </div>
+        </div>
+
+        <div class="cmyk-item">
+          <div class="cmyk-color-box" style="background: var(--color-amber-500);"></div>
+          <div class="cmyk-info">
+            <div class="cmyk-name">Amber Spot</div>
+            <div class="cmyk-vals">Pantone 1235 C</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-head">Physical Document Architecture Invariants</div>
+
+  <div style="background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-tray); padding: 20px 24px;">
+    <ul style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; margin: 0; padding-left: 18px;">
+      <li><strong>0.5pt Hairline Grids:</strong> Document tables, letterhead rules, and telemetry callouts strictly use <code>0.5pt</code> (0.175mm) solid black borders for laser and offset printing.</li>
+      <li><strong>Zero Digital Artifacts:</strong> Background blurs (`backdrop-filter`), the luminous lamps, and soft drop-shadows are strictly stripped in print stylesheets.</li>
+      <li><strong>Substrate Recommendation:</strong> 350gsm premium uncoated bright white cotton cardstock for executive memos; 120gsm matte bond for technical multi-page specifications.</li>
+      <li><strong>Document Metadata Rails:</strong> Every printed sheet must include standard header/footer telemetry: <code>DOC ID</code>, <code>REVISION</code>, <code>SECURITY STATUS</code>, and <code>PAGE X OF Y</code>.</li>
+    </ul>
+  </div>
+</main>
+</body>
+</html>

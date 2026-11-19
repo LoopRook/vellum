@@ -1,0 +1,59 @@
+<!-- @dsCard group="Components" name="Forms &amp; Inputs" subtitle="Text fields, range sliders, and monochrome focus treatment" viewport="640x500" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Forms &amp; inputs</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1000px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); margin-bottom: 20px; }
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+
+@media (max-width: 540px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <div class="demo-head">Text Fields &amp; Labels (Click to test clean focus ring)</div>
+  <div class="form-grid">
+    <div class="field">
+      <label class="label">PROJECT NAME</label>
+      <input type="text" class="input" placeholder="e.g. Project name" value="NORTHWIND" />
+    </div>
+    <div class="field">
+      <label class="label">FILTER CATEGORY</label>
+      <input type="text" class="input" placeholder="e.g. Motion Design" value="3D_AND_MOTION" />
+    </div>
+  </div>
+
+  <div class="demo-head">Calibrated Range Slider (Tactile Knob &amp; Track Fill)</div>
+  <div class="card" style="padding: 18px 20px;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+      <span class="label">CALIBRATION FREQUENCY:</span>
+      <span id="sliderReadout" style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; color: var(--color-text-primary); font-weight: 700;">120 HZ</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <input type="range" class="range-slider" min="30" max="240" value="120" style="width: 100%; --range-progress: 43%;" oninput="const pct = ((this.value - 30)/(240 - 30) * 100).toFixed(0); this.style.setProperty('--range-progress', pct + '%'); document.getElementById('sliderReadout').textContent = this.value + ' HZ';" />
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,715 @@
+<!-- @dsExample name="Landing" description="A worked product landing page, for reference: fixed nav, split hero, a blurred stage card over a dark cavity, a live control console, a collapsible spec drawer, and a feature matrix." -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Landing Example</title>
+<link rel="stylesheet" href="../../styles.css" />
+<script src="./ds-base.js"></script>
+<style>
+/* Page Layout */
+.site-wrapper {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+/* 1. Full-width nav, RETRACTING variant (DESIGN.md §5.1).
+   The sheet is OFF the board while the page is at rest at the top: no fill, no
+   blur, no edge, so the lamps read straight through and the header is seamless
+   with the ground. Scrolling lays the sheet down over whatever is beneath it,
+   which is why it goes milky. That is a second layer, not a colour change.
+   Legal only because this header retracts — a persistent one is always a sheet. */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  border-bottom: 1px solid transparent;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Sheet down. Same material as any persistent nav — --color-surface-nav carries
+   the AA floor for both, so this state must never hardcode its own density. */
+.site-header.scrolled {
+  border-bottom: 1px solid var(--color-border-subtle);
+  backdrop-filter: blur(var(--blur-nav));
+  -webkit-backdrop-filter: blur(var(--blur-nav));
+  background-color: var(--color-surface-nav);
+  box-shadow: var(--elevation-nav-scrolled);
+}
+
+.site-header.nav-hidden {
+  transform: translateY(-100%);
+}
+
+.header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 18px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-logo {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: var(--tracking-title);
+  color: var(--color-text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  font-family: var(--font-mono); text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--color-text-primary);
+}
+
+/* 2. Hero Section */
+.hero-section {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 130px 48px 40px;
+}
+
+.hero-split-grid {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 48px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: var(--type-hero);
+  font-weight: var(--weight-headline);
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+  margin: 0;
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+}
+
+.hero-sidebar {
+  max-width: 460px;
+  padding-bottom: 8px;
+}
+
+.hero-divider-bar {
+  width: 32px;
+  height: 2px;
+  background-color: var(--color-rule-strong);
+  margin-bottom: 24px;
+}
+
+.hero-tagline {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-title);
+  color: var(--color-text-primary);
+  margin: 0 0 12px;
+}
+
+.hero-desc {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 24px;
+  text-wrap: balance;
+}
+
+/* 3. Hero Stage Card */
+.stage-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(var(--blur-stage));
+  -webkit-backdrop-filter: blur(var(--blur-stage));
+  border-radius: var(--radius-stage);
+  padding: 24px;
+  box-shadow: var(--elevation-stage);
+  position: relative;
+  overflow: hidden;
+}
+
+.stage-cavity {
+  width: 100%;
+  height: 560px;
+  border-radius: var(--radius-cavity);
+  background-color: var(--color-surface-sunken);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.console-card {
+  margin-top: 18px;
+  padding: 18px 24px;
+  border-radius: var(--radius-tray);
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(var(--blur-raised));
+  -webkit-backdrop-filter: blur(var(--blur-raised));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.console-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.console-row-sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-top: 1px solid var(--color-divider);
+  padding-top: 10px;
+}
+
+/* Sections */
+.section-pad {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 80px 48px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+@media (max-width: 860px) {
+  .header-inner {
+    padding: 14px 20px;
+  }
+  .nav-links {
+    display: none;
+  }
+  .hero-section {
+    padding: 90px 20px 24px;
+  }
+  .stage-card {
+    padding: 12px;
+  }
+  .stage-cavity {
+    height: clamp(380px, 50vh, 480px);
+  }
+  .console-card {
+    padding: 14px 12px;
+    gap: 8px;
+  }
+  .feature-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .section-pad {
+    padding: 50px 20px;
+  }
+}
+/* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header.scrolled, .stage-card { background: var(--color-surface-solid); }
+}
+</style>
+</head>
+<body>
+<!-- Luminous ambient lamps -->
+<div class="light-table"></div>
+
+<div class="site-wrapper">
+  <!-- 01. Smart hover-triggered fixed nav sheet -->
+  <header class="site-header" id="siteHeader" data-header="retracting">
+    <div class="header-inner">
+      <div class="brand-logo">
+        VELLUM
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <nav class="nav-links">
+          <a href="#features" class="nav-link">FEATURES</a>
+          <a href="#specs" class="nav-link">SPECS</a>
+          <a href="#benchmarks" class="nav-link">BENCHMARKS</a>
+          <a href="#faq" class="nav-link">FAQ</a>
+        </nav>
+
+        <!-- Sun/Moon Theme Toggle -->
+        <button data-mode-toggle class="btn btn-icon" id="themeToggleBtn" aria-label="Switch to dark mode" aria-pressed="false">
+          <svg id="themeIcon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+
+        <a href="#stage" class="btn btn-pill btn-primary" style="padding: 7px 18px; font-size: 11px;">GET STARTED</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 02. Massive Split Hero Section -->
+  <main>
+    <section class="hero-section">
+      <div class="hero-split-grid">
+        <div>
+          <h1 class="hero-headline">
+            VELLUM
+          </h1>
+        </div>
+
+        <div class="hero-sidebar">
+          <div class="hero-divider-bar"></div>
+          <h2 class="hero-tagline">
+            PRECISION TYPOGRAPHY &amp; HARDWARE INTERFACES
+          </h2>
+          <p class="hero-desc">
+            A design system for portfolios, agency sites, and product interfaces.
+          </p>
+          <a href="#stage" class="btn btn-pill btn-primary hero-cta-btn" style="padding: 12px 28px; font-size: 13px;">
+            EXPLORE SHOWCASE →
+          </a>
+        </div>
+      </div>
+
+      <!-- 03. Hero Stage Card (Houses any interactive asset / canvas / video player) -->
+      <div class="stage-card" id="stage">
+        <!-- Stage Cavity: Reusable container for hero canvas / 3D model / video player -->
+        <div class="stage-cavity" id="stageCavity">
+          <div style="text-align: center; padding: 24px;">
+            <div style="font-family: var(--font-display); font-size: clamp(24px, 4vw, 40px); font-weight: 900; color: var(--color-text-on-sunken); letter-spacing: var(--tracking-statement); text-transform: uppercase; margin-bottom: 10px;">
+              HERO STAGE VIEWPORT
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-text-on-sunken-secondary); letter-spacing: 0.06em; text-transform: uppercase;">
+              [ INTERACTIVE COMPONENT / CANVAS / MEDIA CONTAINER ]
+            </div>
+          </div>
+        </div>
+
+        <!-- Embedded control console -->
+        <div class="console-card">
+          <!-- Row 1: Display Mode (Solid Active Inversion) & Stepper -->
+          <div class="console-row">
+            <div class="console-group">
+              <span class="label label-left">LAYOUT:</span>
+              <button class="btn-control active" id="btnMode1" onclick="setActiveMode(this)">GRID VIEW</button>
+              <button class="btn-control" id="btnMode2" onclick="setActiveMode(this)">LIST VIEW</button>
+            </div>
+
+            <div class="console-group">
+              <span class="label label-right">ENTRY:</span>
+              <button class="btn-stepper" onclick="prevEntry()">← PREV</button>
+              <span id="entryDisplay" style="font-family: var(--font-mono); text-transform: uppercase; font-size: 12px; color: var(--color-text-secondary); min-width: 32px; text-align: center;">2/4</span>
+              <button class="btn-stepper" onclick="nextEntry()">NEXT →</button>
+            </div>
+          </div>
+
+          <!-- Row 2: Geometry & Layout Axis (Outline Active Chip) -->
+          <div class="console-row-sub">
+            <div class="console-group">
+              <span class="label label-left">AXIS:</span>
+              <button class="btn-chip active" onclick="setActiveChip(this)">BY REGION</button>
+              <button class="btn-chip" onclick="setActiveChip(this)">BY TENANT</button>
+              <button class="btn-chip" onclick="setActiveChip(this)">NONE</button>
+            </div>
+          </div>
+
+          <!-- Row 3: Presets (Outline Active Chip) & Audio/Status Toggle + Slider -->
+          <div class="console-row-sub">
+            <div class="console-group">
+              <span class="label label-left">SPEED:</span>
+              <button class="btn-chip active" onclick="setActiveChip(this)">FLUID (1250<span class="unit">ms</span>)</button>
+              <button class="btn-chip" onclick="setActiveChip(this)">SNAPPY (700<span class="unit">ms</span>)</button>
+            </div>
+
+            <div class="console-group">
+              <span class="label label-right">AUDIO:</span>
+              <button class="btn-status-toggle" id="audioBtn" onclick="toggleAudio(this)">
+                ENABLED
+              </button>
+              <input type="range" class="range-slider" id="calSlider" min="0" max="100" value="46" style="--range-progress: 46%;" />
+              <span id="calReadout" style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; color: var(--color-text-primary); font-weight: 700; width: 28px;">46%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04. Collapsible 4-Column Specification Matrix Drawer -->
+    <section class="section-pad" id="specs" style="padding-top: 20px; padding-bottom: 40px;">
+      <div class="spec-drawer-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <div class="label" style="margin-bottom: 6px;">PROPERTIES REFERENCE</div>
+            <h3 style="font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: var(--tracking-title); margin: 0;">
+              Complete System Properties &amp; Customization Options
+            </h3>
+          </div>
+
+          <button class="btn btn-pill btn-secondary" id="specToggleBtn" onclick="toggleSpecDrawer()" style="font-size: 11px;">
+            <span id="specToggleText">[ + ] VIEW ALL SPECS</span>
+          </button>
+        </div>
+
+        <div class="spec-drawer-grid" id="specDrawerGrid" style="display: none;">
+          <div class="spec-col-box">
+            <div class="spec-col-title">Typography &amp; Scale</div>
+            <ul class="spec-list">
+              <li><strong>Display Headline</strong>: Geist 900, tracked at <code>--tracking-display</code>.</li>
+              <li><strong>Section Titles</strong>: Geist 800, tracked at <code>--tracking-title</code>.</li>
+              <li><strong>Body Type</strong>: Inter 400 for running prose.</li>
+              <li><strong>Mechanical Rails</strong>: JetBrains Mono 700 uppercase.</li>
+            </ul>
+          </div>
+
+          <div class="spec-col-box">
+            <div class="spec-col-title">Surfaces &amp; Sheet Physics</div>
+            <ul class="spec-list">
+              <li><strong>Stage sheet</strong>: 40px backdrop blur, with a 1px edge in light mode.</li>
+              <li><strong>Inner Console</strong>: 20px blur with recessed background.</li>
+              <li><strong>Card Elevation</strong>: Quiet translateY(-2px) hover depth.</li>
+              <li><strong>Lighting</strong>: soft lamps behind the page, painted by the light table.</li>
+            </ul>
+          </div>
+
+          <div class="spec-col-box">
+            <div class="spec-col-title">Color &amp; Dual-Ground</div>
+            <ul class="spec-list">
+              <li><strong>Light</strong>: #F4F6F9 canvas ground.</li>
+              <li><strong>Dark</strong>: #18181B near-black ground.</li>
+              <li><strong>Tonal Ramps</strong>: five hues, nine rungs, derived at fixed L* targets.</li>
+              <li><strong>Persistence</strong>: LocalStorage state synchronization.</li>
+            </ul>
+          </div>
+
+          <div class="spec-col-box">
+            <div class="spec-col-title">Controls &amp; Interaction</div>
+            <ul class="spec-list">
+              <li><strong>Segmented Pills</strong>: Solid high-contrast active inversion.</li>
+              <li><strong>Pill Grammar</strong>: Neutral category vs semantic status.</li>
+              <li><strong>Potentiometer</strong>: 18px slate knobs with track fill.</li>
+              <li><strong>Smart Header</strong>: 24px blur with 70px hover sensor.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05. Alternating Opacity Statement Typography Banner -->
+    <section style="padding: 90px 20px; max-width: 1440px; margin: 0 auto;">
+      <div class="statement-stack">
+        <span class="solid">SWISS PRECISION</span>
+        <span class="ghost">TRANSLUCENT VELLUM</span>
+        <span class="solid">HARDWARE CONSOLES</span>
+        <span class="ghost">LIVE SYSTEMS</span>
+      </div>
+    </section>
+
+    <!-- 06. 2x2 balanced feature matrix (quiet lift on hover) -->
+    <section class="section-pad" id="features" style="padding-top: 20px;">
+      <div class="feature-grid">
+        <a href="#stage" class="card card-feature" style="text-decoration: none;">
+          <div>
+            <div style="margin-bottom: 16px;">
+              <span class="tag-pill">TYPOGRAPHY</span>
+            </div>
+            <div class="card-feature-title">Swiss Hierarchy</div>
+            <p>Geist Display paired with JetBrains Mono mechanical metadata and balanced body copy.</p>
+          </div>
+          <div class="card-feature-punchline">TYPOGRAPHY SCALE →</div>
+        </a>
+
+        <a href="#stage" class="card card-feature" style="text-decoration: none;">
+          <div>
+            <div style="margin-bottom: 16px;">
+              <span class="tag-pill">SURFACES</span>
+            </div>
+            <div class="card-feature-title">Multi-Layer Vellum</div>
+            <p>40px backdrop blurs with a 1px edge over the ambient lamps.</p>
+          </div>
+          <div class="card-feature-punchline">SURFACE TOKENS →</div>
+        </a>
+
+        <a href="#stage" class="card card-feature" style="text-decoration: none;">
+          <div>
+            <div style="margin-bottom: 16px;">
+              <span class="tag-pill">CONTROLS</span>
+            </div>
+            <div class="card-feature-title">Tactile Hardware Console</div>
+            <p>Segmented button pills, stepped selectors, and calibrated range sliders.</p>
+          </div>
+          <div class="card-feature-punchline">COMPONENT LIBRARY →</div>
+        </a>
+
+        <a href="#stage" class="card card-feature" style="text-decoration: none;">
+          <div>
+            <div style="margin-bottom: 16px;">
+              <span class="tag-pill">ACTIVITY</span>
+            </div>
+            <div class="card-feature-title">Universal Architecture</div>
+            <p>The same foundations compose into a store, a portfolio, or an application.</p>
+          </div>
+          <div class="card-feature-punchline">EXPLORE EXAMPLES →</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- 07. Full-bleed benchmarks strip -->
+    <section id="benchmarks" style="border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); padding: 60px 48px; max-width: 1440px; margin: 40px auto 0;">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">MEDIAN RESPONSE OVERHEAD</div>
+          <div class="stat-num">142<span class="stat-unit unit">ms</span></div>
+        </div>
+        <div class="stat-item">
+          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">SYSTEM THROUGHPUT</div>
+          <div class="stat-num">2.4<span class="stat-unit unit">k/s</span></div>
+        </div>
+        <div class="stat-item">
+          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">ACOUSTIC DYNAMIC RANGE</div>
+          <div class="stat-num">+28<span class="stat-unit unit">dB</span></div>
+        </div>
+        <div class="stat-item">
+          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">EXTERNAL ERROR RATE</div>
+          <div class="stat-num">0<span class="stat-unit unit">%</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08. Primary Conversion Callout Section -->
+    <section class="cta-section" style="padding: 100px 24px; text-align: center; max-width: 800px; margin: 0 auto;">
+      <h2 style="font-family: var(--font-display); font-size: clamp(38px, 6vw, 56px); font-weight: 900; letter-spacing: var(--tracking-statement); line-height: 1; text-transform: uppercase; margin: 0 0 16px;">
+        DEPLOY THE SYSTEM
+      </h2>
+      <p style="font-size: 16px; color: var(--color-text-secondary); line-height: 1.6; max-width: 520px; margin: 0 auto 36px; text-align: left;">
+        Zero-dependency CSS, tokens in JSON, and the component primitives built on them.
+      </p>
+      <a href="#stage" class="btn btn-pill btn-primary" style="padding: 14px 36px; font-size: 13px; display: inline-flex; align-items: center; gap: 8px;">
+        EXPLORE SPECIFICATION →
+      </a>
+    </section>
+
+    <!-- 09. Expandable FAQ Accordion -->
+    <section class="section-pad" id="faq" style="max-width: 760px; margin: 0 auto; padding-top: 0; padding-bottom: 80px;">
+      <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 800; text-align: center; text-transform: uppercase; letter-spacing: var(--tracking-title); margin: 0 0 32px;">
+        FREQUENTLY ASKED QUESTIONS
+      </h2>
+      
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          <span>Can I use this for different kinds of sites?</span>
+          <span class="faq-indicator">[+]</span>
+        </button>
+        <div class="faq-content" style="display: none;">
+          Yes. The tokens, type scale, sheets, and controls are the same whatever you build on them.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          <span>Does it support both light and dark modes?</span>
+          <span class="faq-indicator">[+]</span>
+        </button>
+        <div class="faq-content" style="display: none;">
+          Yes. Every role carries a light value (#F4F6F9 ground) and a dark one (#18181B ground), and the choice persists in localStorage.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)">
+          <span>Can I customize the colors, speeds, and typography?</span>
+          <span class="faq-indicator">[+]</span>
+        </button>
+        <div class="faq-content" style="display: none;">
+          All tokens (colors, blur radius, animation timings, font pairings) are exposed as standard CSS custom properties in tokens.json and styles.css.
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 10. Minimalist Monospace Footer -->
+  <footer style="max-width: 1440px; margin: 0 auto; padding: 32px 48px; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; color: var(--color-text-muted); flex-wrap: wrap; gap: 16px; border-top: 1px solid var(--color-divider);">
+    <div>© 2026 VELLUM · DESIGN SYSTEM V1.0.0-RC12</div>
+    <div>DOCUMENTATION · BACK TO TOP ↑</div>
+  </footer>
+</div>
+
+<script>
+// Smart Fixed Header Scroll & Hover Sensor
+const header = document.getElementById('siteHeader');
+let lastScrollY = window.scrollY;
+let isHoveringTop = false;
+
+window.addEventListener('scroll', () => {
+  const currentY = window.scrollY;
+  const isScrolled = currentY > 80;
+  
+  if (isScrolled) {
+    header.classList.add('scrolled');
+    if (currentY > lastScrollY && !isHoveringTop) {
+      header.classList.add('nav-hidden');
+    } else if (currentY < lastScrollY) {
+      header.classList.remove('nav-hidden');
+    }
+  } else {
+    header.classList.remove('scrolled');
+    header.classList.remove('nav-hidden');
+  }
+  lastScrollY = currentY;
+}, { passive: true });
+
+document.addEventListener('mousemove', (e) => {
+  if (e.clientY <= 70) {
+    isHoveringTop = true;
+    header.classList.remove('nav-hidden');
+  } else {
+    if (isHoveringTop) {
+      isHoveringTop = false;
+      if (window.scrollY > 80) {
+        header.classList.add('nav-hidden');
+      }
+    }
+  }
+});
+
+header.addEventListener('mouseenter', () => {
+  isHoveringTop = true;
+  header.classList.remove('nav-hidden');
+});
+
+header.addEventListener('mouseleave', () => {
+  if (window.scrollY > 80) {
+    isHoveringTop = false;
+    header.classList.add('nav-hidden');
+  }
+});
+
+// Dual-Mode Theme Persistence
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+
+function updateThemeUI(theme) {
+  if (theme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeIcon.innerHTML = `<circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />`;
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    themeIcon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />`;
+  }
+  themeToggleBtn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+  themeToggleBtn.setAttribute('aria-pressed', String(theme === 'dark'));
+}
+
+let savedTheme = null;
+try { savedTheme = localStorage.getItem('site_theme'); } catch (e) {}
+savedTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+updateThemeUI(savedTheme);
+
+themeToggleBtn.addEventListener('click', () => {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  updateThemeUI(next);
+  try { localStorage.setItem('site_theme', next); } catch (e) {}
+});
+
+// Stepper Logic
+let entryIndex = 1;
+const totalEntries = 4;
+
+function nextEntry() {
+  entryIndex = (entryIndex % totalEntries) + 1;
+  document.getElementById('entryDisplay').textContent = `${entryIndex}/${totalEntries}`;
+}
+
+function prevEntry() {
+  entryIndex = entryIndex > 1 ? entryIndex - 1 : totalEntries;
+  document.getElementById('entryDisplay').textContent = `${entryIndex}/${totalEntries}`;
+}
+
+// Console Control Button Handlers
+function setActiveMode(btn) {
+  document.querySelectorAll('#btnMode1, #btnMode2').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function setActiveChip(btn) {
+  btn.parentElement.querySelectorAll('.btn-chip').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function toggleAudio(btn) {
+  const isSoundOn = btn.textContent.trim() === 'ENABLED';
+  btn.textContent = isSoundOn ? 'MUTED' : 'ENABLED';
+  btn.style.borderColor = isSoundOn ? 'var(--color-action-border)' : 'var(--color-status-emerald)';
+  btn.style.color = isSoundOn ? 'var(--color-text-secondary)' : 'var(--color-status-emerald)';
+  btn.style.backgroundColor = isSoundOn ? 'transparent' : 'color-mix(in srgb, var(--color-status-emerald) 10%, transparent)';
+}
+
+// Specification Drawer Toggle
+function toggleSpecDrawer() {
+  const grid = document.getElementById('specDrawerGrid');
+  const btn = document.getElementById('specToggleBtn');
+  const txt = document.getElementById('specToggleText');
+  const isOpen = grid.style.display !== 'none';
+
+  if (isOpen) {
+    grid.style.display = 'none';
+    btn.className = 'btn btn-pill btn-secondary';
+    txt.textContent = '[ + ] VIEW ALL SPECS';
+  } else {
+    grid.style.display = 'grid';
+    btn.className = 'btn btn-pill btn-primary';
+    txt.textContent = '[ - ] HIDE SPECIFICATION DETAILS';
+  }
+}
+
+// Calibration Slider Readout & Dynamic Track Fill
+const slider = document.getElementById('calSlider');
+const readout = document.getElementById('calReadout');
+slider.addEventListener('input', () => {
+  slider.style.setProperty('--range-progress', slider.value + '%');
+  readout.textContent = slider.value + '%';
+});
+
+// FAQ Toggle
+function toggleFaq(btn) {
+  const content = btn.nextElementSibling;
+  const ind = btn.querySelector('.faq-indicator');
+  const isHidden = content.style.display === 'none';
+  content.style.display = isHidden ? 'block' : 'none';
+  ind.textContent = isHidden ? '[-]' : '[+]';
+}
+</script>
+</body>
+</html>

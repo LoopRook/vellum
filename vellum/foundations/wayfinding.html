@@ -1,0 +1,263 @@
+<!-- @dsCard group="Foundations" name="Numbering &amp; Wayfinding" subtitle="How sections, slides, and printed clauses are indexed in each medium" viewport="1000x800" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Numbering &amp; Wayfinding Comparison</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo {
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-6) var(--space-8);
+  font-family: var(--font-body); position: relative; z-index: 1; }
+
+.demo-head {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.compare-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-stage);
+  padding: 24px;
+  box-shadow: var(--elevation-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.compare-banner {
+  padding: 4px 10px;
+  border-radius: var(--radius-control);
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+}
+
+.banner-bad {
+  background: color-mix(in srgb, var(--color-doc-negate) 10%, transparent);
+  color: var(--color-doc-negate);
+  border: 1px solid color-mix(in srgb, var(--color-doc-negate) 20%, transparent);
+}
+
+.banner-good {
+  background: color-mix(in srgb, var(--color-doc-affirm) 10%, transparent);
+  color: var(--color-status-emerald);
+  border: 1px solid color-mix(in srgb, var(--color-doc-affirm) 20%, transparent);
+}
+
+.annotation-note {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-divider);
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+@media (max-width: 860px) {
+  .compare-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+      <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: var(--tracking-title); margin: 0 0 4px;">
+        Numbering &amp; Wayfinding Archetypes
+      </h2>
+      <p style="font-size: 14px; color: var(--color-text-secondary); margin: 0;">
+        Interactive comparative study: floating tags vs. integrated numbering patterns across Web, Decks, and Print.
+      </p>
+    </div>
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <div class="demo-head">
+    <span>01 / The Three Web Patterns Side-by-Side</span>
+    <span class="tag-pill">INTERACTION COMPARISON</span>
+  </div>
+
+  <div class="compare-grid">
+    <!-- Column 1: The Misused Floating Tag -->
+    <div class="compare-card">
+      <div>
+        <div class="compare-banner banner-bad">
+          ✕ Misused (Floating Tag)
+        </div>
+
+        <!-- Simulated Floating Tag -->
+        <div class="label" style="margin-bottom: 12px; opacity: 0.8;">03 / SYSTEM CAPABILITIES</div>
+        
+        <div class="card card-feature" style="padding: 20px;">
+          <div style="margin-bottom: 12px;">
+            <span class="tag-pill">TYPOGRAPHY</span>
+          </div>
+          <div class="card-feature-title" style="font-size: 18px;">Swiss Hierarchy</div>
+          <p style="font-size: 13px;">Geist Display paired with JetBrains Mono.</p>
+        </div>
+      </div>
+
+      <div class="annotation-note">
+        <strong>Why it feels off:</strong> The floating <code>03 / ...</code> sits detached in whitespace above the card, looking like a leftover developer debug note.
+      </div>
+    </div>
+
+    <!-- Column 2: Pure Minimalist Flow (Current Live Website) -->
+    <div class="compare-card">
+      <div>
+        <div class="compare-banner banner-good">
+          ✓ Clean Minimalist (Web Flow)
+        </div>
+
+        <!-- No floating tag above -->
+        <div style="height: 25px;"></div>
+        
+        <div class="card card-feature" style="padding: 20px;">
+          <div style="margin-bottom: 12px;">
+            <span class="tag-pill">TYPOGRAPHY</span>
+          </div>
+          <div class="card-feature-title" style="font-size: 18px;">Swiss Hierarchy</div>
+          <p style="font-size: 13px;">Geist Display paired with JetBrains Mono.</p>
+        </div>
+      </div>
+
+      <div class="annotation-note">
+        <strong>Why it works:</strong> Zero floating noise. The page flows smoothly from statement banner into feature cards with total editorial elegance.
+      </div>
+    </div>
+
+    <!-- Column 3: Integrated Catalog Pill Numbering -->
+    <div class="compare-card">
+      <div>
+        <div class="compare-banner banner-good">
+          ✓ Integrated Catalog Pill
+        </div>
+
+        <!-- No floating tag above -->
+        <div style="height: 25px;"></div>
+        
+        <div class="card card-feature" style="padding: 20px;">
+          <div style="margin-bottom: 12px;">
+            <span class="tag-pill">[ 01 · TYPOGRAPHY ]</span>
+          </div>
+          <div class="card-feature-title" style="font-size: 18px;">Swiss Hierarchy</div>
+          <p style="font-size: 13px;">Geist Display paired with JetBrains Mono.</p>
+        </div>
+      </div>
+
+      <div class="annotation-note">
+        <strong>Why it works:</strong> If numbers are desired on web, embedding them <em>inside</em> the pill (<code>[ 01 · ... ]</code>) makes them feel like a structured catalog part.
+      </div>
+    </div>
+  </div>
+
+  <!-- 02. Sequential Workflow & Process Steps -->
+  <div class="demo-head">
+    <span>02 / Sequential Process Numbering (When Numbers Explain Workflow)</span>
+    <span class="tag-pill">WORKFLOW PATTERN</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 36px;">
+    <div class="card" style="padding: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span class="tag-pill">STEP 01</span>
+        <span style="font-family: var(--font-mono); text-transform: uppercase; font-size: 16px; font-weight: 900; color: var(--color-text-muted);">01</span>
+      </div>
+      <h3 style="font-size: 17px; font-weight: 800; text-transform: uppercase; margin: 0 0 8px;">Define Parameters</h3>
+      <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">Select display modes, flip axes, and tactile presets in tokens.json.</p>
+    </div>
+
+    <div class="card" style="padding: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span class="tag-pill">STEP 02</span>
+        <span style="font-family: var(--font-mono); text-transform: uppercase; font-size: 16px; font-weight: 900; color: var(--color-text-muted);">02</span>
+      </div>
+      <h3 style="font-size: 17px; font-weight: 800; text-transform: uppercase; margin: 0 0 8px;">Scaffold Component</h3>
+      <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">Compose zero-dependency CSS classes into your web app or deck.</p>
+    </div>
+
+    <div class="card" style="padding: 24px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span class="tag-pill">STEP 03</span>
+        <span style="font-family: var(--font-mono); text-transform: uppercase; font-size: 16px; font-weight: 900; color: var(--color-text-muted);">03</span>
+      </div>
+      <h3 style="font-size: 17px; font-weight: 800; text-transform: uppercase; margin: 0 0 8px;">Deploy &amp; Scale</h3>
+      <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">The same grammar holds from the widest desktop down to the smallest handset.</p>
+    </div>
+  </div>
+
+  <!-- 03. Cross-Medium Wayfinding Rule Matrix -->
+  <div class="demo-head">
+    <span>03 / Cross-Medium Wayfinding Guidelines</span>
+    <span class="tag-pill">SPECIFICATION RULES</span>
+  </div>
+
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Medium</th>
+          <th>Interaction Model</th>
+          <th>Numbering Placement</th>
+          <th>Design Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-primary">1. Marketing Web</td>
+          <td class="td-type">Continuous scroll</td>
+          <td class="td-latency">Inside Pills (<code>[ 01 · ... ]</code>) or Steps</td>
+          <td class="td-badge"><span class="tag-pill">PURE FLOW</span></td>
+        </tr>
+        <tr>
+          <td class="td-primary">2. 16:9 Slide Decks</td>
+          <td class="td-type">Isolated slide frames</td>
+          <td class="td-latency">Header kickers &amp; <code>[ 02 / 05 ]</code> counters</td>
+          <td class="td-badge"><span class="tag-pill">AUDIENCE WAYFINDING</span></td>
+        </tr>
+        <tr>
+          <td class="td-primary">3. Print &amp; Spec Sheets</td>
+          <td class="td-type">A4 / Letter sheets</td>
+          <td class="td-latency">Section clauses (<code>01 / Hierarchy</code>)</td>
+          <td class="td-badge"><span class="tag-pill">TECHNICAL REFERENCE</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>

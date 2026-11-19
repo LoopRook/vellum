@@ -1,0 +1,401 @@
+<!-- @dsExample name="Dashboard" description="A workspace application: collapsible navigation, a live telemetry strip, inspector controls, and a data grid." -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Operations Console</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+/* Dashboard Layout Architecture */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.app-sidebar {
+  width: 240px;
+  background: var(--color-surface-raised);
+  border-right: 1px solid var(--color-border);
+  backdrop-filter: blur(var(--blur-nav));
+  -webkit-backdrop-filter: blur(var(--blur-nav));
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.app-brand {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 17px;
+  letter-spacing: var(--tracking-title);
+  color: var(--color-text-primary);
+  margin-bottom: 28px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-control);
+  font-family: var(--font-mono); text-transform: uppercase;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: all var(--duration-fast) ease;
+}
+
+.app-nav-link:hover {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.app-nav-link.active {
+  background: var(--color-action-bg);
+  color: var(--color-action-fg);
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: auto;
+}
+
+.app-topbar {
+  height: 64px;
+  padding: 0 32px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-nav);
+  backdrop-filter: blur(var(--blur-nav));
+  -webkit-backdrop-filter: blur(var(--blur-nav));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-breadcrumbs {
+  font-family: var(--font-mono); text-transform: uppercase;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-breadcrumbs span.active {
+  color: var(--color-text-primary);
+}
+
+.app-content {
+  padding: 32px;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+@media (max-width: 860px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .app-sidebar {
+    display: none;
+  }
+  .app-topbar {
+    padding: 0 16px;
+  }
+  .app-content {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 860px) {
+  /* Truncate before hiding: the crumb still fits at 640 and carries context.
+     Only at 540 and below is there genuinely no room for it. */
+  .app-breadcrumbs {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 540px) {
+  .app-breadcrumbs { display: none; }
+
+  /* space-between with one child pins it LEFT. When the crumb goes, the actions
+     have to claim the gap themselves or they strand against the wrong edge. */
+  .app-topbar > *:last-child { margin-left: auto; }
+}
+/* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .app-sidebar, .app-topbar { background: var(--color-surface-solid); }
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient luminous lamps -->
+<div class="light-table"></div>
+
+<div class="app-layout">
+  <!-- Left Navigation Sidebar -->
+  <aside class="app-sidebar">
+    <div>
+      <div class="app-brand">
+        VELLUM OPS
+      </div>
+
+      <nav class="app-nav-list">
+        <a href="#" class="app-nav-link active">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+          WORKSPACE
+        </a>
+        <a href="#" class="app-nav-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          TELEMETRY
+        </a>
+        <a href="#" class="app-nav-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          HARDWARE
+        </a>
+        <a href="#" class="app-nav-link">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+          EXPORT
+        </a>
+      </nav>
+    </div>
+
+    <!-- System Status Widget in Sidebar -->
+    <div style="background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-control); padding: 12px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span class="label" style="font-size: var(--type-micro);">STORAGE</span>
+        <span class="tag-pill tag-emerald" style="font-size: var(--type-micro); padding: 1px 6px;">NORMAL</span>
+      </div>
+      <div style="height: 4px; background: var(--color-divider); border-radius: var(--radius-pill); overflow: hidden;">
+        <div style="height: 100%; width: 28%; background: var(--color-status-emerald);"></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Application Stage -->
+  <main class="app-main">
+    <!-- Top Bar -->
+    <header class="app-topbar" data-header="persistent">
+      <div class="app-breadcrumbs">
+        <span>VELLUM</span>
+        <span>/</span>
+        <span class="active">FLEET OVERVIEW</span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span class="tag-pill tag-emerald">ALL SYSTEMS NOMINAL</span>
+
+        <button data-mode-toggle class="btn btn-icon" onclick="toggleAppTheme()" id="appThemeBtn" aria-label="Switch to dark mode" aria-pressed="false">
+          <svg id="appThemeIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <button class="btn btn-pill btn-primary" style="padding: 7px 16px; font-size: 11px;">[ + ] NEW JOB</button>
+      </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <div class="app-content">
+      <!-- 01. 4-Column KPI Telemetry Row -->
+      <div class="telemetry-bar" style="margin-bottom: 24px;">
+        <div class="telemetry-col">
+          <div class="label">MEDIAN RESPONSE</div>
+          <div class="telemetry-stat">142<span class="telemetry-unit unit">ms</span></div>
+        </div>
+        <div class="telemetry-col">
+          <div class="label">THROUGHPUT</div>
+          <div class="telemetry-stat">2.4<span class="telemetry-unit unit">k/s</span></div>
+        </div>
+        <div class="telemetry-col">
+          <div class="label">AVAILABILITY</div>
+          <div class="telemetry-stat">100<span class="telemetry-unit unit">%</span></div>
+        </div>
+        <div class="telemetry-col">
+          <div class="label">QUEUE DEPTH</div>
+          <div class="telemetry-stat">18<span class="telemetry-unit">jobs</span></div>
+        </div>
+      </div>
+
+      <!-- 02. Two-Column Workspace Grid -->
+      <div class="dashboard-grid">
+        <!-- Left Column: Tactile Hardware Control Console -->
+        <div class="card" style="padding: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div class="label">RUN CONTROL</div>
+            <span class="tag-pill tag-emerald">LIVE</span>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <div class="label" style="margin-bottom: 8px;">DISPATCH MODE</div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <button class="btn-control active" onclick="this.parentElement.querySelectorAll('.btn-control').forEach(b=>b.classList.remove('active')); this.classList.add('active');">BATCH</button>
+              <button class="btn-control" onclick="this.parentElement.querySelectorAll('.btn-control').forEach(b=>b.classList.remove('active')); this.classList.add('active');">STREAM</button>
+              <button class="btn-control" onclick="this.parentElement.querySelectorAll('.btn-control').forEach(b=>b.classList.remove('active')); this.classList.add('active');">HYBRID</button>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <div class="label" style="margin-bottom: 8px;">PARTITION</div>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn-chip active" onclick="this.parentElement.querySelectorAll('.btn-chip').forEach(b=>b.classList.remove('active')); this.classList.add('active');">BY REGION</button>
+              <button class="btn-chip" onclick="this.parentElement.querySelectorAll('.btn-chip').forEach(b=>b.classList.remove('active')); this.classList.add('active');">BY TENANT</button>
+              <button class="btn-chip" onclick="this.parentElement.querySelectorAll('.btn-chip').forEach(b=>b.classList.remove('active')); this.classList.add('active');">NONE</button>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span class="label">CONCURRENCY:</span>
+              <span id="dashSliderVal" style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--color-text-primary);">120</span>
+            </div>
+            <input type="range" class="range-slider" min="30" max="240" value="120" style="width: 100%; --range-progress: 43%;" oninput="const p=((this.value-30)/(240-30)*100).toFixed(0); this.style.setProperty('--range-progress', p+'%'); document.getElementById('dashSliderVal').textContent=this.value;" />
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-divider); padding-top: 16px;">
+            <span class="label">NOTIFICATIONS:</span>
+            <button class="btn-status-toggle" onclick="const s = this.textContent.trim() === 'ENABLED'; this.textContent = s ? 'MUTED' : 'ENABLED'; this.style.borderColor = s ? 'var(--color-action-border)' : 'var(--color-status-emerald)'; this.style.color = s ? 'var(--color-text-secondary)' : 'var(--color-status-emerald)'; this.style.backgroundColor = s ? 'transparent' : 'color-mix(in srgb, var(--color-status-emerald) 10%, transparent)';">
+              ENABLED
+            </button>
+          </div>
+        </div>
+
+        <!-- Right Column: Structured Data Table + Mobile Card Stack -->
+        <div>
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Service</th>
+                  <th>Protocol</th>
+                  <th>Response</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="td-primary">Directory Service</td>
+                  <td class="td-type"><code style="font-size: 11px;">gRPC</code></td>
+                  <td class="td-latency" style="font-family: var(--font-mono); text-transform: uppercase;">18 <span class="unit">ms</span></td>
+                  <td class="td-badge"><span class="tag-pill tag-emerald" style="padding: 2px 8px; font-size: var(--type-micro);">ACTIVE</span></td>
+                </tr>
+                <tr>
+                  <td class="td-primary">Search Index</td>
+                  <td class="td-type"><code style="font-size: 11px;">REST</code></td>
+                  <td class="td-latency" style="font-family: var(--font-mono); text-transform: uppercase;">64 <span class="unit">ms</span></td>
+                  <td class="td-badge"><span class="tag-pill tag-cyan" style="padding: 2px 8px; font-size: var(--type-micro);">READY</span></td>
+                </tr>
+                <tr>
+                  <td class="td-primary">Archive Store</td>
+                  <td class="td-type"><code style="font-size: 11px;">SFTP</code></td>
+                  <td class="td-latency" style="font-family: var(--font-mono); text-transform: uppercase;">—</td>
+                  <td class="td-badge"><span class="tag-pill" style="padding: 2px 8px; font-size: var(--type-micro);">IDLE</span></td>
+                </tr>
+                <tr>
+                  <td class="td-primary">Notification Relay</td>
+                  <td class="td-type"><code style="font-size: 11px;">AMQP</code></td>
+                  <td class="td-latency" style="font-family: var(--font-mono); text-transform: uppercase;">31 <span class="unit">ms</span></td>
+                  <td class="td-badge"><span class="tag-pill tag-emerald" style="padding: 2px 8px; font-size: var(--type-micro);">BUFFERED</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Spec Matrix Drawer Embedded -->
+          <div class="spec-drawer-card">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <div class="label" style="margin-bottom: 4px;">ARCHITECTURE</div>
+                <h4 style="margin: 0; font-size: 15px; text-transform: uppercase;">Service configuration</h4>
+              </div>
+              <button class="btn btn-pill btn-secondary" onclick="const g = document.getElementById('dashSpecGrid'); const open = g.style.display !== 'none'; g.style.display = open ? 'none' : 'grid'; this.className = open ? 'btn btn-pill btn-secondary' : 'btn btn-pill btn-primary'; this.firstElementChild.textContent = open ? '[ + ] VIEW SPECS' : '[ - ] HIDE SPECS';">
+                <span>[ + ] VIEW SPECS</span>
+              </button>
+            </div>
+
+            <div class="spec-drawer-grid" id="dashSpecGrid" style="display: none; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; padding-top: 18px;">
+              <div class="spec-col-box">
+                <div class="spec-col-title">Run Control</div>
+                <ul class="spec-list">
+                  <li><strong>Dispatch</strong>: batch, stream or hybrid.</li>
+                  <li><strong>Concurrency</strong>: 30 to 240 jobs at once.</li>
+                </ul>
+              </div>
+              <div class="spec-col-box">
+                <div class="spec-col-title">Services</div>
+                <ul class="spec-list">
+                  <li><strong>Protocols</strong>: gRPC, REST, AMQP and SFTP.</li>
+                  <li><strong>Partition</strong>: by region, by tenant, or none.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+function applyAppTheme(next) {
+  const icon = document.getElementById('appThemeIcon');
+  const btn = document.getElementById('appThemeBtn');
+  btn.setAttribute('aria-label', next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+  btn.setAttribute('aria-pressed', String(next === 'dark'));
+  if (next === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    icon.innerHTML = `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`;
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+  }
+}
+
+function toggleAppTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  applyAppTheme(next);
+  try { localStorage.setItem('site_theme', next); } catch (e) {}
+}
+
+let savedAppTheme = null;
+try { savedAppTheme = localStorage.getItem('site_theme'); } catch (e) {}
+applyAppTheme(savedAppTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+</script>
+</body>
+</html>

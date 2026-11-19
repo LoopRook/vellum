@@ -1,0 +1,193 @@
+<!-- @dsCard group="Components" name="Tables &amp; Data Display" subtitle="Hairline data grids, stat strips, and the mobile card-stack collapse" viewport="640x680" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Tables &amp; Data Display</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1000px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+}
+.demo-note { font-size: var(--type-small); color: var(--color-text-secondary); margin: 0 0 var(--space-3); max-width: 68ch; }
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: 16px; }
+
+@media (max-width: 640px) {
+  .telemetry-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .telemetry-col {
+    padding: 18px 12px;
+    align-items: center;
+    text-align: center;
+  }
+  .telemetry-col:nth-child(2) {
+    border-right: none;
+  }
+  .telemetry-col:nth-child(1), .telemetry-col:nth-child(2) {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .telemetry-stat {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 540px) {
+  .data-table,
+  .data-table tbody,
+  .data-table tr,
+  .data-table td {
+    display: block;
+  }
+  .data-table thead {
+    display: none;
+  }
+  .data-table tr {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--color-divider);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 4px 12px;
+    align-items: center;
+  }
+  .data-table tr:last-child {
+    border-bottom: none;
+  }
+  .data-table td {
+    padding: 0;
+    border: none;
+    width: auto;
+  }
+  .data-table td.td-primary {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+  .data-table td.td-badge {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    justify-self: end;
+  }
+  .data-table td.td-type {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    font-size: 11.5px;
+    color: var(--color-text-secondary);
+  }
+  .data-table td.td-latency {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    justify-self: end;
+    font-family: var(--font-mono); text-transform: uppercase;
+    font-size: 11.5px;
+    color: var(--color-text-muted);
+  }
+}
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <!-- 1. Metric / Stat Strip -->
+  <div class="demo-head">Stat strip</div>
+  <p class="demo-note">Grid-locked columns, display numerals, monospace units.</p>
+  <div class="telemetry-bar" style="margin-bottom: 24px;">
+    <div class="telemetry-col">
+      <div class="label">RESPONSE</div>
+      <div class="telemetry-stat">142<span class="telemetry-unit unit">ms</span></div>
+    </div>
+    <div class="telemetry-col">
+      <div class="label">THROUGHPUT</div>
+      <div class="telemetry-stat">2.4<span class="telemetry-unit unit">k/s</span></div>
+    </div>
+    <div class="telemetry-col">
+      <div class="label">AVAILABILITY</div>
+      <div class="telemetry-stat">99.9<span class="telemetry-unit unit">%</span></div>
+    </div>
+    <div class="telemetry-col">
+      <div class="label">ERROR RATE</div>
+      <div class="telemetry-stat">0<span class="telemetry-unit unit">%</span></div>
+    </div>
+  </div>
+
+  <!-- 2. Structured Data Table -->
+  <div class="demo-head">Data table</div>
+  <p class="demo-note">Hairline rows, collapsing to a card stack below the mobile breakpoint.</p>
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Type</th>
+          <th>Response</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-primary">Directory Service</td>
+          <td class="td-type"><code style="font-size: 11px;">gRPC</code></td>
+          <td class="td-latency" style="font-family: var(--font-mono); text-transform: uppercase;">18 <span class="unit">ms</span></td>
+          <td class="td-badge"><span class="tag-pill tag-emerald" style="padding: 2px 8px; font-size: var(--type-micro);">ACTIVE</span></td>
+        </tr>
+        <tr>
+          <td class="td-primary">Search Index</td>
+          <td class="td-type"><code style="font-size: 11px;">REST</code></td>
+          <td class="td-latency" style="font-family: var(--font-mono); text-transform: uppercase;">64 <span class="unit">ms</span></td>
+          <td class="td-badge"><span class="tag-pill tag-cyan" style="padding: 2px 8px; font-size: var(--type-micro);">READY</span></td>
+        </tr>
+        <tr>
+          <td class="td-primary">Archive Store</td>
+          <td class="td-type"><code style="font-size: 11px;">Batch</code></td>
+          <td class="td-latency" style="font-family: var(--font-mono); text-transform: uppercase;">—</td>
+          <td class="td-badge"><span class="tag-pill" style="padding: 2px 8px; font-size: var(--type-micro);">IDLE</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. Collapsible Specification Drawer -->
+  <div class="demo-head">Specification drawer — disclosure over a sheet</div>
+  <div class="spec-drawer-card">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+      <div>
+        <div class="label" style="margin-bottom: 4px;">SPECIFICATION MATRIX</div>
+        <h4 style="margin: 0; font-size: 16px; text-transform: uppercase;">Specification Detail</h4>
+      </div>
+      <button class="btn btn-pill btn-secondary" onclick="const g = document.getElementById('demoSpecGrid'); const open = g.style.display !== 'none'; g.style.display = open ? 'none' : 'grid'; this.className = open ? 'btn btn-pill btn-secondary' : 'btn btn-pill btn-primary'; this.firstElementChild.textContent = open ? '[ + ] VIEW DETAILS' : '[ - ] HIDE DETAILS';">
+        <span>[ + ] VIEW DETAILS</span>
+      </button>
+    </div>
+
+    <div class="spec-drawer-grid" id="demoSpecGrid" style="display: none; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; padding-top: 20px;">
+      <div class="spec-col-box">
+        <div class="spec-col-title">Display &amp; Geometry</div>
+        <ul class="spec-list">
+          <li><strong>Grid Axis</strong>: 45° Diagonal / Horiz.</li>
+          <li><strong>Discs</strong>: Octagon / Circle.</li>
+        </ul>
+      </div>
+      <div class="spec-col-box">
+        <div class="spec-col-title">Motion &amp; Physics</div>
+        <ul class="spec-list">
+          <li><strong>Timing</strong>: Fluid / Snappy.</li>
+          <li><strong>Sheen</strong>: matte, diffuse. No reflection.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

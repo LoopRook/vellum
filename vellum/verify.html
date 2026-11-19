@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Verify</title>
+<link rel="stylesheet" href="styles.css" />
+<!--
+  Rendered verification. validate_system.js reads source; this page reads what a browser
+  actually draws, which is the only way to see inherited case, relative sizes and the dark
+  cascade. It needs nothing but a browser: Claude Design, Claude Code's browser pane, or a
+  person in any browser. Serve the folder over http; opened as a file, pages load without
+  their stylesheet. DECISIONS 033.
+
+  ?page=path.html        check one page (repeat ?page= for several), path relative to here
+  (no ?page)             check every card and example in _ds_manifest.json
+  Result, for a script:  <html data-verify="pass|fail">, and the title ends in PASS or FAIL.
+-->
+<style>
+.demo { max-width: 1100px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); text-transform: uppercase; font-size: var(--type-label); font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-mono-wide); color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+}
+.lede { color: var(--color-text-secondary); max-width: 72ch; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: var(--space-3); }
+.rule-card { padding: var(--space-4); }
+.rule-card h3 { font-size: var(--type-subhead); margin: var(--space-2) 0 var(--space-2); }
+.rule-card p { font-size: var(--type-small); margin: 0; }
+.rule-count { font-family: var(--font-mono); text-transform: uppercase; font-size: var(--type-micro); letter-spacing: var(--tracking-mono); color: var(--color-text-muted); margin-top: var(--space-2); }
+.progress { font-family: var(--font-mono); text-transform: uppercase; font-size: var(--type-micro); letter-spacing: var(--tracking-mono); color: var(--color-text-muted); }
+.fail-table { width: 100%; margin: 0; }
+.fail-table td { vertical-align: top; }
+.fail-table code { white-space: normal; overflow-wrap: anywhere; }
+.controls { display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; margin-bottom: var(--space-4); }
+
+@media (max-width: 420px) {
+  .demo { padding: var(--space-4) var(--space-4) var(--space-6); }
+}
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <h1>Verify</h1>
+  <p class="lede">Loads each page in this browser and measures what it renders, in light and dark,
+    at desktop and phone width, against the rules the source-level validator cannot see.
+    Nothing is sent anywhere; every check runs here.</p>
+
+  <div class="controls">
+    <button class="btn btn-control" id="rerun">RUN AGAIN</button>
+    <span class="progress" id="progress">STARTING</span>
+  </div>
+
+  <div class="demo-head">Rules</div>
+  <div class="summary" id="summary"></div>
+
+  <div class="demo-head">What failed</div>
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <table class="data-table fail-table">
+      <thead><tr><th>Rule</th><th>Page</th><th>Element</th><th>Found</th></tr></thead>
+      <tbody id="fails"><tr><td colspan="4">Running.</td></tr></tbody>
+    </table>
+  </div>
+
+
+  <div class="demo-head">Pages checked</div>
+  <p class="lede" id="pages"></p>
+</main>
+
+<script>
+/* ------------------------------------------------------------------ the rules
+   Each reads one rendered page and returns the elements that break it. `where` is the
+   element as a short descriptor, `found` is what the browser reported. */
+const RULES = [
+  { id: 'load', title: 'Pages load', ref: 'DECISIONS 006',
+    says: 'Every page opens and has text to measure. A page that cannot be read fails; it never passes unchecked.',
+    passes: [] },
+  { id: 'display', title: 'Display type', ref: 'GRAMMAR §2.1',
+    says: 'Every run of text in the display face is weight 800–900, and its tracking is never positive: it tightens with size, and small titles sit at zero.',
+    passes: [{ width: 1280, mode: 'light' }] },
+  { id: 'headline', title: 'Headline colour', ref: 'GRAMMAR §2.1',
+    says: 'Display type is --color-text-primary, or the display role of what it sits on: a cavity, the document sheet, a statement banner’s ghost word, or paper ink.',
+    passes: [{ width: 1280, mode: 'light' }, { width: 1280, mode: 'dark' }] },
+  { id: 'mono', title: 'Monospace case', ref: 'GRAMMAR §2.1',
+    says: 'Monospace renders uppercase, except code, identifiers and units, which keep their literal case.',
+    passes: [{ width: 1280, mode: 'light' }] },
+  { id: 'capsule', title: 'Capsules never wrap', ref: 'GRAMMAR §2.7',
+    says: 'Anything drawn as a capsule — rounded to at least half its height — holds its text on one line.',
+    passes: [{ width: 1280, mode: 'light' }, { width: 375, mode: 'light' }] },
+  { id: 'dot', title: 'A dot has a word', ref: 'GRAMMAR §2.5',
+    says: 'A status dot sits beside the word that names its state. The word carries the meaning; the dot never stands alone.',
+    passes: [{ width: 1280, mode: 'light' }] },
+  { id: 'floor', title: 'Type floor', ref: 'GRAMMAR §5',
+    says: 'No text renders below --type-micro, except the console family’s compact controls at 420px or less, down to 9.5px.',
+    passes: [{ width: 1280, mode: 'light' }, { width: 375, mode: 'light' }] },
+  { id: 'dark', title: 'Dark shadows', ref: 'GRAMMAR §2.3',
+    says: 'In dark, nothing casts a shadow. A status dot may glow.',
+    passes: [{ width: 1280, mode: 'dark' }] },
+  { id: 'edges', title: 'Sheet edges', ref: 'GRAMMAR §2.3',
+    says: 'A sheet’s edge is --color-border in light and nothing in dark. Controls keep their own edge; a line inside a sheet is a divider, not an edge.',
+    passes: [{ width: 1280, mode: 'light' }, { width: 1280, mode: 'dark' }] },
+  { id: 'align', title: 'Prose is left-aligned', ref: 'GRAMMAR §2.1',
+    says: 'Body copy that runs past two lines is left-aligned: never centred, right-aligned or justified.',
+    passes: [{ width: 1280, mode: 'light' }, { width: 375, mode: 'light' }] },
+  { id: 'jobs', title: 'Family jobs', ref: 'GRAMMAR §2.1',
+    says: 'Mono is never prose: twelve words or more belong in Inter. Inter never sets a label, badge or button. A disclosure’s question is prose and stays Inter.',
+    passes: [{ width: 1280, mode: 'light' }] },
+  { id: 'nesting', title: 'Trays sit in sheets', ref: 'GRAMMAR §2.2',
+    says: 'A tray and a stage cavity are cut into a sheet. Neither sits on the bare canvas.',
+    passes: [{ width: 1280, mode: 'light' }] },
+  { id: 'toggle', title: 'Mode toggle reachable', ref: 'GRAMMAR §2.9',
+    says: 'A page with a mode toggle shows one on its first screen, 1280×800 and 375×812, without scrolling.',
+    passes: [{ width: 1280, mode: 'light' }, { width: 375, mode: 'light' }] },
+  { id: 'reach', title: 'Every rule can match', ref: 'DECISIONS 054',
+    says: 'Every selector in the system stylesheet and in a page’s own styles matches an element on some page, in light or dark. A rule that matches nothing is dead code, and the validator counts it as a use.',
+    passes: [{ width: 1280, mode: 'light' }, { width: 1280, mode: 'dark' }] },
+];
+
+// Pages that depict violations on purpose are listed, not checked.
+const DEPICTS_VIOLATIONS = ['foundations/antipatterns.html'];
+const COMPACT = '.btn-control, .btn-chip, .btn-stepper, .btn-status-toggle, .console-group .label';
+const EXCEPTION = 'code, kbd, samp, pre, .literal, .unit';
+const CONTROLS = 'input, textarea, select, button, .btn, .tag-pill, .tag, .btn-chip, .btn-control, .range-slider';
+// What mono owns: labels, badges, buttons, table headers (GRAMMAR §2.1).
+const LABELS = 'button, .btn, .tag-pill, .tag, .label, .btn-chip, .btn-control, th';
+const PROSE_IN_CONTROL = '.faq-trigger';
+const SHEETS = '.card, .stage-card, .console-card, .tray';
+const words = (s) => String(s).trim().split(/\s+/).filter((w) => /\w/.test(w)).length;
+
+const family = (cs) => cs.fontFamily.split(',')[0].replace(/['"]/g, '').trim();
+// The opacity of every colour in a computed value. Browsers report a color-mix() as
+// color(srgb r g b / a), so every colour function is read, not only rgb(). A colour whose
+// opacity cannot be read counts as visible: a check that cannot read a value must fail it,
+// never pass it (DECISIONS 006). The first draft read only rgb() and missed two edges.
+const alphas = (value) => [...String(value).matchAll(/\b(rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(([^()]*)\)/gi)].map((m) => {
+  const args = m[2];
+  if (args.includes('/')) { const a = parseFloat(args.split('/').pop()); return Number.isFinite(a) ? a : 1; }
+  const commas = args.split(',');
+  if (/^rgba|^hsla/i.test(m[1]) && commas.length === 4) { const a = parseFloat(commas[3]); return Number.isFinite(a) ? a : 1; }
+  return 1;
+});
+const describe = (el) => {
+  const cls = typeof el.className === 'string' && el.className.trim() ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : '';
+  const own = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join('').replace(/\s+/g, ' ').trim();
+  return `${el.tagName.toLowerCase()}${cls}${own ? ' “' + own.slice(0, 28) + '”' : ''}`;
+};
+const textElements = (doc, win) => [...doc.body.querySelectorAll('*')].filter((el) => {
+  if (/^(SCRIPT|STYLE|NOSCRIPT)$/.test(el.tagName)) return false;
+  if (![...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) return false;
+  const cs = win.getComputedStyle(el);
+  return cs.display !== 'none' && cs.visibility !== 'hidden';
+});
+
+/* ------------------------------------------------------------ reach: every rule can match
+   Pages that are not cards or examples, read for this rule only: the workbench, and the three
+   consumer sites. They carry classes the cards do not (.sidebar, .status-dot-live). */
+const REACH_EXTRA = ['index.html', 'thumbnail.html',
+  '../../implementations/_acceptance-test/index.html', '../../implementations/_test-portfolio/index.html', '../../implementations/_test-store/index.html'];
+
+/* Classes that script adds after load, so a rule naming one cannot match a page at rest.
+   Each is written down with where it is added. A selector is tried with these treated as present. */
+const STATE_CLASSES = [
+  'scrolled',    // examples/landing/index.html: the header, once the page has scrolled
+  'nav-hidden',  // examples/landing/index.html: the header, while scrolling down
+];
+
+/* Selectors allowed to match nothing, each with the reason. The list is written down so that
+   an offered class which no page shows is a recorded decision and not an accident. An entry that
+   matches after all fails, so the list cannot go stale. */
+const REACH_EXCEPTIONS = [
+  { origin: 'styles.css', selector: '.tag-pill.tag-neutral', reason: 'the half of a pair that nothing carries; .tag-neutral alone is used (workbench). Owner to decide' },
+  { origin: 'styles.css', selector: 'samp', reason: 'one of five elements in the case reset; no page shows one' },
+  { origin: 'styles.css', selector: 'pre', reason: 'same list; no page has a <pre> since the pill review list was removed (053)' },
+  // Reached only by something a person does, or by a branch that has not run.
+  { origin: 'index.html', selector: '.nav-item.active', reason: 'set when a card is picked in the sidebar' },
+  { origin: 'foundations/layout.html', selector: '.radius-spec-plain', reason: 'the fallback specimen, used only for a radius that has none; every radius has one' },
+  // The deck's component runtime injects its own stylesheet (DECISIONS 023: vendored runtimes are exempt).
+  { origin: 'examples/deck/Deck.dc.html', pattern: /sc-|^(?:figure|table|x-dc)$/, reason: 'the deck runtime’s own styles' },
+];
+
+const REACH = { parts: new Map() };
+const splitSelectors = (text) => {
+  const parts = []; let depth = 0, cur = '';
+  for (const ch of text) {
+    if (ch === '(' || ch === '[') depth++;
+    if (ch === ')' || ch === ']') depth--;
+    if (ch === ',' && depth === 0) { parts.push(cur.trim()); cur = ''; } else cur += ch;
+  }
+  parts.push(cur.trim());
+  return parts.filter(Boolean);
+};
+// What a selector needs to be tested at rest: pseudo-elements and the pseudo-classes a pointer or
+// keyboard sets are always true, and a class script adds is treated as present.
+const NEVER = ':not(.__never__)';
+const DYNAMIC = 'hover|active|focus-visible|focus-within|focus|visited|link|any-link|target|checked|indeterminate|fullscreen|autofill|invalid|valid|user-invalid|user-valid|open|modal|popover-open|defined|paused|playing';
+const atRest = (sel) => {
+  let t = sel
+    .replace(/::?-(?:webkit|moz|ms)-[a-z-]+(?:\([^)]*\))?/gi, NEVER)
+    .replace(/::[a-z-]+(?:\([^)]*\))?/gi, NEVER)
+    .replace(/:(?:before|after|first-line|first-letter)(?![\w-])/gi, NEVER)
+    .replace(new RegExp(':(?:' + DYNAMIC + ')(?![\\w-])', 'gi'), NEVER);
+  for (const c of STATE_CLASSES) t = t.split('.' + c).join(NEVER);
+  return t;
+};
+const sheetOrigin = (sheet, page) => {
+  if (!sheet.href) return page.replace(/^(\.\.\/)+/, '');
+  return new URL(sheet.href).pathname.replace(/^.*\//, '');
+};
+function eachStyleRule(list, fn) {
+  for (const rule of list) {
+    if (rule.type === 1) fn(rule);
+    else if (rule.type !== 7 && rule.type !== 8 && rule.cssRules) eachStyleRule(rule.cssRules, fn);
+  }
+}
+
+const CHECK = {
+  reach(doc, win, pass) {
+    for (const sheet of doc.styleSheets) {
+      let rules;
+      // This page writes most of its own elements after a run, so its own rules are not judged
+      // (pass.skipOwn). Its elements still count for the system stylesheet.
+      if (pass.skipOwn && !sheet.href) continue;
+      try { rules = sheet.cssRules; } catch (e) { continue; }   // a stylesheet from another origin cannot be read
+      const origin = sheetOrigin(sheet, pass.page);
+      eachStyleRule(rules, (rule) => {
+        for (const part of splitSelectors(rule.selectorText)) {
+          const key = origin + ' ' + part;
+          const entry = REACH.parts.get(key) || { origin, selector: part, matched: false, error: '' };
+          REACH.parts.set(key, entry);
+          if (entry.matched) continue;
+          try { if (doc.querySelector(atRest(part))) entry.matched = true; } catch (e) { entry.error = e.message; }
+        }
+      });
+    }
+    return [];
+  },
+  display(doc, win) {
+    const out = [];
+    for (const el of textElements(doc, win)) {
+      const cs = win.getComputedStyle(el);
+      if (!/Geist/i.test(family(cs))) continue;
+      const w = Number(cs.fontWeight);
+      // "normal" is no tracking, which the title step now is (DECISIONS 061).
+      const ls = cs.letterSpacing === 'normal' ? 0 : parseFloat(cs.letterSpacing);
+      if (w < 800 || w > 900) out.push({ where: describe(el), found: `weight ${w}` });
+      else if (!(ls <= 0)) out.push({ where: describe(el), found: `letter-spacing ${cs.letterSpacing}` });
+    }
+    return out;
+  },
+  headline(doc, win, pass) {
+    const out = [];
+    const probe = doc.createElement('i');
+    doc.body.appendChild(probe);
+    const ok = new Set(['text-primary', 'text-on-sunken', 'text-document', 'text-ghost'].map((r) => {
+      probe.style.color = `var(--color-${r})`;
+      return win.getComputedStyle(probe).color;
+    }));
+    probe.remove();
+    for (const el of textElements(doc, win)) {
+      const cs = win.getComputedStyle(el);
+      if (!/Geist/i.test(family(cs))) continue;
+      if (el.closest('[data-medium="paper"]')) continue; // paper ink, GRAMMAR §2.11
+      if (!ok.has(cs.color)) out.push({ where: describe(el), found: `colour ${cs.color} in ${pass.mode}` });
+    }
+    return out;
+  },
+  mono(doc, win) {
+    const out = [];
+    for (const el of textElements(doc, win)) {
+      const cs = win.getComputedStyle(el);
+      if (!/JetBrains/i.test(family(cs))) continue;
+      const own = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join('');
+      const exception = el.closest(EXCEPTION);
+      if (exception && cs.textTransform !== 'none') out.push({ where: describe(el), found: `an exception rendered ${cs.textTransform}` });
+      if (!exception && cs.textTransform !== 'uppercase' && /[a-z]/.test(own)) out.push({ where: describe(el), found: 'lowercase monospace' });
+    }
+    return out;
+  },
+  capsule(doc, win, pass) {
+    const out = [];
+    for (const el of doc.body.querySelectorAll('*')) {
+      const cs = win.getComputedStyle(el);
+      if (cs.display === 'none' || !(el.textContent || '').trim() || /%/.test(cs.borderTopLeftRadius)) continue;
+      const r = el.getBoundingClientRect();
+      if (!r.height || r.height > 60 || parseFloat(cs.borderTopLeftRadius) < r.height / 2 - 0.5) continue;
+      if (!/nowrap|^pre$/.test(cs.whiteSpace)) out.push({ where: describe(el), found: `white-space ${cs.whiteSpace} at ${pass.width}px, ${Math.round(r.height)}px tall` });
+    }
+    return out;
+  },
+  dot(doc, win) {
+    // A dot's word is visible text in the element that holds it, outside the dot itself.
+    const out = [];
+    for (const el of doc.body.querySelectorAll('.status-dot')) {
+      if (win.getComputedStyle(el).display === 'none') continue;
+      const holder = el.parentElement;
+      const word = holder ? [...holder.childNodes].filter((n) => n !== el).map((n) => n.textContent || '').join('').trim() : '';
+      if (!word) out.push({ where: describe(el), found: 'a dot with no word beside it' });
+    }
+    return out;
+  },
+  floor(doc, win, pass) {
+    const out = [];
+    const micro = parseFloat(win.getComputedStyle(doc.documentElement).getPropertyValue('--type-micro')) || 10.5;
+    for (const el of textElements(doc, win)) {
+      const size = parseFloat(win.getComputedStyle(el).fontSize);
+      if (size >= micro) continue;
+      if (pass.width <= 420 && el.closest(COMPACT) && size >= 9.5) continue;
+      out.push({ where: describe(el), found: `${size}px at ${pass.width}px wide` });
+    }
+    return out;
+  },
+  dark(doc, win) {
+    const out = [];
+    // The status hues as this page renders them, so a status dot's glow can be recognised.
+    const probe = doc.createElement('i');
+    doc.body.appendChild(probe);
+    // The names come from the page's own stylesheets, so a status a site adds (GRAMMAR §3.9)
+    // is recognised too, and a list here cannot fall behind the core (DECISIONS 058, 059).
+    const names = new Set();
+    (function walk(list) {
+      for (const r of list) {
+        if (r.cssRules) walk(r.cssRules);
+        if (r.style) for (const p of r.style) { const m = /^--color-status-([a-z][a-z0-9-]*?)(-fg)?$/.exec(p); if (m) names.add(m[1]); }
+      }
+    })([...doc.styleSheets].flatMap((s) => { try { return [...s.cssRules]; } catch (e) { return []; } }));
+    const status = new Set([...names].map((h) => {
+      probe.style.background = `var(--color-status-${h})`;
+      return win.getComputedStyle(probe).backgroundColor;
+    }));
+    // The primary action's hover glow is exempt by name, pending the review DECISIONS 011
+    // holds open (DECISIONS 025).
+    probe.style.boxShadow = 'var(--elevation-action-hover)';
+    const actionHover = win.getComputedStyle(probe).boxShadow;
+    probe.remove();
+    for (const el of doc.body.querySelectorAll('*')) {
+      const cs = win.getComputedStyle(el);
+      if (cs.display === 'none') continue;
+      if (cs.boxShadow !== 'none' && alphas(cs.boxShadow).some((a) => a > 0) && !status.has(cs.backgroundColor) && cs.boxShadow !== actionHover) {
+        out.push({ where: describe(el), found: `shadow ${cs.boxShadow.slice(0, 70)}` });
+      }
+    }
+    return out;
+  },
+  edges(doc, win, pass) {
+    const out = [];
+    // The sheet fills and the sheet edge as this page renders them, in this mode.
+    const probe = doc.createElement('i');
+    doc.body.appendChild(probe);
+    const fills = new Set(['surface', 'surface-raised', 'surface-nav', 'surface-document'].map((n) => {
+      probe.style.background = `var(--color-${n})`;
+      return win.getComputedStyle(probe).backgroundColor;
+    }));
+    probe.style.border = '1px solid var(--color-border)';
+    const edge = win.getComputedStyle(probe).borderTopColor;
+    probe.remove();
+    for (const el of doc.body.querySelectorAll('*')) {
+      // A control's edge is its affordance, not a sheet's edge (DECISIONS 033). A paper
+      // specimen is another medium, with ink rules instead of sheet edges (GRAMMAR §2.11).
+      if (el.closest(CONTROLS) || el.closest('[data-medium="paper"]')) continue;
+      // A held hover (.is-hover) draws the hover edge, which brightens in light mode (GRAMMAR §4.8).
+      // It is not a resting edge, and the resting card beside it is still measured (DECISIONS 055).
+      if (el.matches('.is-hover')) continue;
+      const cs = win.getComputedStyle(el);
+      if (cs.display === 'none') continue;
+      const sheet = fills.has(cs.backgroundColor) || (cs.backdropFilter && cs.backdropFilter !== 'none');
+      if (!sheet) continue;
+      // An edge goes all the way round. A line on one side is a divider inside a sheet.
+      const sides = ['Top', 'Right', 'Bottom', 'Left'];
+      if (!sides.every((s) => parseFloat(cs[`border${s}Width`]) > 0)) continue;
+      const bad = pass.mode === 'dark'
+        ? sides.some((s) => alphas(cs[`border${s}Color`]).some((a) => a > 0))
+        : sides.some((s) => cs[`border${s}Color`] !== edge);
+      if (bad) out.push({ where: describe(el), found: `edge ${cs.borderTopColor} in ${pass.mode}; the sheet edge is ${edge}` });
+    }
+    return out;
+  },
+  align(doc, win, pass) {
+    const out = [];
+    for (const el of textElements(doc, win)) {
+      const cs = win.getComputedStyle(el);
+      if (!/Inter/i.test(family(cs)) || /^inline/.test(cs.display) || el.closest(LABELS)) continue;
+      if (!/^(center|right|justify|end)$/.test(cs.textAlign)) continue;
+      if (words(el.textContent) <= 8) continue;
+      const line = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.2;
+      const lines = (el.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)) / line;
+      if (lines > 2.2) out.push({ where: describe(el), found: `${Math.round(lines)} lines ${cs.textAlign} at ${pass.width}px` });
+    }
+    return out;
+  },
+  jobs(doc, win) {
+    const out = [];
+    for (const el of textElements(doc, win)) {
+      const cs = win.getComputedStyle(el);
+      const own = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join(' ');
+      if (/JetBrains/i.test(family(cs)) && !el.closest(EXCEPTION) && words(own) >= 12) {
+        out.push({ where: describe(el), found: `${words(own)} words of monospace; a sentence belongs in Inter` });
+      }
+      // A disclosure's question is the reader's prose, set in Inter inside its button (GRAMMAR §2.1).
+      if (/Inter/i.test(family(cs)) && el.closest(LABELS) && !el.closest(PROSE_IN_CONTROL)) {
+        out.push({ where: describe(el), found: `Inter inside ${describe(el.closest(LABELS)).split(' ')[0]}; a label is monospace` });
+      }
+    }
+    return out;
+  },
+  nesting(doc, win) {
+    const out = [];
+    const probe = doc.createElement('i');
+    doc.body.appendChild(probe);
+    const fills = new Set(['surface', 'surface-raised', 'surface-document'].map((n) => {
+      probe.style.background = `var(--color-${n})`;
+      return win.getComputedStyle(probe).backgroundColor;
+    }));
+    probe.remove();
+    const isSheet = (el) => el.matches(SHEETS) || fills.has(win.getComputedStyle(el).backgroundColor);
+    for (const el of doc.body.querySelectorAll('.tray, .stage-cavity')) {
+      if (win.getComputedStyle(el).display === 'none' || el.closest('[data-medium="paper"]')) continue;
+      let up = el.parentElement;
+      while (up && up !== doc.body && !isSheet(up)) up = up.parentElement;
+      if (!up || up === doc.body) out.push({ where: describe(el), found: `${el.matches('.tray') ? 'a tray' : 'a cavity'} on the bare canvas; it is cut into a card` });
+    }
+    return out;
+  },
+  toggle(doc, win, pass) {
+    const toggles = [...doc.querySelectorAll('[data-mode-toggle]')];
+    // A fixed-viewport example declares the narrowest screen it is made for (GRAMMAR §2.12),
+    // and its first screen is not measured below that.
+    if (!toggles.length || pass.width < (pass.minWidth || 0)) return [];
+    const screen = pass.width <= 420 ? 812 : 800;
+    const seen = toggles.some((el) => {
+      const cs = win.getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+      return cs.display !== 'none' && cs.visibility !== 'hidden' && r.width > 0 && r.height > 0 &&
+        r.top >= 0 && r.bottom <= screen && r.left >= 0 && r.right <= pass.width;
+    });
+    if (seen) return [];
+    const r = toggles[0].getBoundingClientRect();
+    return [{ where: describe(toggles[0]), found: `none of ${toggles.length} on the first ${pass.width}×${screen} screen; the first is at ${Math.round(r.left)},${Math.round(r.top)}` }];
+  },
+};
+
+/* ------------------------------------------------------------------ running */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+async function pageList() {
+  const asked = new URLSearchParams(location.search).getAll('page');
+  const m = await (await fetch('_ds_manifest.json', { cache: 'reload' })).json();
+  for (const e of m.examples) if (e.minWidth) MIN_WIDTH[e.entryPath] = e.minWidth;
+  if (asked.length) return asked;
+  return m.cards.map((c) => c.path).concat(m.examples.map((e) => e.entryPath));
+}
+// Fixed-viewport examples and the width each declares (GRAMMAR §2.12).
+const MIN_WIDTH = {};
+
+// The address is set before the frame is added. Added first, a frame fires its load event
+// for the empty about:blank document at once, and every rule then measures a blank page and
+// finds nothing wrong. That is how the first draft of this page passed the pre-fix system.
+function load(src, width) {
+  return new Promise((resolve) => {
+    const f = document.createElement('iframe');
+    f.style.cssText = `position:absolute;left:-10000px;top:0;border:0;width:${width}px;height:900px`;
+    f.src = src + (src.includes('?') ? '&' : '?') + 'verify=' + Date.now();
+    f.onload = () => resolve(f);
+    document.body.appendChild(f);
+  });
+}
+
+async function measure(src, pass, rules) {
+  const f = await load(src, pass.width);
+  const doc = f.contentDocument, win = f.contentWindow;
+  if (!doc || !doc.head) {
+    f.remove();
+    return { load: [{ where: '(the whole page)', found: 'could not be opened; check the path, and that it is served from the same place as this page' }] };
+  }
+  // Transitions would be read half-way in a frame the browser is not drawing.
+  const still = doc.createElement('style');
+  still.textContent = '*,*::before,*::after{transition:none!important;animation:none!important}';
+  doc.head.appendChild(still);
+  if (pass.mode === 'dark') doc.documentElement.setAttribute('data-theme', 'dark');
+  else doc.documentElement.removeAttribute('data-theme');
+  try { await doc.fonts.ready; } catch (e) { /* fonts are not needed to read computed values */ }
+  await new Promise((r) => setTimeout(r, 150));
+  const found = {};
+  // A page with nothing to read has not been checked, and must not pass as if it had
+  // (DECISIONS 006): a wrong path, a page that failed to load, a blank frame.
+  const seen = doc && doc.body && doc.location.href !== 'about:blank' ? textElements(doc, win).length : 0;
+  if (!seen) {
+    found.load = [{ where: '(the whole page)', found: `nothing rendered to measure at ${pass.width}px ${pass.mode}; it did not load, or has no text` }];
+  } else {
+    for (const r of rules) found[r.id] = CHECK[r.id](doc, win, pass);
+  }
+  f.remove();
+  return found;
+}
+
+// What the pages, together, never matched. Run once, after every page has been read: a rule
+// belongs to the system and is dead only if no page at all can match it.
+function reachVerdict(fails) {
+  const unmatched = [...REACH.parts.values()].filter((p) => !p.matched);
+  if (REACH.parts.size === 0) {
+    fails.push({ rule: 'reach', page: '(all)', where: '(no rule read)', found: 'no stylesheet rule was read from any page, so nothing was checked' });
+    return;
+  }
+  const allowed = new Set();
+  for (const p of unmatched) {
+    if (p.error) { fails.push({ rule: 'reach', page: p.origin, where: p.selector, found: 'cannot be tested: ' + p.error }); continue; }
+    const ex = REACH_EXCEPTIONS.findIndex((e) => e.origin === p.origin && (e.pattern ? e.pattern.test(p.selector) : e.selector === p.selector));
+    if (ex !== -1) { allowed.add(ex); continue; }
+    fails.push({ rule: 'reach', page: p.origin, where: p.selector, found: 'matches no element on any page' });
+  }
+  REACH_EXCEPTIONS.forEach((e, i) => {
+    if (!allowed.has(i)) fails.push({ rule: 'reach', page: e.origin, where: e.selector, found: 'is listed as an exception but now matches, or no longer exists: remove it from REACH_EXCEPTIONS' });
+  });
+}
+
+async function run() {
+  REACH.parts.clear();
+  document.documentElement.dataset.verify = 'running';
+  document.title = 'Vellum — Verify — RUNNING';
+  const pages = await pageList();
+  // Read past the cache, so what is measured is what is on disk.
+  await fetch('styles.css', { cache: 'reload' });
+  // A page that does not answer 200 is a failure, not a pass: the server's error page has
+  // text of its own, and every rule would find nothing wrong with it.
+  const missing = new Set();
+  for (const p of pages) {
+    const res = await fetch(p, { cache: 'reload' }).catch(() => null);
+    if (!res || !res.ok) missing.add(p);
+  }
+  const fails = [];
+  const checked = [];
+  const skipped = [];
+  const passes = [];
+  for (const r of RULES) for (const pass of r.passes) {
+    const key = `${pass.width}-${pass.mode}`;
+    let entry = passes.find((x) => x.key === key);
+    if (!entry) passes.push(entry = { key, pass, rules: [] });
+    entry.rules.push(r);
+  }
+  let done = 0;
+  const total = pages.length * passes.length;
+  for (const p of pages) {
+    if (DEPICTS_VIOLATIONS.includes(p)) { skipped.push(p); done += passes.length; continue; }
+    if (missing.has(p)) {
+      fails.push({ rule: 'load', page: p, where: '(the whole page)', found: 'the page did not load: check the path' });
+      done += passes.length;
+      continue;
+    }
+    for (const { pass, rules } of passes) {
+      $('progress').textContent = `${++done} / ${total} · ${pass.width}PX ${pass.mode.toUpperCase()}`;
+      const found = await measure(p, { ...pass, minWidth: MIN_WIDTH[p], page: p }, rules);
+      for (const [rule, list] of Object.entries(found)) for (const x of list) fails.push({ rule, page: p, ...x });
+    }
+    checked.push(p);
+  }
+  const reach = RULES.find((r) => r.id === 'reach');
+  for (const p of REACH_EXTRA) {
+    const res = await fetch(p, { cache: 'reload' }).catch(() => null);
+    if (!res || !res.ok) { fails.push({ rule: 'reach', page: p, where: '(the whole page)', found: 'the page did not load; its classes are not counted, so its rules would read as dead' }); continue; }
+    for (const pass of reach.passes) {
+      $('progress').textContent = `${++done} · ${p.replace(/^.*\//, '')} · ${pass.mode.toUpperCase()}`;
+      await measure(p, { ...pass, page: p }, [reach]);
+    }
+  }
+  // This page's own elements, which carry classes of the system stylesheet too (a <pre>, .card).
+  CHECK.reach(document, window, { ...reach.passes[0], page: 'verify.html', skipOwn: true });
+  reachVerdict(fails);
+  render(fails, checked, skipped);
+}
+
+function render(fails, checked, skipped) {
+  const ok = fails.length === 0;
+  document.documentElement.dataset.verify = ok ? 'pass' : 'fail';
+  document.title = `Vellum — Verify — ${ok ? 'PASS' : 'FAIL'}`;
+  $('progress').textContent = `${ok ? 'PASS' : 'FAIL'} · ${checked.length} PAGES · ${fails.length} FAILURES`;
+  $('summary').innerHTML = RULES.map((r) => {
+    const n = fails.filter((f) => f.rule === r.id).length;
+    return `<div class="card rule-card">
+      <span class="tag-pill ${n ? 'tag-amber' : 'tag-emerald'}">${n ? 'FAIL' : 'PASS'}</span>
+      <h3>${esc(r.title)}</h3>
+      <p>${esc(r.says)}</p>
+      <div class="rule-count">${esc(r.ref)} · ${n} FAILURE${n === 1 ? '' : 'S'}</div>
+    </div>`;
+  }).join('');
+  $('fails').innerHTML = fails.length
+    ? fails.slice(0, 500).map((f) => `<tr><td>${esc(RULES.find((r) => r.id === f.rule).title)}</td><td><code>${esc(f.page)}</code></td><td><code>${esc(f.where)}</code></td><td><code>${esc(f.found)}</code></td></tr>`).join('')
+    : '<tr><td colspan="4">Nothing failed.</td></tr>';
+  $('pages').innerHTML = checked.map((p) => `<code>${esc(p)}</code>`).join(', ') +
+    (skipped.length ? `. Not checked, because they depict violations on purpose: ${skipped.map((p) => `<code>${esc(p)}</code>`).join(', ')}.` : '.');
+}
+
+
+$('rerun').addEventListener('click', run);
+run();
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!-- @dsCard group="Foundations" name="Spacing &amp; Radii" subtitle="The eight-step spacing scale and radius-as-identity mapping" viewport="640x640" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Spacing &amp; Radii</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+.demo { max-width: 1000px; width: 100%; margin: 0 auto; padding: var(--space-6) var(--space-6) var(--space-8); position: relative; z-index: 1; }
+.demo-head {
+  font-family: var(--font-mono); font-size: var(--type-label); font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-mono-wide); text-transform: uppercase; color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+}
+.demo-note { font-size: var(--type-small); color: var(--color-text-secondary); margin: 0 0 var(--space-3); max-width: 68ch; }
+.theme-toggle-row { display: flex; justify-content: flex-end; margin-bottom: var(--space-4); }
+
+.space-row {
+  display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-2);
+  font-family: var(--font-mono); text-transform: uppercase; font-size: var(--type-label);
+}
+.space-name { flex: none; width: 110px; color: var(--color-text-primary); }
+.space-bar { height: 16px; background: var(--color-text-secondary); border-radius: var(--radius-chip); opacity: 0.7; flex: none; }
+.space-val { color: var(--color-text-muted); }
+
+/* Each radius is drawn on the object it belongs to, built from the system's own classes,
+   so a reader can tell a pill from a stage by looking (GRAMMAR §2.8, DECISIONS 038). */
+.radii { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: var(--space-6) var(--space-4); align-items: start; }
+.radius-spec { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+.radius-spec-name {
+  font-family: var(--font-mono); text-transform: uppercase; font-size: var(--type-micro);
+  letter-spacing: var(--tracking-mono); color: var(--color-text-primary);
+}
+.radius-spec-name .radius-spec-value { color: var(--color-text-muted); margin-left: var(--space-1); }
+.radius-spec-desc { font-size: var(--type-micro); color: var(--color-text-muted); line-height: var(--leading-body); }
+.radius-spec-row { display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
+.radius-spec-row .input { flex: 1; min-width: 0; }
+.radius-spec-host { padding: var(--space-2); }
+.radius-spec-well { height: 44px; }
+.radius-spec-sheet { height: 64px; }
+.radius-spec-drawer { height: 64px; padding: 0; }
+.radius-spec .faq-item { margin: 0; }
+.radius-spec .faq-trigger { padding: var(--space-3) var(--space-4); }
+.radius-spec-plain { height: 44px; border: 1px solid var(--color-border); background: var(--color-surface-raised); }
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <div class="theme-toggle-row">
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <div class="demo-head">Spacing scale</div>
+  <p class="demo-note">Eight steps on a 4px base. Bars are drawn at true size from the token values, so the scale you see is the scale that ships.</p>
+  <div id="spacing"></div>
+
+  <div class="demo-head">Radius as identity</div>
+  <p class="demo-note">Radius says what a thing <em>is</em>, not how large it is. Two components sharing a radius are the same kind of object — a pill is fully round because it is a capsule, a mode button is small-radius because it is a machined part. Choosing by eye breaks the grammar even when it looks fine.</p>
+  <div class="radii" id="radii"></div>
+
+  <div class="demo-head">Blur as elevation</div>
+  <p class="demo-note">Depth is expressed by blur, and the ordering is fixed. Rungs may be skipped — a page with no stage is fine — but never reordered, and never extended with a new value.</p>
+  <div id="blur"></div>
+</main>
+
+<script src="../tokens.generated.js"></script>
+<script>
+const {LIGHT, META} = VellumTokens;
+
+const px = (v) => parseFloat(v) || 0;
+const byPath = (prefix) => Object.keys(META).filter((n) => META[n].path.startsWith(prefix));
+
+/* --- Spacing ------------------------------------------------------------- */
+const spacing = byPath('semantic.space.').sort((a, b) => px(LIGHT[a]) - px(LIGHT[b]));
+document.getElementById('spacing').innerHTML = spacing.map((n) => `
+  <div class="space-row">
+    <span class="space-name literal">${n}</span>
+    <span class="space-bar" style="width: ${px(LIGHT[n])}px"></span>
+    <span class="space-val unit">${LIGHT[n]}</span>
+  </div>`).join('');
+
+/* --- Radii --------------------------------------------------------------- */
+// Each role on the object that carries it, from the system's own classes. A radius added to
+// the tokens without an object here still shows, as a plain swatch.
+const SPECIMEN = {
+  chip: `<div class="radius-spec-row"><button class="btn-chip">CHIP</button><button class="btn-chip active">ACTIVE</button></div>`,
+  control: `<div class="radius-spec-row"><button class="btn btn-control">CONTROL</button><input class="input" value="Field" aria-label="Example field"></div>`,
+  faq: `<div class="faq-item"><button class="faq-trigger"><span>A stacked question</span><span class="faq-indicator">[+]</span></button></div>`,
+  cavity: `<div class="card radius-spec-host"><div class="stage-cavity radius-spec-well"></div></div>`,
+  tray: `<div class="card radius-spec-host"><div class="tray radius-spec-well"></div></div>`,
+  drawer: `<div class="spec-drawer-card radius-spec-drawer"></div>`,
+  stage: `<div class="card radius-spec-sheet"></div>`,
+  card: `<div class="telemetry-bar radius-spec-sheet"></div>`,
+  pill: `<div class="radius-spec-row"><span class="tag-pill">CATEGORY</span><span class="tag-pill tag-emerald">LIVE</span><button class="btn btn-pill btn-primary">ACTION</button></div>`,
+};
+const radii = byPath('semantic.radius.').sort((a, b) => px(LIGHT[a]) - px(LIGHT[b]));
+document.getElementById('radii').innerHTML = radii.map((n) => {
+  const label = n.replace('--radius-', '');
+  const value = String(LIGHT[n]).replace(/^([\d.]+)(px)$/, (all, num, u) => `${num}<span class="unit">${u}</span>`);
+  const object = SPECIMEN[label] || `<div class="radius-spec-plain" style="border-radius: var(${n})"></div>`;
+  return `<div class="radius-spec">
+    <div class="radius-spec-name">${label}<span class="radius-spec-value">${value}</span></div>
+    ${object}
+    <div class="radius-spec-desc">${(META[n].description || '').replace(/\.$/, '')}</div>
+  </div>`;
+}).join('');
+
+/* --- Blur ladder --------------------------------------------------------- */
+const blur = byPath('semantic.blur.')
+  .sort((a, b) => px(LIGHT[b]) - px(LIGHT[a]));
+const maxBlur = Math.max(...blur.map((n) => px(LIGHT[n])));
+
+document.getElementById('blur').innerHTML = blur.map((n) => `
+  <div class="space-row">
+    <span class="space-name literal">${n}</span>
+    <span class="space-bar" style="width: ${Math.round((px(LIGHT[n]) / maxBlur) * 180)}px"></span>
+    <span class="space-val unit">${LIGHT[n]}</span>
+  </div>`).join('') +
+  `<div class="space-row">
+     <span class="space-name">cavity</span>
+     <span class="space-bar" style="width: 3px"></span>
+     <span class="space-val">no blur — opaque, reads as cut in</span>
+   </div>`;
+</script>
+</body>
+</html>

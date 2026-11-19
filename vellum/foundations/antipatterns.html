@@ -1,0 +1,310 @@
+<!-- @dsCard group="Foundations" name="Do's &amp; Don'ts (Anti-Patterns)" subtitle="Brand invariants set against the prohibited pattern each one rules out" viewport="1000x800" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Brand Invariants &amp; Anti-Patterns</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* ---------------------------------------------------------------------------
+   The literal colours in this file are deliberate and must NOT be tokenised.
+   #3B82F6 (browser-default focus blue), #00E5FF used as a glow, and #FFB800 on
+   a headline are the PROHIBITED patterns this card exists to depict. An
+   anti-pattern has to sit outside the token system — the moment it has a token
+   it stops being an anti-pattern and becomes a supported option.
+   Every other value here derives from ../tokens.generated.js.
+   --------------------------------------------------------------------------- */
+.demo {
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-6) var(--space-8);
+  font-family: var(--font-body); position: relative; z-index: 1; }
+
+.demo-head {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: var(--space-6) 0 var(--space-3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.compare-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.compare-box {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-stage);
+  padding: 24px;
+  box-shadow: var(--elevation-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.badge-do {
+  padding: 4px 10px;
+  border-radius: var(--radius-control);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--color-doc-affirm) 12%, transparent);
+  color: var(--color-status-emerald);
+  border: 1px solid color-mix(in srgb, var(--color-doc-affirm) 25%, transparent);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  width: fit-content;
+}
+
+.badge-dont {
+  padding: 4px 10px;
+  border-radius: var(--radius-control);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--color-doc-negate) 12%, transparent);
+  color: var(--color-doc-negate);
+  border: 1px solid color-mix(in srgb, var(--color-doc-negate) 25%, transparent);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+  width: fit-content;
+}
+
+.rule-desc {
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-divider);
+}
+
+/* Specific Anti-Pattern Simulators */
+.anti-neon-card {
+  transition: all var(--duration-fast) ease;
+}
+.anti-neon-card:hover {
+  border-color: #00E5FF !important;
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.6) !important;
+}
+
+.anti-blue-focus:focus {
+  outline: 2px solid #3B82F6 !important;
+  border-color: #3B82F6 !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3) !important;
+}
+
+@media (max-width: 860px) {
+  .compare-pair {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+<div class="light-table"></div>
+
+<main class="demo">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+    <div>
+      <h2 style="font-family: var(--font-display); font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: -0.03em; margin: 0 0 4px;">
+        Brand Invariants &amp; Anti-Patterns
+      </h2>
+      <p style="font-size: 14px; color: var(--color-text-secondary); margin: 0;">
+        Interactive visual guide codifying strict brand rules ("DO's") and prohibited mistakes ("DON'Ts").
+      </p>
+    </div>
+    <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
+  </div>
+
+  <!-- 01. Surfaces & Hover Physics -->
+  <div class="demo-head">
+    <span>01 / Surface &amp; Card Hover Elevation</span>
+    <span class="tag-pill">SURFACE PHYSICS</span>
+  </div>
+
+  <div class="compare-pair">
+    <!-- DO: the quiet lift -->
+    <div class="compare-box" style="border-color: color-mix(in srgb, var(--color-doc-affirm) 30%, transparent);">
+      <div>
+        <div class="badge-do">✓ DO: the quiet lift</div>
+        <div class="card card-feature" style="padding: 20px;">
+          <span class="tag-pill">SURFACE</span>
+          <div class="card-feature-title" style="font-size: 18px; margin: 10px 0 6px;">Multi-Layer Blur</div>
+          <p style="font-size: 13px; margin: 0;">Hover me: Uses <code>translateY(-2px)</code> with a deepening shadow and a brighter edge.</p>
+        </div>
+      </div>
+      <div class="rule-desc">
+        <strong>Rule:</strong> Never use colored glow lines. Maintain quiet industrial luxury with subtle elevation.
+      </div>
+    </div>
+
+    <!-- DON'T: Neon Colored Hover Outline -->
+    <div class="compare-box" style="border-color: color-mix(in srgb, var(--color-doc-negate) 30%, transparent);">
+      <div>
+        <div class="badge-dont">✕ DON'T: Neon Glow Outlines</div>
+        <div class="card anti-neon-card" style="padding: 20px;">
+          <span class="tag-pill">SURFACE</span>
+          <div style="font-family: var(--font-display); font-size: 18px; font-weight: 800; letter-spacing: var(--tracking-title); margin: 10px 0 6px;">Multi-Layer Blur</div>
+          <p style="font-size: 13px; margin: 0;">Hover me: Uses loud neon cyan borders and glowing drop shadows.</p>
+        </div>
+      </div>
+      <div class="rule-desc">
+        <strong>Mistake:</strong> Neon rainbow glows look cheap and corrupt the minimalist Swiss aesthetic.
+      </div>
+    </div>
+  </div>
+
+  <!-- 02. Typography & Headline Color -->
+  <div class="demo-head">
+    <span>02 / Typography &amp; Headline Hierarchy</span>
+    <span class="tag-pill">TYPOGRAPHY</span>
+  </div>
+
+  <div class="compare-pair">
+    <!-- DO: Monochrome High-Contrast Headline -->
+    <div class="compare-box" style="border-color: color-mix(in srgb, var(--color-doc-affirm) 30%, transparent);">
+      <div>
+        <div class="badge-do">✓ DO: High-Contrast Monochrome</div>
+        <h3 style="font-family: var(--font-display); font-size: 28px; font-weight: 900; letter-spacing: -0.04em; margin: 0 0 8px; text-transform: uppercase;">
+          VELLUM<br/>DESIGN LANGUAGE
+        </h3>
+        <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">
+          Display headlines are strictly pure ink black (<code data-token="--color-neutral-900"></code>) or pure white (<code data-token="--color-white"></code>).
+        </p>
+      </div>
+      <div class="rule-desc">
+        <strong>Rule:</strong> High-contrast black and white maintains crisp architectural authority.
+      </div>
+    </div>
+
+    <!-- DON'T: Rainbow / Yellow Tinted Headlines -->
+    <div class="compare-box" style="border-color: color-mix(in srgb, var(--color-doc-negate) 30%, transparent);">
+      <div>
+        <div class="badge-dont">✕ DON'T: Rainbow / Tinted Titles</div>
+        <h3 style="font-family: var(--font-display); font-size: 28px; font-weight: 900; letter-spacing: -0.04em; margin: 0 0 8px; text-transform: uppercase;">
+          VELLUM<br/><span style="color: #FFB800;">DESIGN LANGUAGE</span>
+        </h3>
+        <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0; line-height: 1.5;">
+          Tinting headline text yellow or cyan degrades contrast and looks unprofessional.
+        </p>
+      </div>
+      <div class="rule-desc">
+        <strong>Mistake:</strong> Color is strictly reserved for small precision telemetry dots, not massive headline type.
+      </div>
+    </div>
+  </div>
+
+  <!-- 03. Pill Grammar & Semantic Tints -->
+  <div class="demo-head">
+    <span>03 / Pill Category vs. Status Grammar</span>
+    <span class="tag-pill">PILL SYSTEM</span>
+  </div>
+
+  <div class="compare-pair">
+    <!-- DO: Neutral Category vs Semantic Status -->
+    <div class="compare-box" style="border-color: color-mix(in srgb, var(--color-doc-affirm) 30%, transparent);">
+      <div>
+        <div class="badge-do">✓ DO: Strict Separation</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
+          <span class="tag-pill">TYPOGRAPHY</span>
+          <span class="tag-pill">CONTROLS</span>
+          <span class="tag-pill tag-emerald">LIVE</span>
+        </div>
+        <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0;">
+          Neutral pills for structural categories; tinted pills strictly for live state.
+        </p>
+      </div>
+      <div class="rule-desc">
+        <strong>Rule:</strong> Clear semantics prevent visual confusion between categories and operational state.
+      </div>
+    </div>
+
+    <!-- DON'T: Semantic Pollution -->
+    <div class="compare-box" style="border-color: color-mix(in srgb, var(--color-doc-negate) 30%, transparent);">
+      <div>
+        <div class="badge-dont">✕ DON'T: Semantic Pollution</div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;">
+          <span class="tag-pill tag-emerald">TYPOGRAPHY</span>
+          <span class="tag-pill tag-amber">CONTROLS</span>
+          <span class="tag-pill tag-cyan">HARDWARE</span>
+        </div>
+        <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0;">
+          Coloring static category names like "Typography" in green or amber pollutes the status grammar.
+        </p>
+      </div>
+      <div class="rule-desc">
+        <strong>Mistake:</strong> If everything is green or amber, status indicators lose their meaning.
+      </div>
+    </div>
+  </div>
+
+  <!-- 04. Form Focus Rings & Hardware Inputs -->
+  <div class="demo-head">
+    <span>04 / Form Focus States &amp; Hardware Inputs</span>
+    <span class="tag-pill">CONTROLS &amp; FORMS</span>
+  </div>
+
+  <div class="compare-pair">
+    <!-- DO: Monochrome Ink Focus Transition -->
+    <div class="compare-box" style="border-color: color-mix(in srgb, var(--color-doc-affirm) 30%, transparent);">
+      <div>
+        <div class="badge-do">✓ DO: Monochrome Ink Focus</div>
+        <div style="margin-bottom: 10px;">
+          <input type="text" class="input" placeholder="Click to test focus..." value="NORTHWIND" />
+        </div>
+        <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0;">
+          Focus state transitions smoothly to crisp ink border (<code>border-color: var(--color-text-primary)</code>).
+        </p>
+      </div>
+      <div class="rule-desc">
+        <strong>Rule:</strong> Precision hardware tools use clean mechanical focus transitions.
+      </div>
+    </div>
+
+    <!-- DON'T: Browser Blue / Yellow Glow Rings -->
+    <div class="compare-box" style="border-color: color-mix(in srgb, var(--color-doc-negate) 30%, transparent);">
+      <div>
+        <div class="badge-dont">✕ DON'T: Generic SaaS Blue Rings</div>
+        <div style="margin-bottom: 10px;">
+          <input type="text" class="input anti-blue-focus" placeholder="Click to test focus..." value="NORTHWIND" />
+        </div>
+        <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0;">
+          Standard browser blue halos (<code>#3B82F6</code>) clash with the Swiss palette.
+        </p>
+      </div>
+      <div class="rule-desc">
+        <strong>Mistake:</strong> Never leave default browser focus outlines or soft generic SaaS rings.
+      </div>
+    </div>
+  </div>
+</main>
+<script src="../tokens.generated.js"></script>
+<script>
+const {LIGHT} = VellumTokens;
+/* Only the citations derive. The prohibited colours below stay literal by design —
+   an anti-pattern must sit outside the token system or it is not an anti-pattern. */
+document.querySelectorAll('[data-token]').forEach((n) => { n.textContent = LIGHT[n.dataset.token]; });
+</script>
+</body>
+</html>

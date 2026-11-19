@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vellum — Design System Workbench</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 100vh;
+  background-color: var(--color-bg-canvas);
+  overflow: hidden;
+}
+
+/* Workbench Sidebar */
+.sidebar {
+  width: 320px;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  backdrop-filter: blur(var(--blur-stage));
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.sidebar-header {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 0;
+}
+
+.nav-section-title {
+  padding: 12px 20px 6px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.nav-item {
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: var(--weight-medium);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all var(--duration-fast) ease;
+}
+
+.nav-item:hover {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+}
+
+.nav-item.active {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  font-weight: 700;
+  border-left: 3px solid var(--color-text-primary);
+}
+
+/* Main Stage Canvas */
+.stage-workbench {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  background: var(--color-bg-canvas);
+}
+
+.stage-topbar {
+  padding: 12px 24px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(var(--blur-nav));
+  z-index: 5;
+}
+
+.stage-viewport {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: auto;
+}
+
+.preview-frame {
+  width: 100%;
+  max-width: 1160px;
+  height: 100%;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-stage);
+  background: var(--color-bg-canvas);
+  box-shadow: var(--elevation-stage);
+  transition: width var(--duration-smooth) var(--easing-spring);
+}
+
+/* --- Narrow viewports ------------------------------------------------------
+   The workbench is a two-pane inspector, which is a desktop shape. Rather than
+   force it, stack the panes: the index becomes a scrollable strip above the
+   preview. Keeps the doc site usable on a phone without pretending the layout
+   is something it is not. */
+@media (max-width: 860px) {
+  body { flex-direction: column; height: 100dvh; }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 42vh;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .stage-workbench { min-height: 0; }
+
+  /* The viewport switcher simulates narrow widths. On a narrow device you are
+     already at one, so it is three buttons of pure cost. The theme toggle stays. */
+  .viewport-switch { display: none; }
+
+  /* The card path is the first thing worth losing when the bar is tight. */
+  .stage-topbar #currentCardPath { display: none; }
+  .stage-topbar { gap: var(--space-2); }
+}
+/* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .sidebar, .stage-topbar { background: var(--color-surface-solid); }
+}
+</style>
+</head>
+<body>
+<!-- Ambient background lamps -->
+<div class="light-table"></div>
+
+<!-- Left Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span style="font-family: var(--font-display); font-weight: 900; font-size: 16px; letter-spacing: var(--tracking-title);">VELLUM</span>
+      <span class="tag tag-emerald" id="sfVersion">…</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <!-- GENERATED:NAV:START -->
+    <div class="nav-section-title">Foundations</div>
+    <div class="nav-item" onclick="loadCard('foundations/grammar.html', this)">Grammar: Constants &amp; Variables</div>
+    <div class="nav-item" onclick="loadCard('foundations/color.html', this)">Color &amp; Ramps</div>
+    <div class="nav-item" onclick="loadCard('foundations/type.html', this)">Typography Scale</div>
+    <div class="nav-item" onclick="loadCard('foundations/sheets.html', this)">Sheets &amp; Depth</div>
+    <div class="nav-item" onclick="loadCard('foundations/layout.html', this)">Spacing &amp; Radii</div>
+    <div class="nav-item" onclick="loadCard('foundations/icons.html', this)">Interface Icons</div>
+    <div class="nav-item" onclick="loadCard('foundations/wayfinding.html', this)">Numbering &amp; Wayfinding</div>
+    <div class="nav-item" onclick="loadCard('foundations/antipatterns.html', this)">Do&#39;s &amp; Don&#39;ts (Anti-Patterns)</div>
+    <div class="nav-item" onclick="loadCard('foundations/states.html', this)">Component State Anatomy</div>
+    <div class="nav-item" onclick="loadCard('foundations/specimen.html', this)">System Specimen</div>
+    <div class="nav-item" onclick="loadCard('foundations/cmf.html', this)">CMF &amp; Material</div>
+    <div class="nav-item" onclick="loadCard('foundations/print.html', this)">Print &amp; Physical Stationery</div>
+    <div class="nav-section-title">Components</div>
+    <div class="nav-item" onclick="loadCard('components/buttons.html', this)">Buttons &amp; Controls</div>
+    <div class="nav-item" onclick="loadCard('components/console.html', this)">Toolbars &amp; Segmented Controls</div>
+    <div class="nav-item" onclick="loadCard('components/cards.html', this)">Feature Cards &amp; FAQ</div>
+    <div class="nav-item" onclick="loadCard('components/navigation.html', this)">Navigation</div>
+    <div class="nav-item" onclick="loadCard('components/forms.html', this)">Forms &amp; Inputs</div>
+    <div class="nav-item" onclick="loadCard('components/table.html', this)">Tables &amp; Data Display</div>
+    <div class="nav-item" onclick="loadCard('components/dialog.html', this)">Dialogs &amp; Modals</div>
+    <div class="nav-section-title">Examples</div>
+    <div class="nav-item" onclick="loadCard('examples/dashboard/index.html', this)">Dashboard</div>
+    <div class="nav-item" onclick="loadCard('examples/deck/Deck.dc.html', this)">Deck</div>
+    <div class="nav-item" onclick="loadCard('examples/deck/example-deck.html', this)">Example Pitch Deck (Reference)</div>
+    <div class="nav-item" onclick="loadCard('examples/landing/index.html', this)">Landing</div>
+    <div class="nav-item" onclick="loadCard('examples/document/spec.html', this)">Printable Spec Sheet</div>
+    <div class="nav-item" onclick="loadCard('thumbnail.html', this)">Cover Thumbnail</div>
+    <!-- GENERATED:NAV:END -->
+  </nav>
+</aside>
+
+<!-- Main Workbench Stage -->
+<main class="stage-workbench">
+  <header class="stage-topbar">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span id="currentCardLabel" style="font-family: var(--font-display); font-weight: 800; font-size: 15px; letter-spacing: var(--tracking-title);">Color &amp; Ramps</span>
+      <span id="currentCardPath" class="tag tag-neutral">foundations/color.html</span>
+    </div>
+
+    <div class="stage-actions" style="display: flex; align-items: center; gap: 8px;">
+      <button class="btn btn-control viewport-switch" onclick="setFrameSize('100%')">FULL</button>
+      <button class="btn btn-control viewport-switch" onclick="setFrameSize('640px')">640<span class="unit">px</span></button>
+      <button class="btn btn-control viewport-switch" onclick="setFrameSize('375px')">MOBILE</button>
+      <button data-mode-toggle class="btn btn-icon" onclick="toggleTheme()" aria-label="Theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="stage-viewport">
+    <iframe id="previewFrame" class="preview-frame" src="foundations/color.html"></iframe>
+  </div>
+</main>
+
+<script>
+function syncThemeToIframe() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  try {
+    const frame = document.getElementById('previewFrame');
+    if (!frame || !frame.contentDocument) return;
+    const iframeDoc = frame.contentDocument;
+    if (isDark) {
+      iframeDoc.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      iframeDoc.documentElement.removeAttribute('data-theme');
+    }
+  } catch(e) {}
+}
+
+const previewFrame = document.getElementById('previewFrame');
+previewFrame.addEventListener('load', syncThemeToIframe);
+
+function loadCard(path, el) {
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  el.classList.add('active');
+  previewFrame.src = path + '?v=' + VellumTokens.VERSION + '&t=' + Date.now();
+  document.getElementById('currentCardLabel').textContent = el.textContent;
+  document.getElementById('currentCardPath').textContent = path;
+}
+
+function setFrameSize(size) {
+  if (size === '100%') {
+    previewFrame.style.maxWidth = '100%';
+    previewFrame.style.width = '100%';
+  } else {
+    previewFrame.style.maxWidth = size;
+    previewFrame.style.width = size;
+  }
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  if (next === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+  }
+  syncThemeToIframe();
+}
+</script>
+<script src="tokens.generated.js"></script>
+<script>
+/* The version badge reads the token file rather than restating it — a stamped
+   version is the first thing to go stale after a release is cut. */
+document.getElementById('sfVersion').textContent = 'v' + VellumTokens.VERSION;
+</script>
+</body>
+</html>
