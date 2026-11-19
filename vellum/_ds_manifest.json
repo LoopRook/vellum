@@ -21,7 +21,7 @@
       "path": "foundations/type.html",
       "group": "Foundations",
       "viewport": "640x760",
-      "subtitle": "The ten-step scale, three families, and the tracking pairs each step takes",
+      "subtitle": "The type scale, three families, and the tracking pairs each step takes",
       "name": "Typography Scale"
     },
     {
@@ -112,7 +112,7 @@
       "path": "components/navigation.html",
       "group": "Components",
       "viewport": "640x420",
-      "subtitle": "Fixed nav sheet that hides on scroll down and returns on scroll up or hover",
+      "subtitle": "The floating nav sheet and the pinned nav bar",
       "name": "Navigation"
     },
     {
@@ -140,22 +140,15 @@
   "examples": [
     {
       "name": "Dashboard",
-      "description": "A workspace application: collapsible navigation, a live telemetry strip, inspector controls, and a data grid.",
+      "description": "A workspace application: a navigation sidebar, a live telemetry strip, inspector controls, and a data grid.",
       "folder": "examples/dashboard",
       "entryPath": "examples/dashboard/index.html"
     },
     {
       "name": "Deck",
-      "description": "A worked 16:9 widescreen presentation, for reference: cover, architecture, quadrants, hardware telemetries, and sheet feature slides.",
+      "description": "A worked 16:9 widescreen presentation, for reference: cover, a headline figure, a hardware stage, a comparison, and a closing slide.",
       "folder": "examples/deck",
       "entryPath": "examples/deck/Deck.dc.html",
-      "minWidth": 1280
-    },
-    {
-      "name": "Example Pitch Deck (Reference)",
-      "description": "A worked 16:9 deck showing how slides are composed from Vellum tokens, type, and sheets.",
-      "folder": "examples/deck",
-      "entryPath": "examples/deck/example-deck.html",
       "minWidth": 1280
     },
     {
@@ -163,6 +156,13 @@
       "description": "A worked product landing page, for reference: fixed nav, split hero, a blurred stage card over a dark cavity, a live control console, a collapsible spec drawer, and a feature matrix.",
       "folder": "examples/landing",
       "entryPath": "examples/landing/index.html"
+    },
+    {
+      "name": "Pitch Deck",
+      "description": "A worked 16:9 deck showing how slides are composed from Vellum tokens, type, and sheets.",
+      "folder": "examples/deck",
+      "entryPath": "examples/deck/example-deck.html",
+      "minWidth": 1280
     },
     {
       "name": "Printable Spec Sheet",

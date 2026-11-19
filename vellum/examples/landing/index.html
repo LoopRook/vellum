@@ -142,17 +142,9 @@
   text-wrap: balance;
 }
 
-/* 3. Hero Stage Card */
-.stage-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  backdrop-filter: blur(var(--blur-stage));
-  -webkit-backdrop-filter: blur(var(--blur-stage));
-  border-radius: var(--radius-stage);
+/* 3. Hero Stage Card: the system's .card, with padding */
+#stage {
   padding: 24px;
-  box-shadow: var(--elevation-stage);
-  position: relative;
-  overflow: hidden;
 }
 
 .stage-cavity {
@@ -223,7 +215,7 @@
   .hero-section {
     padding: 90px 20px 24px;
   }
-  .stage-card {
+  #stage {
     padding: 12px;
   }
   .stage-cavity {
@@ -243,7 +235,7 @@
 }
 /* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .site-header.scrolled, .stage-card { background: var(--color-surface-solid); }
+  .site-header.scrolled { background: var(--color-surface-solid); }
 }
 </style>
 </head>
@@ -304,7 +296,7 @@
       </div>
 
       <!-- 03. Hero Stage Card (Houses any interactive asset / canvas / video player) -->
-      <div class="stage-card" id="stage">
+      <div class="card" id="stage">
         <!-- Stage Cavity: Reusable container for hero canvas / 3D model / video player -->
         <div class="stage-cavity" id="stageCavity">
           <div style="text-align: center; padding: 24px;">
@@ -408,7 +400,7 @@
             <ul class="spec-list">
               <li><strong>Light</strong>: #F4F6F9 canvas ground.</li>
               <li><strong>Dark</strong>: #18181B near-black ground.</li>
-              <li><strong>Tonal Ramps</strong>: five hues, nine rungs, derived at fixed L* targets.</li>
+              <li><strong>Tonal Ramps</strong>: nine rungs per hue, derived at fixed L* targets.</li>
               <li><strong>Persistence</strong>: LocalStorage state synchronization.</li>
             </ul>
           </div>
@@ -456,7 +448,7 @@
               <span class="tag-pill">SURFACES</span>
             </div>
             <div class="card-feature-title">Multi-Layer Vellum</div>
-            <p>40px backdrop blurs with a 1px edge over the ambient lamps.</p>
+            <p>40px backdrop blurs over the ambient lamps, with a 1px edge in light mode.</p>
           </div>
           <div class="card-feature-punchline">SURFACE TOKENS →</div>
         </a>
@@ -513,7 +505,7 @@
         DEPLOY THE SYSTEM
       </h2>
       <p style="font-size: 16px; color: var(--color-text-secondary); line-height: 1.6; max-width: 520px; margin: 0 auto 36px; text-align: left;">
-        Zero-dependency CSS, tokens in JSON, and the component primitives built on them.
+        One CSS file, tokens in JSON, and the component primitives built on them.
       </p>
       <a href="#stage" class="btn btn-pill btn-primary" style="padding: 14px 36px; font-size: 13px; display: inline-flex; align-items: center; gap: 8px;">
         EXPLORE SPECIFICATION →
@@ -552,7 +544,7 @@
           <span class="faq-indicator">[+]</span>
         </button>
         <div class="faq-content" style="display: none;">
-          All tokens (colors, blur radius, animation timings, font pairings) are exposed as standard CSS custom properties in tokens.json and styles.css.
+          All tokens (colors, blur radius, animation timings, font pairings) are defined in tokens.json and exposed as standard CSS custom properties in styles.css.
         </div>
       </div>
     </section>

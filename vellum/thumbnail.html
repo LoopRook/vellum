@@ -6,55 +6,73 @@
 <title>Vellum — Cover Thumbnail</title>
 <link rel="stylesheet" href="styles.css" />
 <style>
+/* The cover is led by the name (DECISIONS 070). No sheet at all: the seamless-header case (GRAMMAR §2.3),
+   so the lamps read straight through and carry the brand behind very large type. */
+html, body { height: 100%; }
 body {
   margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: var(--color-bg-canvas);
   overflow: hidden;
+  background: var(--color-bg-canvas);
 }
-.cover-card {
-  width: 580px;
-  padding: 40px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  backdrop-filter: blur(var(--blur-stage));
-  border-radius: var(--radius-stage);
-  box-shadow: var(--elevation-stage);
+.cover {
   position: relative;
   z-index: 1;
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-8) var(--space-12) var(--space-8);
 }
-/* Where backdrop blur is unavailable, this page's own sheets fall back to opaque (GRAMMAR §5.5, DECISIONS 039). */
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .cover-card { background: var(--color-surface-solid); }
+.cover-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-4);
+}
+.cover-eyebrow { letter-spacing: var(--tracking-mono-wide); color: var(--color-text-secondary); }
+.cover-version { color: var(--color-text-secondary); }
+.cover-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  column-gap: var(--space-12);
+  row-gap: var(--space-3);
+}
+.cover-name {
+  font-size: var(--type-hero);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  margin: 0;
+  /* Geist's caps sit above the line box's floor; this pulls the baseline onto the padding. */
+  margin-bottom: calc(var(--type-hero) * -0.06);
+}
+.cover-line {
+  max-width: 44ch;
+  margin: 0;
+  font-size: var(--type-body);
+  line-height: var(--leading-body);
+  color: var(--color-text-secondary);
 }
 </style>
 </head>
 <body>
 <div class="light-table"></div>
-
-<div class="cover-card">
-  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-    <span class="tag-pill">DESIGN SYSTEM SPEC</span>
-    <span style="font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; font-weight: 700; color: var(--color-text-muted);" id="sfVersion" class="literal">…</span>
+<div class="cover">
+  <div class="cover-top">
+    <span class="label cover-eyebrow">DESIGN SYSTEM</span>
+    <span class="label cover-version literal" id="sfVersion">…</span>
   </div>
-  <h1 style="font-size: 38px; line-height: 1.0; margin-bottom: 12px;">VELLUM</h1>
-  <p style="font-size: 14px; margin-bottom: 24px;">Swiss precision typography, luminous translucent vellum, and tactile hardware controls.</p>
-  
-  <div style="display: flex; gap: 8px;">
-    <div style="height: 12px; flex: 1; border-radius: var(--radius-pill); background: var(--color-accent);"></div>
-    <div style="height: 12px; flex: 1; border-radius: var(--radius-pill); background: var(--color-status-emerald);"></div>
-    <div style="height: 12px; flex: 1; border-radius: var(--radius-pill); background: var(--color-status-cyan);"></div>
-    <div style="height: 12px; flex: 1; border-radius: var(--radius-pill); background: var(--color-text-primary);"></div>
+  <div class="cover-foot">
+    <h1 class="cover-name">VELLUM</h1>
+    <p class="cover-line">Translucent sheets on a light table, lit by lamps.</p>
   </div>
 </div>
 <script src="tokens.generated.js"></script>
 <script>
-/* The version badge reads the token file rather than restating it — a stamped
-   version is the first thing to go stale after a release is cut. */
+/* The version reads the token file rather than restating it. */
 document.getElementById('sfVersion').textContent = 'v' + VellumTokens.VERSION;
 </script>
 </body>

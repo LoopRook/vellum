@@ -120,7 +120,7 @@ Sources: tokens.json (semantic.print for inks), DESIGN.md §7, GRAMMAR.md §2.11
    (--print-ink-secondary) for subtitles, on unprinted stock (--print-paper).
 2. ZERO digital artifacts. No backdrop blur, no lamps, no drop shadows, no
    translucency. These do not survive the crossing to paper.
-3. All structural dividers, table borders, and tag frames are 0.5pt (0.175mm) solid rules.
+3. All structural dividers, table borders, and tag frames are 0.5pt (0.176mm) solid rules.
 4. Type: wordmark and names in Geist 900 uppercase; metadata and tabular figures in
    JetBrains Mono uppercase; body in Inter.
 5. Numeric columns are right-aligned monospace so digits align.

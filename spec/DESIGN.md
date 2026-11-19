@@ -430,12 +430,12 @@ Print inks are mode-invariant (`tokens.json` → `semantic.print`): a sheet has 
 | Medium | Format | Type | Layout |
 | :--- | :--- | :--- | :--- |
 | **Letterhead / memo** | A4 or US Letter, 15mm margins | Brand Geist 900 22pt; body Inter 10.5pt/1.6; metadata JetBrains Mono 9pt | Wordmark top-left; four-line metadata block (`DOC ID`, `REVISION`, `SECURITY`, `PAGE`) top-right; 1.5pt rule beneath; 0.5pt signature baseline |
-| **Business card** | 85×55mm (ISO 7810) or 3.5×2in, 350gsm matte | Brand Geist 900 18pt; name Geist 900 12pt; details Mono 7.5pt | Front: monochrome wordmark + uppercase tagline. Back: two columns split by a 0.5pt vertical hairline |
+| **Business card** | 85×55mm or 3.5×2in, 350gsm matte | Brand Geist 900 18pt; name Geist 900 12pt; details Mono 7.5pt | Front: monochrome wordmark + uppercase tagline. Back: two columns split by a 0.5pt vertical hairline |
 | **Invoice / quote** | A4 or US Letter | Title Geist 900 24pt; table Mono 9.5pt tabular; totals Geist 900 14pt | 0.5pt hairline grid. Description left; quantity, unit price, amount right-aligned monospace. Total in a bold callout, bottom-right |
 | **HTML email signature** | `<table>`, max-width 460px, inline CSS only | Name 14px bold sans; title Mono 10.5px; links Mono 10px | 2px solid left-border accent with 12px padding. No external stylesheets — table layout for Gmail, Outlook, Apple Mail, iOS |
 
 **Never violate:** 100% K for text and rules, 60% K for subtitles; no digital effects on
-paper; 0.5pt (0.175mm) hairlines throughout.
+paper; 0.5pt (0.176mm) hairlines throughout.
 
 ---
 
@@ -445,8 +445,8 @@ Each row is a real failure mode, rendered side by side on the **Do's & Don'ts** 
 
 | Area | Do | Don't |
 | :--- | :--- | :--- |
-| Card hover | Lift 2px, deepen the shadow, brighten the specular edge | Neon glow or coloured border on hover |
-| Sheets | Multi-layer blur over the light table with a 1px edge | Flat opaque cards with a blur value that does nothing |
+| Card hover | Lift 2px; in light mode the edge also brightens | Neon glow or coloured border on hover |
+| Sheets | Multi-layer blur over the light table, with a 1px edge in light mode | Flat opaque cards with a blur value that does nothing |
 | Text on a sheet | Sharp and solid | Blur applied to the text or the button itself |
 | Headlines | Monochrome ink or white | Tinted, gradient-filled, or one accent word |
 | Monospace | Uppercase, tracked | Lowercase mechanical labels |

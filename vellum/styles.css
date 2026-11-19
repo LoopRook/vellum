@@ -656,7 +656,7 @@ code, kbd, samp, pre, .literal, .unit { text-transform: none !important; }
 }
 
 /* ==========================================================================
-   Buttons & Segmented Controls (Tactile Hardware Exact Match)
+   Buttons & Segmented Controls
    ========================================================================== */
 .btn {
   display: inline-flex;
@@ -695,7 +695,7 @@ code, kbd, samp, pre, .literal, .unit { text-transform: none !important; }
 
 /* A solid surface rising toward the light catches more of it, so the fill
    lightens where the material has headroom — light mode lifts one ramp step, dark mode
-   is already white and holds while the shadow carries the gesture.
+   lifts from its L* 88 grey to white (DECISIONS 011).
    This replaces an `opacity` fade, which moved the two modes in opposite
    directions and dimmed the label along with the fill. */
 .btn-primary:hover, .btn-primary.is-hover {
@@ -706,7 +706,7 @@ code, kbd, samp, pre, .literal, .unit { text-transform: none !important; }
 }
 
 /* The same gesture reversed. Pressing re-couples the sheet to the board, so the
-   fill darkens — where there is room. dark mode drops a ramp step; light mode is already
+   fill darkens — where there is room. dark mode drops 8.2 L*; light mode is already
    at neutral-900 with 8 L* to pure black, which is prohibited as a fill, so it
    holds and the geometry carries it. Whichever mode has no headroom, holds. */
 .btn-primary:active, .btn-primary.is-active {
@@ -1604,9 +1604,8 @@ code, kbd, samp, pre, .literal, .unit { text-transform: none !important; }
 
 /* ==========================================================================
    Status Dots
-   The spec calls for "operational health dots", "warning dots", and "telemetry
-   dots" throughout; this is that primitive. Same rule as tinted pills — a dot
-   reports live state, never decorates.
+   Same rule as tinted pills — a dot reports live state, never decorates, and
+   sits beside the word that names that state (GRAMMAR §2.5).
    ========================================================================== */
 .status-dot {
   display: inline-block;
@@ -1706,7 +1705,6 @@ code, kbd, samp, pre, .literal, .unit { text-transform: none !important; }
   }
 
   /* Physical Hairline Card & Console Borders (0.5pt to 1pt) */
-  .stage-card,
   .card,
   .console-card,
   .cmf-card,

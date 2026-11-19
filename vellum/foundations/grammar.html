@@ -137,15 +137,15 @@
       </div>
       <div class="rule">
         <div class="rule-name">04 · The material has physics</div>
-        <p class="rule-body">Blur belongs to the sheet, never to text. Every sheet edge is exactly 1px and uncoloured. The lamps, two or three per mode, are what a sheet diffuses — without them every surface flattens.</p>
+        <p class="rule-body">Blur belongs to the sheet, never to text. In light mode every sheet edge is exactly 1px and uncoloured; in dark it is zero. The lamps, two or three per mode, are what a sheet diffuses — without them every surface flattens.</p>
       </div>
       <div class="rule">
         <div class="rule-name">05 · Hover is quiet</div>
-        <p class="rule-body">Lift <code>2px</code>, deepen the shadow, brighten the edge. No glow, no colour shift, no scaling.</p>
+        <p class="rule-body">Lift <code>2px</code>; in light mode the edge also brightens. No glow, no colour shift, no scaling.</p>
       </div>
       <div class="rule">
         <div class="rule-name">06 · Accents are status, not brand</div>
-        <p class="rule-body">Action colour is monochrome ink that inverts across modes. Amber, emerald, and cyan report live state only — never a button fill, never a headline.</p>
+        <p class="rule-body">Action colour is monochrome ink that inverts across modes. The status colours report live state only — never a button fill, never a headline.</p>
       </div>
       <div class="rule">
         <div class="rule-name">07 · Pill grammar is binary</div>
@@ -209,8 +209,8 @@
     <div class="audit-item"><strong>Accent discipline</strong>Point at any accent and name the state it reports. No answer means it fails.</div>
     <div class="audit-item"><strong>Pill grammar</strong>Categories untinted, tint reserved for live state?</div>
     <div class="audit-item"><strong>Elevation</strong>Ladder in order, consoles nested inside cards, cavities opaque and unblurred?</div>
-    <div class="audit-item"><strong>Sheet integrity</strong>Text sharp on the sheet, borders exactly 1px and uncoloured, two or three lamps present per mode?</div>
-    <div class="audit-item"><strong>Quiet hover</strong>Lift and shadow only — no glow, no border colour change, no scaling?</div>
+    <div class="audit-item"><strong>Sheet integrity</strong>Text sharp on the sheet, borders exactly 1px and uncoloured in light and zero in dark, two or three lamps present per mode?</div>
+    <div class="audit-item"><strong>Quiet hover</strong>A lift, and in light mode a brighter edge — no glow, no hue on the border, no scaling?</div>
     <div class="audit-item"><strong>Focus</strong>Monochrome ring on keyboard navigation, no browser default?</div>
     <div class="audit-item"><strong>Not a template</strong>Layout driven by this project's content, not copied from an example?</div>
   </div>

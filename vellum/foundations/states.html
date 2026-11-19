@@ -354,7 +354,7 @@
       <li><strong>1. Default (Idle):</strong> The component resting state with translucent sheet edges and standard ink contrast.</li>
       <li><strong>2. Hover (Elevated):</strong> Mouse cursor enters the component. Elements lift quietly by <code>translateY(-1px)</code>, borders darken/crisp to <code>var(--color-text-primary)</code>, and a subtle lift is added.</li>
       <li><strong>3. Active (Pressed):</strong> MouseDown or finger tap actuation. The component physically depresses by <code>translateY(1px) scale(0.98)</code>, simulating an analog mechanical switch throw.</li>
-      <li><strong>4. Focused (Keyboard Navigation):</strong> Triggered when a user navigates via the <kbd>Tab</kbd> key. Standard WCAG AAA accessibility ring strictly using a <code>2px solid var(--color-text-primary)</code> outline with <code>2px</code> offset (never browser default blue/yellow rings).</li>
+      <li><strong>4. Focused (Keyboard Navigation):</strong> Triggered when a user navigates via the <kbd>Tab</kbd> key. A ring strictly using a <code>2px solid var(--color-text-primary)</code> outline with <code>2px</code> offset (never browser default blue/yellow rings).</li>
       <li><strong>5. Disabled:</strong> Inactive or non-interactive state. Drops to <code>opacity: 0.38</code> with <code>cursor: not-allowed</code>, preserving grid geometry without disappearing.</li>
     </ul>
   </div>

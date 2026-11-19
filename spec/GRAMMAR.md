@@ -532,7 +532,7 @@ node systems/vellum/derive_ramp.js "#0F62FE" --css --name brand-1
 That prints `--color-brand-1-100` through `--color-brand-1-900`, and it is the whole operation.
 Without Node, load the same file in a page, `<script src="derive_ramp.js">`: it exposes
 `VellumRamp.deriveRamp(hex)`, whose `steps` are the nine rungs (`DECISIONS.md` 063).
-`--json` emits a `tokens.json` fragment instead; `--verify` regenerates the five shipped
+`--json` emits a `tokens.json` fragment instead; `--verify` regenerates the shipped
 ramps and diffs them against the token file, which the build also does on every run. A
 project declares the steps it uses. The build regenerates each one, and fails a step tuned by
 hand, a step with no `--brand-<n>` to come from, and the old unnumbered spellings `--brand` and
@@ -631,9 +631,8 @@ not compete with the lamp, so it passes more colour per unit. Both bounds are ma
 0.26 and light mode 0.45 each move it about 30.8. So "has nothing left to diffuse" and "stops being
 ambient light" mean the same thing in both modes rather than naming different thresholds.
 
-Dark mode's ceiling sits well above its own default of 0.08 on purpose. A ceiling equal to the
-default would forbid a site being brighter than the system, which nothing has decided should
-be forbidden.
+Vellum's own lamp A sits at dark mode's ceiling, 0.26. The ceiling bounds how far a project
+may push its own colour; it is not headroom kept above the system's defaults.
 
 The bounds are declared on `semantic.lamp` and enforced on every build, for the system's own
 defaults and for anything that repoints them.
@@ -644,7 +643,8 @@ smaller and softer than the last. Softness is how far the light spreads past the
 edge as it fades, in proportion to the lamp's size; it is baked into the generated stops and
 holds at every window width (`DECISIONS.md` 064). In dark mode the lamps are the only light
 source rather than ambience, so they take their own arrangement — diagonally opposed,
-and two is permitted. Sizes and the falloff are shared; only position and count differ.
+and two is permitted. Dark also sets its own `--lamp-scale` and softness, close to light's;
+both are on `semantic.lamp`.
 See `DECISIONS.md` 008.
 
 ### 3.6 Header variant

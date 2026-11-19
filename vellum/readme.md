@@ -35,7 +35,7 @@ vellum/
 │                          #   wayfinding, anti-patterns, specimen, states, CMF, print
 ├── components/            # 7 cards — buttons, console, cards, navigation, forms,
 │                          #   tables, dialogs
-└── examples/              # 5 examples to check output against — landing, dashboard, deck, example deck, spec sheet
+└── examples/              # 5 examples to check output against — landing, dashboard, deck, pitch deck, spec sheet
 ```
 
 `build.js`, `validate_system.js`, `verify.html` and `VERIFICATION.md` are repository tooling.
@@ -53,9 +53,9 @@ The specification lives one level up in [`../spec/`](../spec/):
 
 ---
 
-## Nothing is maintained twice
+## One source for every value
 
-`tokens.json` is the only place a value is written. `build.js` derives from it:
+`tokens.json` is the only place a value is set. `build.js` derives from it:
 
 ```
 spec/tokens.json ──┬──> styles.css        (the :root and [data-theme="dark"] block)
@@ -65,8 +65,10 @@ spec/tokens.json ──┬──> styles.css        (the :root and [data-theme="
                    └──> index.html          (the workbench sidebar)
 ```
 
-The foundation cards import `tokens.generated.js` and render swatches, scales, and tables
-from it, so a doc page and the stylesheet cannot disagree — neither one holds a literal.
+The foundation cards that show values import `tokens.generated.js` and render swatches,
+scales, and tables from it, so those values and the stylesheet cannot disagree. Two files
+restate some values by hand, `theme.json` and the spec sheet example's token table; the
+validator compares both to `tokens.json` (rules 4r and 4h).
 
 **After editing `tokens.json`, or any `@dsCard` / `@dsExample` marker:**
 

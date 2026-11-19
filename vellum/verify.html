@@ -127,7 +127,7 @@ const CONTROLS = 'input, textarea, select, button, .btn, .tag-pill, .tag, .btn-c
 // What mono owns: labels, badges, buttons, table headers (GRAMMAR §2.1).
 const LABELS = 'button, .btn, .tag-pill, .tag, .label, .btn-chip, .btn-control, th';
 const PROSE_IN_CONTROL = '.faq-trigger';
-const SHEETS = '.card, .stage-card, .console-card, .tray';
+const SHEETS = '.card, .console-card, .tray';
 const words = (s) => String(s).trim().split(/\s+/).filter((w) => /\w/.test(w)).length;
 
 const family = (cs) => cs.fontFamily.split(',')[0].replace(/['"]/g, '').trim();

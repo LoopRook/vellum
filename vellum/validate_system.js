@@ -1672,7 +1672,7 @@ const TRAY_TAG_RE = /<!--[\s\S]*?-->|<\/([a-zA-Z][\w:-]*)\s*>|<([a-zA-Z][\w:-]*)
 
 // Returns { satisfied, inconclusive }. `satisfied` holds every tray-role
 // class for which at least one element carrying it opened with a
-// `card`/`stage-card` element somewhere on the currently-open tag stack.
+// `card` element somewhere on the currently-open tag stack.
 // `inconclusive` is true when a closing tag couldn't be matched to anything
 // open on the stack — the markup is too irregular to trust either answer,
 // so the caller should assert neither containment nor its absence.
@@ -1715,7 +1715,7 @@ function traysNestedInCards(text, trayClasses) {
     // Whole-token comparison — "card-feature" must not satisfy a check for "card".
     const classes = new Set((classAttr ? classAttr[1] : '').split(/\s+/).filter(Boolean));
     const hasCardAncestor = stack.some(
-      (frame) => frame.classes.has('card') || frame.classes.has('stage-card')
+      (frame) => frame.classes.has('card')
     );
     if (hasCardAncestor) {
       for (const cls of classes) {
@@ -3806,6 +3806,41 @@ for (const s of staleVersions) fail(`Stale version stamp: ${s}`);
 grammarRows.push(
   `| — | Version stamps match \`tokens.json\` (${currentVersion}) | ${staleVersions.length === 0 ? 'pass' : '**' + staleVersions.length + ' stale**'} | ${staleVersions.join(', ') || '—'} |`
 );
+
+// The scan above skips every line that says "release", so it never read the root README's
+// "Latest release" line, which named RC4 for eight releases, or the README's paths telling
+// readers which frozen release to use, which named rc4 too (DECISIONS 068). Both must name the
+// newest folder under releases/. A line saying "Previous" names older ones on purpose.
+// Skipped where there is no README or releases/ beside systems/, as in a copy of systems/ alone.
+{
+  const root = path.join(DS, '..', '..');
+  const readmePath = path.join(root, 'README.md');
+  const releasesDir = path.join(root, 'releases');
+  const rcOf = (v) => Number((/-rc(\d+)$/i.exec(v) || [])[1]);
+  const newest = fs.existsSync(releasesDir)
+    ? fs.readdirSync(releasesDir).filter((d) => /^v\d+\.\d+\.\d+-rc\d+$/i.test(d)).sort((a, b) => rcOf(a) - rcOf(b)).pop()
+    : null;
+  const stale = [];
+  if (newest && fs.existsSync(readmePath)) {
+    const lines = fs.readFileSync(readmePath, 'utf8').split('\n');
+    const latest = lines.findIndex((l) => /\*\*Latest release\*\*/i.test(l));
+    if (latest === -1) stale.push('README.md has no "**Latest release**" line');
+    else {
+      const named = (/\*\*Latest release\*\*:?\s*v?(\S+)/i.exec(lines[latest]) || [])[1] || '';
+      if (named.toLowerCase() !== newest.slice(1).toLowerCase()) stale.push(`README.md:${latest + 1} names ${named || 'nothing'}`);
+    }
+    lines.forEach((line, i) => {
+      if (/previous/i.test(line)) return;
+      for (const m of line.matchAll(/releases\/(v\d+\.\d+\.\d+-rc\d+)/gi)) {
+        if (m[1].toLowerCase() !== newest.toLowerCase()) stale.push(`README.md:${i + 1} points at releases/${m[1]}`);
+      }
+    });
+    for (const s of stale) fail(`Stale release in the README: ${s}; the newest release is ${newest} (DECISIONS 068).`);
+  }
+  grammarRows.push(
+    `| — | The README names the newest release${newest ? ` (${newest})` : ''} | ${!newest ? 'not checked: no releases/' : stale.length === 0 ? 'pass' : '**' + stale.length + ' stale**'} | ${stale.join(', ') || '—'} |`
+  );
+}
 
 out.push('| Rule | Invariant | Result | Detail |');
 out.push('| :--- | :--- | :--- | :--- |');
