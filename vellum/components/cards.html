@@ -54,10 +54,10 @@
         <div style="margin-bottom: 16px;">
           <span class="tag-pill">LIVE</span>
         </div>
-        <div class="card-feature-title" style="font-size: 20px;">Hardware Rasterizer</div>
+        <div class="card-feature-title" style="font-size: 20px;">Live Records</div>
         <p style="font-size: 13px;">Records update in place as they change, with no reload and no loss of scroll position.</p>
       </div>
-      <div class="card-feature-punchline">EXPLORE PIPELINE →</div>
+      <div class="card-feature-punchline">VIEW RECORDS →</div>
     </a>
   </div>
 
@@ -79,21 +79,21 @@
   <div class="demo-head">Expandable FAQ Accordion</div>
   <div class="faq-item">
     <button class="faq-trigger" onclick="const c = this.nextElementSibling; const i = this.querySelector('.faq-indicator'); const open = c.style.display !== 'none'; c.style.display = open ? 'none' : 'block'; i.textContent = open ? '[+]' : '[-]';">
-      <span>How do I integrate this into my project?</span>
+      <span>How do I use this in my project?</span>
       <span class="faq-indicator">[-]</span>
     </button>
     <div class="faq-content">
-      Import styles.css and copy the relevant foundation and component classes into your template or component framework.
+      Link styles.css from your page and use its classes. GRAMMAR.md says which choices are yours.
     </div>
   </div>
 
   <div class="faq-item">
     <button class="faq-trigger" onclick="const c = this.nextElementSibling; const i = this.querySelector('.faq-indicator'); const open = c.style.display !== 'none'; c.style.display = open ? 'none' : 'block'; i.textContent = open ? '[+]' : '[-]';">
-      <span>Are tokens customizable?</span>
+      <span>Can I change the tokens?</span>
       <span class="faq-indicator">[+]</span>
     </button>
     <div class="faq-content" style="display: none;">
-      Yes, all colors, typography, blur levels, and radii are exposed as standard CSS custom properties in :root.
+      Some of them. Every value is a CSS custom property in :root, and GRAMMAR.md says which a project may change.
     </div>
   </div>
 </main>

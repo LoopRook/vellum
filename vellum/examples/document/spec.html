@@ -1,4 +1,4 @@
-<!-- @dsExample name="Printable Spec Sheet" description="A print-ready Swiss A4/Letter executive memo and technical specification sheet with 0.5pt hairline grid and monospace telemetry." -->
+<!-- @dsExample name="Printable Spec Sheet" description="A printable A4/Letter specification sheet for Vellum itself: letterhead, token table, rules and sign-off, on a 0.5pt hairline grid." -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -222,26 +222,26 @@
 
     <!-- Title Block -->
     <div class="doc-title-block">
-      <div class="doc-kicker">TECHNICAL MEMORANDUM &amp; STANDARD DIRECTIVE</div>
+      <div class="doc-kicker">TECHNICAL SPECIFICATION</div>
       <h1 class="doc-main-title">Vellum Design System Specification</h1>
       <p class="doc-lead">
-        This document codifies the design tokens, typographic hierarchy, sheet blurs, and tactile controls of the Vellum design system for human engineers and autonomous AI agents.
+        This sheet records Vellum's core tokens and the rules that hold on every page, for the people and the AI agents who build with it.
       </p>
     </div>
 
     <!-- Section 01: Core Architecture Tokens -->
     <div class="doc-section-head">
-      <span>01 / System Token Hierarchy</span>
+      <span>01 / Core Tokens</span>
       <span>CHECKED BY THE VALIDATOR</span>
     </div>
 
     <div class="doc-table-scroll"><table class="doc-table">
       <thead>
         <tr>
-          <th>Token Category</th>
+          <th>Token</th>
           <th>Light mode</th>
           <th>Dark mode</th>
-          <th>Semantic Application</th>
+          <th>Used for</th>
         </tr>
       </thead>
       <tbody>
@@ -249,54 +249,54 @@
           <td><code>--color-bg-canvas</code></td>
           <td><code>#F4F6F9</code></td>
           <td><code>#18181B</code></td>
-          <td>Primary canvas ground</td>
+          <td>The page ground</td>
         </tr>
         <tr>
           <td><code>--color-surface</code></td>
           <td><code>rgba(255,255,255,0.65)</code></td>
           <td><code>rgba(12,13,14,0.1929)</code></td>
-          <td>40px backdrop blur cards</td>
+          <td>Sheets, at 40px blur</td>
         </tr>
         <tr>
           <td><code>--color-surface-sunken</code></td>
           <td><code>#0F172A</code></td>
           <td><code>#0B0C0D</code></td>
-          <td>Recessed display viewports</td>
+          <td>Cavities</td>
         </tr>
         <tr>
           <td><code>--color-status-emerald</code></td>
           <td><code>#13B37D</code></td>
           <td><code>#13B37D</code></td>
-          <td>Active status &amp; live readouts</td>
+          <td>Live state</td>
         </tr>
       </tbody>
     </table></div>
 
     <!-- Section 02: Invariants & Grammar Rules -->
     <div class="doc-section-head">
-      <span>02 / Core Behavioral Invariants</span>
-      <span>STRICT COMPLIANCE</span>
+      <span>02 / Rules on Every Page</span>
+      <span>GRAMMAR §2</span>
     </div>
 
     <ul class="spec-list" style="padding-left: 18px; font-size: 13.5px; line-height: 1.7; margin: 0 0 24px;">
-      <li><strong>Pill Grammar</strong>: Neutral untinted pills (<code>.tag-pill</code>) are strictly reserved for structural categories (e.g. <code>TYPOGRAPHY</code>, <code>CONTROLS</code>). Tinted pills (red, amber, emerald, cyan, purple) are reserved for real-time states and telemetry.</li>
-      <li><strong>Quiet Elevation Hovers</strong>: Interactive cards rise by <code>translateY(-2px)</code>; in light mode the edge brightens, in dark the rise is the whole gesture. Harsh colored border glows on card hover are strictly prohibited.</li>
+      <li><strong>Pill Grammar</strong>: Neutral untinted pills (<code>.tag-pill</code>) are strictly reserved for structural categories (e.g. <code>TYPOGRAPHY</code>, <code>CONTROLS</code>). Tinted pills (red, amber, emerald, cyan, purple) are reserved for live state.</li>
+      <li><strong>Quiet Hover</strong>: Interactive cards rise by <code>translateY(-2px)</code>; in light mode the edge brightens, in dark the rise is the whole gesture. A coloured glow on hover is never allowed.</li>
       <li><strong>Monochrome Focus Rings</strong>: Form fields and sliders take a clean ink border (<code>border-color: var(--color-text-primary)</code>) plus a monochrome halo (<code>--color-focus-ring</code>), never the browser's blue ring.</li>
-      <li><strong>Responsive Stacking</strong>: Structured data tables automatically collapse into self-contained card stacks on viewports &le; 540px.</li>
+      <li><strong>Responsive Stacking</strong>: Data tables collapse into a stack of cards on screens 540px wide or narrower.</li>
     </ul>
 
     <!-- Section 03: Sign-Off & Verification -->
     <div class="doc-section-head">
-      <span>03 / System Verification &amp; Authorization</span>
+      <span>03 / Checks &amp; Sign-Off</span>
     </div>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 12px; font-family: var(--font-mono); text-transform: uppercase; margin-top: 16px;">
       <div>
-        <div style="color: var(--color-text-muted); margin-bottom: 4px;">ARCHITECTURAL SIGN-OFF:</div>
+        <div style="color: var(--color-text-muted); margin-bottom: 4px;">SIGNED OFF BY:</div>
         <div style="font-weight: 700; border-bottom: 1px solid var(--color-divider); padding-bottom: 4px;">JONATHAN HOCKADAY</div>
       </div>
       <div>
-        <div style="color: var(--color-text-muted); margin-bottom: 4px;">VERIFICATION ENGINE:</div>
+        <div style="color: var(--color-text-muted); margin-bottom: 4px;">VALIDATOR:</div>
         <div style="font-weight: 700; border-bottom: 1px solid var(--color-divider); padding-bottom: 4px;">0 ERRORS · 0 WARNINGS PASS</div>
       </div>
     </div>

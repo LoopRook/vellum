@@ -54,7 +54,7 @@ Three rows, grouped by *kind* of control rather than by importance:
 | :--- | :--- |
 | 1 | Segmented mode toggle + stepper — mutually exclusive states |
 | 2 | Axis and layout chips — orthogonal toggles |
-| 3 | Presets + status toggle + calibrated slider with a numeric readout |
+| 3 | Presets + status toggle + range slider with a numeric readout |
 
 This grouping is a sensible default for a control surface with mixed control types.
 It is not a rule. A console with one row, or five, or none is fine — what matters is

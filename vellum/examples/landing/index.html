@@ -1,4 +1,4 @@
-<!-- @dsExample name="Landing" description="A worked product landing page, for reference: fixed nav, split hero, a blurred stage card over a dark cavity, a live control console, a collapsible spec drawer, and a feature matrix." -->
+<!-- @dsExample name="Landing" description="A worked product landing page, for reference: fixed nav, split hero, a stage sheet holding a dark cavity and a control tray, a collapsible spec drawer, and a 2×2 feature grid." -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -244,7 +244,7 @@
 <div class="light-table"></div>
 
 <div class="site-wrapper">
-  <!-- 01. Smart hover-triggered fixed nav sheet -->
+  <!-- 01. Retracting nav sheet -->
   <header class="site-header" id="siteHeader" data-header="retracting">
     <div class="header-inner">
       <div class="brand-logo">
@@ -255,7 +255,7 @@
         <nav class="nav-links">
           <a href="#features" class="nav-link">FEATURES</a>
           <a href="#specs" class="nav-link">SPECS</a>
-          <a href="#benchmarks" class="nav-link">BENCHMARKS</a>
+          <a href="#benchmarks" class="nav-link">FIGURES</a>
           <a href="#faq" class="nav-link">FAQ</a>
         </nav>
 
@@ -271,7 +271,7 @@
     </div>
   </header>
 
-  <!-- 02. Massive Split Hero Section -->
+  <!-- 02. Split hero -->
   <main>
     <section class="hero-section">
       <div class="hero-split-grid">
@@ -284,7 +284,7 @@
         <div class="hero-sidebar">
           <div class="hero-divider-bar"></div>
           <h2 class="hero-tagline">
-            PRECISION TYPOGRAPHY &amp; HARDWARE INTERFACES
+            SWISS TYPOGRAPHY &amp; TRANSLUCENT SHEETS
           </h2>
           <p class="hero-desc">
             A design system for portfolios, agency sites, and product interfaces.
@@ -301,15 +301,15 @@
         <div class="stage-cavity" id="stageCavity">
           <div style="text-align: center; padding: 24px;">
             <div style="font-family: var(--font-display); font-size: clamp(24px, 4vw, 40px); font-weight: 900; color: var(--color-text-on-sunken); letter-spacing: var(--tracking-statement); text-transform: uppercase; margin-bottom: 10px;">
-              HERO STAGE VIEWPORT
+              STAGE CAVITY
             </div>
             <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-text-on-sunken-secondary); letter-spacing: 0.06em; text-transform: uppercase;">
-              [ INTERACTIVE COMPONENT / CANVAS / MEDIA CONTAINER ]
+              [ A CANVAS, VIDEO OR LIVE DEMO GOES HERE ]
             </div>
           </div>
         </div>
 
-        <!-- Embedded control console -->
+        <!-- Control tray -->
         <div class="console-card">
           <!-- Row 1: Display Mode (Solid Active Inversion) & Stepper -->
           <div class="console-row">
@@ -327,12 +327,12 @@
             </div>
           </div>
 
-          <!-- Row 2: Geometry & Layout Axis (Outline Active Chip) -->
+          <!-- Row 2: Grouping (Outline Active Chip) -->
           <div class="console-row-sub">
             <div class="console-group">
-              <span class="label label-left">AXIS:</span>
-              <button class="btn-chip active" onclick="setActiveChip(this)">BY REGION</button>
-              <button class="btn-chip" onclick="setActiveChip(this)">BY TENANT</button>
+              <span class="label label-left">GROUP:</span>
+              <button class="btn-chip active" onclick="setActiveChip(this)">BY MEDIUM</button>
+              <button class="btn-chip" onclick="setActiveChip(this)">BY YEAR</button>
               <button class="btn-chip" onclick="setActiveChip(this)">NONE</button>
             </div>
           </div>
@@ -358,14 +358,14 @@
       </div>
     </section>
 
-    <!-- 04. Collapsible 4-Column Specification Matrix Drawer -->
+    <!-- 04. Collapsible 4-column specification drawer -->
     <section class="section-pad" id="specs" style="padding-top: 20px; padding-bottom: 40px;">
       <div class="spec-drawer-card">
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
           <div>
-            <div class="label" style="margin-bottom: 6px;">PROPERTIES REFERENCE</div>
+            <div class="label" style="margin-bottom: 6px;">SPECIFICATION</div>
             <h3 style="font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: var(--tracking-title); margin: 0;">
-              Complete System Properties &amp; Customization Options
+              The System at a Glance
             </h3>
           </div>
 
@@ -381,54 +381,54 @@
               <li><strong>Display Headline</strong>: Geist 900, tracked at <code>--tracking-display</code>.</li>
               <li><strong>Section Titles</strong>: Geist 800, tracked at <code>--tracking-title</code>.</li>
               <li><strong>Body Type</strong>: Inter 400 for running prose.</li>
-              <li><strong>Mechanical Rails</strong>: JetBrains Mono 700 uppercase.</li>
+              <li><strong>Labels</strong>: JetBrains Mono 700 uppercase.</li>
             </ul>
           </div>
 
           <div class="spec-col-box">
-            <div class="spec-col-title">Surfaces &amp; Sheet Physics</div>
+            <div class="spec-col-title">Surfaces &amp; Sheets</div>
             <ul class="spec-list">
               <li><strong>Stage sheet</strong>: 40px backdrop blur, with a 1px edge in light mode.</li>
-              <li><strong>Inner Console</strong>: 20px blur with recessed background.</li>
-              <li><strong>Card Elevation</strong>: Quiet translateY(-2px) hover depth.</li>
+              <li><strong>Tray</strong>: 20px blur, denser than the sheet.</li>
+              <li><strong>Card Hover</strong>: rises 2px; never a glow.</li>
               <li><strong>Lighting</strong>: soft lamps behind the page, painted by the light table.</li>
             </ul>
           </div>
 
           <div class="spec-col-box">
-            <div class="spec-col-title">Color &amp; Dual-Ground</div>
+            <div class="spec-col-title">Color &amp; Modes</div>
             <ul class="spec-list">
               <li><strong>Light</strong>: #F4F6F9 canvas ground.</li>
               <li><strong>Dark</strong>: #18181B near-black ground.</li>
               <li><strong>Tonal Ramps</strong>: nine rungs per hue, derived at fixed L* targets.</li>
-              <li><strong>Persistence</strong>: LocalStorage state synchronization.</li>
+              <li><strong>Mode Choice</strong>: remembered between visits.</li>
             </ul>
           </div>
 
           <div class="spec-col-box">
             <div class="spec-col-title">Controls &amp; Interaction</div>
             <ul class="spec-list">
-              <li><strong>Segmented Pills</strong>: Solid high-contrast active inversion.</li>
-              <li><strong>Pill Grammar</strong>: Neutral category vs semantic status.</li>
-              <li><strong>Potentiometer</strong>: 18px slate knobs with track fill.</li>
-              <li><strong>Smart Header</strong>: 24px blur with 70px hover sensor.</li>
+              <li><strong>Segmented Pills</strong>: the active one turns solid ink.</li>
+              <li><strong>Pill Grammar</strong>: untinted is a category, tinted is live.</li>
+              <li><strong>Range Slider</strong>: 18px handle, track filled to the value.</li>
+              <li><strong>Header</strong>: hides on scroll down, returns on scroll up.</li>
             </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 05. Alternating Opacity Statement Typography Banner -->
+    <!-- 05. Statement banner: alternating solid and ghost lines -->
     <section style="padding: 90px 20px; max-width: 1440px; margin: 0 auto;">
       <div class="statement-stack">
-        <span class="solid">SWISS PRECISION</span>
+        <span class="solid">SWISS TYPOGRAPHY</span>
         <span class="ghost">TRANSLUCENT VELLUM</span>
-        <span class="solid">HARDWARE CONSOLES</span>
-        <span class="ghost">LIVE SYSTEMS</span>
+        <span class="solid">LIT FROM BEHIND</span>
+        <span class="ghost">LIGHT AND DARK</span>
       </div>
     </section>
 
-    <!-- 06. 2x2 balanced feature matrix (quiet lift on hover) -->
+    <!-- 06. 2x2 feature grid (quiet lift on hover) -->
     <section class="section-pad" id="features" style="padding-top: 20px;">
       <div class="feature-grid">
         <a href="#stage" class="card card-feature" style="text-decoration: none;">
@@ -437,7 +437,7 @@
               <span class="tag-pill">TYPOGRAPHY</span>
             </div>
             <div class="card-feature-title">Swiss Hierarchy</div>
-            <p>Geist Display paired with JetBrains Mono mechanical metadata and balanced body copy.</p>
+            <p>Geist for headlines, Inter for reading, and JetBrains Mono for every label.</p>
           </div>
           <div class="card-feature-punchline">TYPOGRAPHY SCALE →</div>
         </a>
@@ -447,8 +447,8 @@
             <div style="margin-bottom: 16px;">
               <span class="tag-pill">SURFACES</span>
             </div>
-            <div class="card-feature-title">Multi-Layer Vellum</div>
-            <p>40px backdrop blurs over the ambient lamps, with a 1px edge in light mode.</p>
+            <div class="card-feature-title">Translucent Sheets</div>
+            <p>Sheets of vellum over the lamps, with a 1px edge in light mode.</p>
           </div>
           <div class="card-feature-punchline">SURFACE TOKENS →</div>
         </a>
@@ -458,8 +458,8 @@
             <div style="margin-bottom: 16px;">
               <span class="tag-pill">CONTROLS</span>
             </div>
-            <div class="card-feature-title">Tactile Hardware Console</div>
-            <p>Segmented button pills, stepped selectors, and calibrated range sliders.</p>
+            <div class="card-feature-title">Controls in Trays</div>
+            <p>Segmented buttons, steppers, chips and range sliders, grouped in rows by kind.</p>
           </div>
           <div class="card-feature-punchline">COMPONENT LIBRARY →</div>
         </a>
@@ -467,34 +467,34 @@
         <a href="#stage" class="card card-feature" style="text-decoration: none;">
           <div>
             <div style="margin-bottom: 16px;">
-              <span class="tag-pill">ACTIVITY</span>
+              <span class="tag-pill">EXAMPLES</span>
             </div>
-            <div class="card-feature-title">Universal Architecture</div>
-            <p>The same foundations compose into a store, a portfolio, or an application.</p>
+            <div class="card-feature-title">One System, Many Pages</div>
+            <p>The same foundations make a landing page, a dashboard, a deck or a spec sheet.</p>
           </div>
           <div class="card-feature-punchline">EXPLORE EXAMPLES →</div>
         </a>
       </div>
     </section>
 
-    <!-- 07. Full-bleed benchmarks strip -->
+    <!-- 07. Full-bleed figures strip -->
     <section id="benchmarks" style="border-top: 1px solid var(--color-divider); border-bottom: 1px solid var(--color-divider); padding: 60px 48px; max-width: 1440px; margin: 40px auto 0;">
       <div class="stats-grid">
         <div class="stat-item">
-          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">MEDIAN RESPONSE OVERHEAD</div>
-          <div class="stat-num">142<span class="stat-unit unit">ms</span></div>
+          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">TYPE FAMILIES</div>
+          <div class="stat-num">3</div>
         </div>
         <div class="stat-item">
-          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">SYSTEM THROUGHPUT</div>
-          <div class="stat-num">2.4<span class="stat-unit unit">k/s</span></div>
+          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">COLOUR RAMPS</div>
+          <div class="stat-num">6</div>
         </div>
         <div class="stat-item">
-          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">ACOUSTIC DYNAMIC RANGE</div>
-          <div class="stat-num">+28<span class="stat-unit unit">dB</span></div>
+          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">STATUS COLOURS</div>
+          <div class="stat-num">5</div>
         </div>
         <div class="stat-item">
-          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">EXTERNAL ERROR RATE</div>
-          <div class="stat-num">0<span class="stat-unit unit">%</span></div>
+          <div class="label" style="margin-bottom: 10px; letter-spacing: 0.06em;">SPACING BASE</div>
+          <div class="stat-num">4<span class="stat-unit unit">px</span></div>
         </div>
       </div>
     </section>
@@ -502,7 +502,7 @@
     <!-- 08. Primary Conversion Callout Section -->
     <section class="cta-section" style="padding: 100px 24px; text-align: center; max-width: 800px; margin: 0 auto;">
       <h2 style="font-family: var(--font-display); font-size: clamp(38px, 6vw, 56px); font-weight: 900; letter-spacing: var(--tracking-statement); line-height: 1; text-transform: uppercase; margin: 0 0 16px;">
-        DEPLOY THE SYSTEM
+        USE THE SYSTEM
       </h2>
       <p style="font-size: 16px; color: var(--color-text-secondary); line-height: 1.6; max-width: 520px; margin: 0 auto 36px; text-align: left;">
         One CSS file, tokens in JSON, and the component primitives built on them.
@@ -534,17 +534,17 @@
           <span class="faq-indicator">[+]</span>
         </button>
         <div class="faq-content" style="display: none;">
-          Yes. Every role carries a light value (#F4F6F9 ground) and a dark one (#18181B ground), and the choice persists in localStorage.
+          Yes. Every role carries a light value (#F4F6F9 ground) and a dark one (#18181B ground), and the page remembers which one you chose.
         </div>
       </div>
 
       <div class="faq-item">
         <button class="faq-trigger" onclick="toggleFaq(this)">
-          <span>Can I customize the colors, speeds, and typography?</span>
+          <span>Can I change the colours and typography?</span>
           <span class="faq-indicator">[+]</span>
         </button>
         <div class="faq-content" style="display: none;">
-          All tokens (colors, blur radius, animation timings, font pairings) are defined in tokens.json and exposed as standard CSS custom properties in styles.css.
+          The colours, yes: brand colours, lamps, the accent and the layout are yours. The three type families and the rules in GRAMMAR.md stay fixed.
         </div>
       </div>
     </section>

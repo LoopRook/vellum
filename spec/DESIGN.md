@@ -1,7 +1,7 @@
 ---
 name: "Vellum Design System"
 version: "1.0.0-RC12"
-description: "Swiss International Typographic Style, translucent vellum layering, and Dieter Rams functionalism, in dual light and dark modes."
+description: "Swiss International Typographic Style, translucent vellum layering, and Dieter Rams functionalism, in light and dark modes."
 author: "Jonathan Hockaday"
 license: "MPL-2.0"
 source_of_truth: "./tokens.json"
@@ -17,8 +17,8 @@ target_frameworks:
 
 # DESIGN.md — Vellum
 
-> **Machine-readable and human-verifiable specification** for Claude Code, Claude Design,
-> Google Stitch, Cursor, Framer, and modern front-end engineering.
+> **The design language in prose**, for the people and the AI agents building with Vellum:
+> what each part is for, and why its rules hold.
 
 ## Read this first
 
@@ -312,7 +312,7 @@ still applies.
 
 ### 5.2 Sheet
 
-The system's primary surface — one sheet of vellum. `--blur-stage`, `--radius-stage`, 1px specular border,
+The system's primary surface — one sheet of vellum. `--blur-stage`, `--radius-stage`, a 1px edge in light mode,
 `--elevation-stage` at rest. Interactive instances take the §4.4 hover.
 
 ### 5.3 Cavity
@@ -341,7 +341,7 @@ number of rows is a per-project decision.
 | Icon trigger | Circular | Sheet fill, ink border on hover |
 
 Range sliders use a solid 18px handle (`--color-control-thumb`) with a contrasting collar,
-over a track split at the current value. Calibrated feedback, not a decorative line.
+over a track split at the current value. The split shows the value; it is not a decorative line.
 
 ### 5.6 Mode toggle
 
@@ -351,7 +351,7 @@ There are two presentations and the distinction is context, not preference:
 | Context | Presentation |
 | :--- | :--- |
 | **A site or application** | A circular `.btn-icon` carrying a sun or moon glyph. The glyph shows the mode you would switch **to** — moon while in light mode, sun while in dark mode. |
-| **A documentation card** | A labelled `.btn-control` reading `TOGGLE DARK MODE`. A card has no chrome to hold an icon, and a reader studying the system benefits from the mode being named rather than implied. |
+| **A documentation card** | A labelled `.btn-control` reading `TOGGLE DARK`. A card has no chrome to hold an icon, and a reader studying the system benefits from the mode being named rather than implied. |
 
 **Placement is a rule, not a preference: the toggle lives in persistent chrome and must
 be reachable without scrolling.** A header, a sticky rail, a sidebar — whichever this
@@ -455,7 +455,7 @@ Each row is a real failure mode, rendered side by side on the **Do's & Don'ts** 
 | Status tints | Reserved for live state | Decorative tints on static content |
 | Primary action | Monochrome ink, inverting per mode | Accent hue, pastel fill, or gradient wash |
 | Focus | Monochrome ink ring | Browser-default blue, or no focus at all |
-| Sliders | Solid handle, calibrated track | Invisible track, flat square handle |
+| Sliders | Solid handle, track filled to the value | Invisible track, flat square handle |
 | Numbering | Inside a pill or a step marker | Detached tags floating in whitespace |
 | Print | Hairlines and process ink | Blur, lamps, or shadow on paper |
 

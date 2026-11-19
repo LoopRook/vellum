@@ -5,7 +5,7 @@
 **Version**: 1.0.0-RC12
 
 Swiss International Typographic Style, translucent vellum layering, and Dieter Rams functionalism, in
-dual **Light mode** (light) and **Dark mode** (dark) modes.
+light and dark modes.
 
 This is a **toolkit, not a template.** It encodes an invariant grammar — type discipline,
 pill logic, elevation, sheet rules, colour-role semantics — separately from the choices any
@@ -107,7 +107,7 @@ The full set is [`GRAMMAR.md`](../spec/GRAMMAR.md) §2. The ones broken most oft
    state only — never a button fill, never a headline. A project may recolour them within
    limits and add its own (GRAMMAR §3.9).
 2. **Pills are binary.** Untinted means category; tinted means live state.
-3. **Hover is quiet.** Lift, deepen the shadow, brighten the edge. Never a glow.
+3. **Hover is quiet.** Lift 2px; in light mode the edge brightens too. Never a glow.
 4. **The elevation ladder is fixed.** Rungs may be skipped, never reordered. A cavity is a
    hole, not a pane: opaque and unblurred.
 5. **Monospace is always uppercase.**

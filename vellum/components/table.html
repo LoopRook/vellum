@@ -163,8 +163,8 @@
   <div class="spec-drawer-card">
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
       <div>
-        <div class="label" style="margin-bottom: 4px;">SPECIFICATION MATRIX</div>
-        <h4 style="margin: 0; font-size: 16px; text-transform: uppercase;">Specification Detail</h4>
+        <div class="label" style="margin-bottom: 4px;">CONFIGURATION</div>
+        <h4 style="margin: 0; font-size: 16px; text-transform: uppercase;">Service Configuration</h4>
       </div>
       <button class="btn btn-pill btn-secondary" onclick="const g = document.getElementById('demoSpecGrid'); const open = g.style.display !== 'none'; g.style.display = open ? 'none' : 'grid'; this.className = open ? 'btn btn-pill btn-secondary' : 'btn btn-pill btn-primary'; this.firstElementChild.textContent = open ? '[ + ] VIEW DETAILS' : '[ - ] HIDE DETAILS';">
         <span>[ + ] VIEW DETAILS</span>
@@ -173,17 +173,17 @@
 
     <div class="spec-drawer-grid" id="demoSpecGrid" style="display: none; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; padding-top: 20px;">
       <div class="spec-col-box">
-        <div class="spec-col-title">Display &amp; Geometry</div>
+        <div class="spec-col-title">Run Control</div>
         <ul class="spec-list">
-          <li><strong>Grid Axis</strong>: 45° Diagonal / Horiz.</li>
-          <li><strong>Discs</strong>: Octagon / Circle.</li>
+          <li><strong>Dispatch</strong>: batch, stream or hybrid.</li>
+          <li><strong>Concurrency</strong>: 30 to 240 jobs at once.</li>
         </ul>
       </div>
       <div class="spec-col-box">
-        <div class="spec-col-title">Motion &amp; Physics</div>
+        <div class="spec-col-title">Services</div>
         <ul class="spec-list">
-          <li><strong>Timing</strong>: Fluid / Snappy.</li>
-          <li><strong>Sheen</strong>: matte, diffuse. No reflection.</li>
+          <li><strong>Types</strong>: gRPC, REST and batch.</li>
+          <li><strong>Partition</strong>: by region, by tenant, or none.</li>
         </ul>
       </div>
     </div>

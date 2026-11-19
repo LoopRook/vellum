@@ -1,4 +1,4 @@
-<!-- @dsCard group="Foundations" name="Print &amp; Physical Stationery" subtitle="Paper substrates, 0.5pt hairline grid, process inks, and document metadata rails" viewport="1000x820" -->
+<!-- @dsCard group="Foundations" name="Print &amp; Physical Stationery" subtitle="Paper stocks, the 0.5pt hairline grid, process inks, and document metadata" viewport="1000x820" -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -147,7 +147,7 @@
     <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
   </div>
 
-  <div class="demo-head">Physical Hardware CMF Specification Tag (1:1 Ratio)</div>
+  <div class="demo-head">CMF specification tag</div>
 
   <div class="print-grid">
     <!-- Card 1: Physical Hardware Tag Specimen -->
@@ -207,7 +207,7 @@
         CMYK &amp; Paper Substrate Rules
       </div>
       <p style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; margin: 0 0 12px;">
-        For physical letterheads, specification sheets, and hardware packaging, digital RGB values map to pure process inks:
+        For physical letterheads, specification sheets, and packaging, digital RGB values map to pure process inks:
       </p>
 
       <div class="cmyk-swatch-grid">
@@ -250,10 +250,10 @@
 
   <div style="background: var(--color-surface-raised); border: 1px solid var(--color-border); border-radius: var(--radius-tray); padding: 20px 24px;">
     <ul style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; margin: 0; padding-left: 18px;">
-      <li><strong>0.5pt Hairline Grids:</strong> Document tables, letterhead rules, and telemetry callouts strictly use <code>0.5pt</code> (0.176mm) solid black borders for laser and offset printing.</li>
+      <li><strong>0.5pt Hairline Grids:</strong> Document tables, letterhead rules, and callouts use <code>0.5pt</code> (0.176mm) solid black borders for laser and offset printing.</li>
       <li><strong>Zero Digital Artifacts:</strong> Background blurs (`backdrop-filter`), the luminous lamps, and soft drop-shadows are strictly stripped in print stylesheets.</li>
-      <li><strong>Substrate Recommendation:</strong> 350gsm premium uncoated bright white cotton cardstock for executive memos; 120gsm matte bond for technical multi-page specifications.</li>
-      <li><strong>Document Metadata Rails:</strong> Every printed sheet must include standard header/footer telemetry: <code>DOC ID</code>, <code>REVISION</code>, <code>SECURITY STATUS</code>, and <code>PAGE X OF Y</code>.</li>
+      <li><strong>Paper Stock:</strong> 350gsm matte card for business cards; 120gsm matte bond for memos and multi-page specifications.</li>
+      <li><strong>Document Metadata:</strong> Every printed sheet must carry a header or footer with <code>DOC ID</code>, <code>REVISION</code>, <code>SECURITY STATUS</code>, and <code>PAGE X OF Y</code>.</li>
     </ul>
   </div>
 </main>

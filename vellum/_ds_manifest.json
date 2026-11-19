@@ -42,7 +42,7 @@
       "path": "foundations/icons.html",
       "group": "Foundations",
       "viewport": "640x540",
-      "subtitle": "Lucide stroke glyphs, currentColor inheritance, and sheet trigger frames",
+      "subtitle": "Lucide stroke glyphs, how they take the text colour, and the icon button",
       "name": "Interface Icons"
     },
     {
@@ -84,21 +84,21 @@
       "path": "foundations/print.html",
       "group": "Foundations",
       "viewport": "1000x820",
-      "subtitle": "Paper substrates, 0.5pt hairline grid, process inks, and document metadata rails",
+      "subtitle": "Paper stocks, the 0.5pt hairline grid, process inks, and document metadata",
       "name": "Print & Physical Stationery"
     },
     {
       "path": "components/buttons.html",
       "group": "Components",
       "viewport": "640x520",
-      "subtitle": "Pill CTAs, secondary actions, machined controls, chips, and icon triggers",
+      "subtitle": "Pill CTAs, secondary actions, mode controls, chips, and icon triggers",
       "name": "Buttons & Controls"
     },
     {
       "path": "components/console.html",
       "group": "Components",
       "viewport": "640x480",
-      "subtitle": "Multi-row control trays, segmented mode pills, steppers, and calibrated sliders",
+      "subtitle": "Multi-row control trays, segmented mode pills, steppers, and range sliders",
       "name": "Toolbars & Segmented Controls"
     },
     {
@@ -140,20 +140,20 @@
   "examples": [
     {
       "name": "Dashboard",
-      "description": "A workspace application: a navigation sidebar, a live telemetry strip, inspector controls, and a data grid.",
+      "description": "A workspace application: a navigation sidebar, a strip of key figures, run controls, and a data grid.",
       "folder": "examples/dashboard",
       "entryPath": "examples/dashboard/index.html"
     },
     {
       "name": "Deck",
-      "description": "A worked 16:9 widescreen presentation, for reference: cover, a headline figure, a hardware stage, a comparison, and a closing slide.",
+      "description": "A worked 16:9 widescreen presentation, for reference: cover, a headline figure, a stage with its controls, a comparison, and a closing slide.",
       "folder": "examples/deck",
       "entryPath": "examples/deck/Deck.dc.html",
       "minWidth": 1280
     },
     {
       "name": "Landing",
-      "description": "A worked product landing page, for reference: fixed nav, split hero, a blurred stage card over a dark cavity, a live control console, a collapsible spec drawer, and a feature matrix.",
+      "description": "A worked product landing page, for reference: fixed nav, split hero, a stage sheet holding a dark cavity and a control tray, a collapsible spec drawer, and a 2×2 feature grid.",
       "folder": "examples/landing",
       "entryPath": "examples/landing/index.html"
     },
@@ -166,7 +166,7 @@
     },
     {
       "name": "Printable Spec Sheet",
-      "description": "A print-ready Swiss A4/Letter executive memo and technical specification sheet with 0.5pt hairline grid and monospace telemetry.",
+      "description": "A printable A4/Letter specification sheet for Vellum itself: letterhead, token table, rules and sign-off, on a 0.5pt hairline grid.",
       "folder": "examples/document",
       "entryPath": "examples/document/spec.html"
     }

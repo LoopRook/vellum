@@ -1,4 +1,4 @@
-<!-- @dsCard group="Foundations" name="Interface Icons" subtitle="Lucide stroke glyphs, currentColor inheritance, and sheet trigger frames" viewport="640x540" -->
+<!-- @dsCard group="Foundations" name="Interface Icons" subtitle="Lucide stroke glyphs, how they take the text colour, and the icon button" viewport="640x540" -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -91,7 +91,7 @@
     <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
   </div>
 
-  <div class="demo-head">Tactile sheet button triggers (.btn-icon)</div>
+  <div class="demo-head">Icon buttons (.btn-icon)</div>
   <div class="console-tray">
     <button class="btn btn-icon" aria-label="Search" title="Search">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -116,7 +116,7 @@
     </button>
   </div>
 
-  <div class="demo-head">Integrated Text &amp; Action Pairings</div>
+  <div class="demo-head">Icons beside text</div>
   <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
     <button class="btn btn-pill btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
       <span>EXPLORE SHOWCASE</span>
@@ -134,7 +134,7 @@
     </span>
   </div>
 
-  <div class="demo-head">Standard Glyph Matrix (Lucide Clean Stroke)</div>
+  <div class="demo-head">The glyph set (Lucide)</div>
   <div class="glyph-matrix">
     <div class="glyph-item">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
@@ -204,12 +204,12 @@
 
   <div class="rules-card">
     <div style="font-family: var(--font-display); font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: var(--tracking-title); margin-bottom: 8px;">
-      Icon Invariant Rules (Swiss Precision)
+      Icon rules
     </div>
     <ul style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; margin: 0; padding-left: 18px;">
       <li><strong>Never decorate with floating cards:</strong> Icons are not standalone cards; they live inside <code>.btn-icon</code> triggers or inline next to text.</li>
-      <li><strong>Automatic currentColor:</strong> Icons must always use <code>stroke="currentColor"</code> so they effortlessly inherit the text color of their parent element.</li>
-      <li><strong>Proportional Sizes:</strong> 14px for badges &amp; pills, 16px for button triggers, 20px for primary console controls.</li>
+      <li><strong>Automatic currentColor:</strong> Icons must always use <code>stroke="currentColor"</code> so they inherit the text color of their parent element.</li>
+      <li><strong>Proportional Sizes:</strong> 14px for badges &amp; pills, 16px for button triggers, 20px for primary controls in a tray.</li>
     </ul>
   </div>
 </main>

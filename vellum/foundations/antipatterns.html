@@ -131,7 +131,7 @@
         Brand Invariants &amp; Anti-Patterns
       </h2>
       <p style="font-size: 14px; color: var(--color-text-secondary); margin: 0;">
-        Interactive visual guide codifying strict brand rules ("DO's") and prohibited mistakes ("DON'Ts").
+        Each rule beside the mistake it rules out. Hover the cards and click the fields to try them.
       </p>
     </div>
     <button data-mode-toggle class="btn btn-control" onclick="const d = document.documentElement.getAttribute('data-theme') === 'dark'; if(d) { document.documentElement.removeAttribute('data-theme'); } else { document.documentElement.setAttribute('data-theme', 'dark'); }">TOGGLE DARK</button>
@@ -140,7 +140,7 @@
   <!-- 01. Surfaces & Hover Physics -->
   <div class="demo-head">
     <span>01 / Surface &amp; Card Hover Elevation</span>
-    <span class="tag-pill">SURFACE PHYSICS</span>
+    <span class="tag-pill">SURFACES</span>
   </div>
 
   <div class="compare-pair">
@@ -155,7 +155,7 @@
         </div>
       </div>
       <div class="rule-desc">
-        <strong>Rule:</strong> Never use colored glow lines. Maintain quiet industrial luxury with subtle elevation.
+        <strong>Rule:</strong> Never a coloured glow. The card rises; nothing lights up.
       </div>
     </div>
 
@@ -170,7 +170,7 @@
         </div>
       </div>
       <div class="rule-desc">
-        <strong>Mistake:</strong> Neon rainbow glows look cheap and corrupt the minimalist Swiss aesthetic.
+        <strong>Mistake:</strong> A coloured glow reads as a status, and a card at rest has none.
       </div>
     </div>
   </div>
@@ -194,7 +194,7 @@
         </p>
       </div>
       <div class="rule-desc">
-        <strong>Rule:</strong> High-contrast black and white maintains crisp architectural authority.
+        <strong>Rule:</strong> Size and weight carry the hierarchy, never colour.
       </div>
     </div>
 
@@ -210,7 +210,7 @@
         </p>
       </div>
       <div class="rule-desc">
-        <strong>Mistake:</strong> Color is strictly reserved for small precision telemetry dots, not massive headline type.
+        <strong>Mistake:</strong> Colour is kept for live state, so a coloured headline reads as a status.
       </div>
     </div>
   </div>
@@ -236,7 +236,7 @@
         </p>
       </div>
       <div class="rule-desc">
-        <strong>Rule:</strong> Clear semantics prevent visual confusion between categories and operational state.
+        <strong>Rule:</strong> If the label would read the same tomorrow, it is a category.
       </div>
     </div>
 
@@ -259,9 +259,9 @@
     </div>
   </div>
 
-  <!-- 04. Form Focus Rings & Hardware Inputs -->
+  <!-- 04. Focus on form fields -->
   <div class="demo-head">
-    <span>04 / Form Focus States &amp; Hardware Inputs</span>
+    <span>04 / Focus on Form Fields</span>
     <span class="tag-pill">CONTROLS &amp; FORMS</span>
   </div>
 
@@ -274,11 +274,11 @@
           <input type="text" class="input" placeholder="Click to test focus..." value="NORTHWIND" />
         </div>
         <p style="font-size: 13px; color: var(--color-text-secondary); margin: 0;">
-          Focus state transitions smoothly to crisp ink border (<code>border-color: var(--color-text-primary)</code>).
+          On focus the border turns ink (<code>border-color: var(--color-text-primary)</code>).
         </p>
       </div>
       <div class="rule-desc">
-        <strong>Rule:</strong> Precision hardware tools use clean mechanical focus transitions.
+        <strong>Rule:</strong> Focus is ink, and always visible.
       </div>
     </div>
 

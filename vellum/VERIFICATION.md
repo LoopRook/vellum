@@ -231,7 +231,7 @@ Display weight (check 4w): h1-h6 in styles.css held to 800/900 and a display tra
 
 Mono case (check 4x): 142 mono rule(s) and style attribute(s) read; exceptions code, kbd, samp, pre, .literal, .unit.
 
-Case exceptions (check 4y): 62 literal/unit marker(s) read; 9 written by the page's own script and not readable here.
+Case exceptions (check 4y): 59 literal/unit marker(s) read; 9 written by the page's own script and not readable here.
 
 Scales (check 4z): 79 radius and 49 blur declaration(s) held to the --radius-* and --blur-* roles; 34 media-query width(s) held to the 5 breakpoints.
 
